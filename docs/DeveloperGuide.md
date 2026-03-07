@@ -337,8 +337,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 6. Should not require internet connection to function.
 7. A user should be able to transfer all contact data to another computer by transferring a single contact data file.
 8. Should ensure no data is lost by saving all changes to disk after every command that modifies contact data.
-9. A new user should be able to add and delete a contact within 10 minutes of launching the application for the first time, without referring to the User Guide.
-10. The program should not crash upon reading from a corrupted contact data file.
+9. The program should not crash upon reading from a corrupted contact data file.
 
 ### Glossary
 
