@@ -32,7 +32,7 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "friends "
             + PREFIX_TAG + "owesMoney";
 
-    public static final String MESSAGE_SUCCESS = "New person added: %1$s";
+    public static final String MESSAGE_SUCCESS = "Alright, the contact below has been added to your list!";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the contact list";
 
     private final Person toAdd;
@@ -54,7 +54,7 @@ public class AddCommand extends Command {
         }
 
         model.addPerson(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+        return new CommandResult(MESSAGE_SUCCESS);
     }
 
     @Override
