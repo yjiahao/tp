@@ -13,12 +13,6 @@ public class PhoneTest {
         assertThrows(NullPointerException.class, () -> new Phone(null));
     }
 
-    // @Test
-    // public void constructor_invalidPhone_throwsIllegalArgumentException() {
-    //     String invalidPhone = "";
-    //     assertThrows(IllegalArgumentException.class, () -> new Phone(invalidPhone));
-    // }
-
     @Test
     public void isValidPhone() {
         // null phone number
@@ -34,6 +28,7 @@ public class PhoneTest {
         assertFalse(Phone.isValidPhone("91##5^3?")); // symbols within digits
 
         // valid phone numbers
+        assertTrue(Phone.isValidPhone("")); // empty string is now considered a valid phone number
         assertTrue(Phone.isValidPhone("93121534")); // exactly 8 numbers
         assertTrue(Phone.isValidPhone("10348692")); // exactly 8 numbers
     }
