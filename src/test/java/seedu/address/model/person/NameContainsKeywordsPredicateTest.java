@@ -70,7 +70,7 @@ public class NameContainsKeywordsPredicateTest {
                 .withName("Alice Bob")
                 .withPhone("94351253")
                 .build()));
-        }
+    }
 
     @Test
     public void test_nameDoesNotContainKeywords_returnsFalse() {
@@ -85,11 +85,10 @@ public class NameContainsKeywordsPredicateTest {
         // Non-matching keyword2
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("zzz"));
         assertFalse(predicate.test(new PersonBuilder()
-        .withName("Alice Bob")
-        .withPhone("94351253")
-        .withAddress("123 Clementi Road")
-        .build()));
-
+                .withName("Alice Bob")
+                .withPhone("94351253")
+                .withAddress("123 Clementi Road")
+                .build()));
     }
 
     @Test
