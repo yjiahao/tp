@@ -16,14 +16,23 @@ import seedu.address.model.person.Person;
  */
 public class DeleteCommand extends Command {
 
-    public static final String COMMAND_WORD = "delete";
+    public static final String COMMAND_WORD = "del";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number used in the displayed person list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "%1$s was removed";
+
+    public static final String MESSAGE_INVALID_INDEX = "That contact does not exist, "
+            + "please enter a valid index between 1 and %1$d";
+
+    public static final String MESSAGE_SINGLE_CONTACT_ONLY = "The contact list size is only 1";
+
+    public static final String MESSAGE_EMPTY_CONTACT_LIST = "The contact list is currently empty.";
+
+    public static final String MESSAGE_TOO_MANY_ARGUMENTS = "Too many arguments";
 
     private final Index targetIndex;
 
@@ -37,7 +46,8 @@ public class DeleteCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            String invalidIndexMessage = getInvalidIndexMessage(lastShownList.size());
+            throw new CommandException(invalidIndexMessage);
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
@@ -65,5 +75,15 @@ public class DeleteCommand extends Command {
         return new ToStringBuilder(this)
                 .add("targetIndex", targetIndex)
                 .toString();
+    }
+
+    private String getInvalidIndexMessage(int listSize) {
+        if (listSize == 0) {
+            return MESSAGE_EMPTY_CONTACT_LIST;
+        }
+        if (listSize == 1) {
+            return MESSAGE_SINGLE_CONTACT_ONLY;
+        }
+        return String.format(MESSAGE_INVALID_INDEX, listSize);
     }
 }
