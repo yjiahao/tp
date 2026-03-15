@@ -93,7 +93,7 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
-* Since phone number and address fields are now optional, the UI alerts the user if a particular person has no phone number or address:
+* Since phone number and address fields are optional, the UI alerts the user if a particular person has no phone number or address:
 
   ![result for 'list' with no phone number and address](images/missingPhoneNumberAndAddress.png)
 
