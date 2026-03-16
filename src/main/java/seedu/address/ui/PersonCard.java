@@ -92,7 +92,7 @@ public class PersonCard extends UiPart<Region> {
     }
 
     /**
-     * Sets CSS class for a particular {@code Label} object.
+     * Adds CSS class for a particular {@code Label} object.
      *
      * @param label The label to add the CSS class to.
      * @param cssClass The CSS class to add.
