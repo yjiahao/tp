@@ -1,7 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -31,17 +31,17 @@ public class TagCommandParser implements Parser<TagCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public TagCommand parse(String args) throws ParseException {
-        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, PREFIX_CATEGORY_TAG);
+        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
-        if (!arePrefixesPresent(argumentMultimap, PREFIX_CATEGORY_TAG)
+        if (!arePrefixesPresent(argumentMultimap, PREFIX_TAG)
                 || argumentMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
         }
 
-        argumentMultimap.verifyNoDuplicatePrefixesFor(PREFIX_CATEGORY_TAG);
+        argumentMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TAG);
 
         Index targetIndex = ParserUtil.parseIndex(argumentMultimap.getPreamble());
-        Tag categoryTag = parseCategoryTag(argumentMultimap.getValue(PREFIX_CATEGORY_TAG).get());
+        Tag categoryTag = parseCategoryTag(argumentMultimap.getValue(PREFIX_TAG).get());
         return new TagCommand(targetIndex, categoryTag);
     }
 

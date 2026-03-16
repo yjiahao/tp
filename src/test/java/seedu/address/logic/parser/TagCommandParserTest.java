@@ -2,7 +2,7 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.getErrorMessageForDuplicatePrefixes;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -18,40 +18,40 @@ public class TagCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsTagCommand() {
-        assertParseSuccess(parser, " 1 /tag student",
+        assertParseSuccess(parser, " 1 t/student",
                 new TagCommand(INDEX_FIRST_PERSON, new Tag("Student")));
     }
 
     @Test
     public void parse_validArgsMixedCase_returnsNormalizedTagCommand() {
-        assertParseSuccess(parser, " 1 /tag pArEnT",
+        assertParseSuccess(parser, " 1 t/pArEnT",
                 new TagCommand(INDEX_FIRST_PERSON, new Tag("Parent")));
     }
 
     @Test
     public void parse_missingIndex_throwsParseException() {
-        assertParseFailure(parser, " /tag Student",
+        assertParseFailure(parser, " t/Student",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_nonEmptyPreamble_throwsParseException() {
-        assertParseFailure(parser, " preamble /tag Student", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, " preamble t/Student", ParserUtil.MESSAGE_INVALID_INDEX);
     }
 
     @Test
     public void parse_duplicateCategoryPrefix_throwsParseException() {
-        assertParseFailure(parser, " 1 /tag Student /tag Tutor",
-                getErrorMessageForDuplicatePrefixes(PREFIX_CATEGORY_TAG));
+        assertParseFailure(parser, " 1 t/Student t/Tutor",
+                getErrorMessageForDuplicatePrefixes(PREFIX_TAG));
     }
 
     @Test
     public void parse_invalidCategory_throwsParseException() {
-        assertParseFailure(parser, " 1 /tag Friend", TagCommandParser.MESSAGE_INVALID_CATEGORY);
+        assertParseFailure(parser, " 1 t/Friend", TagCommandParser.MESSAGE_INVALID_CATEGORY);
     }
 
     @Test
     public void parse_invalidIndex_throwsParseException() {
-        assertParseFailure(parser, " zero /tag Student", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, " zero t/Student", ParserUtil.MESSAGE_INVALID_INDEX);
     }
 }

@@ -93,7 +93,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_tag() throws Exception {
         TagCommand command = (TagCommand) parser.parseCommand(TagCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " /tag student");
+                + INDEX_FIRST_PERSON.getOneBased() + " t/student");
         assertEquals(new TagCommand(INDEX_FIRST_PERSON, new Tag("Student")), command);
     }
 
