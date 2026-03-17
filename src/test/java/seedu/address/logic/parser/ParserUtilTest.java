@@ -152,8 +152,8 @@ public class ParserUtilTest {
 
     @Test
     public void parseCategoryTag_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, Tag.MESSAGE_CATEGORY_CONSTRAINTS,
-                () -> ParserUtil.parseCategoryTag(VALID_TAG_1));
+        assertThrows(ParseException.class, Tag.MESSAGE_CATEGORY_CONSTRAINTS, ()
+                -> ParserUtil.parseCategoryTag(VALID_TAG_1));
     }
 
     @Test
