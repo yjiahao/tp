@@ -115,23 +115,34 @@ Examples:
 *  `edit 1 p/91234567` Edits the phone number of the 1st person to be `91234567`.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose name, address, or phone number contains any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find KEYWORD [MORE_KEYWORDS]...`
+or `find [n/NAME] [a/ADDRESS] [p/PHONE]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
+* The search is case-insensitive for names and addresses. e.g. `hans` will match `Hans`
+* Partial matches are supported. e.g. `Han` will match `Hans`
+* If no prefixes are provided, all supported fields are searched.
+* `n/` restricts the search to names only.
+* `a/` restricts the search to addresses only.
+* `p/` restricts the search to phone numbers only.
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+  e.g. `Ali Clementi` will return persons whose name, address, or phone number contains either `Ali` or `Clementi`
+* If prefixes are used, all search terms must be prefixed.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find Ali` returns persons whose name, address, or phone number contains `Ali`
+* `find a/119224` returns persons whose address contains `119224`
+* `find n/Clement` returns persons whose name contains `Clement`
+* `find p/9435` returns persons whose phone number contains `9435`
+* `find n/aleX a/seran` returns persons whose name contains `aleX` or whose address contains `seran`
+  ![result for 'find n/aleX a/seran'](images/find_AlexSeranResult.png)
+
+Notes:
+- If no prefixes are provided, the search is performed across all supported fields.
+- If prefixes are used, all search terms must be prefixed.
 
 ### Deleting a person : `delete`
 
