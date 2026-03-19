@@ -95,6 +95,23 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String tag} into a supported category {@code Tag}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code tag} is not a supported category.
+     */
+    public static Tag parseCategoryTag(String tag) throws ParseException {
+        Tag parsedTag = parseTag(tag);
+        String normalizedCategoryTagName = Tag.getNormalizedCategoryTagName(parsedTag.tagName);
+
+        if (normalizedCategoryTagName == null) {
+            throw new ParseException(Tag.MESSAGE_CATEGORY_CONSTRAINTS);
+        }
+
+        return new Tag(normalizedCategoryTagName);
+    }
+
+    /**
      * Parses {@code Collection<String> tags} into a {@code Set<Tag>}.
      */
     public static Set<Tag> parseTags(Collection<String> tags) throws ParseException {

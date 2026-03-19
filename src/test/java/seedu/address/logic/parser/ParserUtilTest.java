@@ -146,6 +146,36 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseCategoryTag_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseCategoryTag(null));
+    }
+
+    @Test
+    public void parseCategoryTag_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, Tag.MESSAGE_CATEGORY_CONSTRAINTS, ()
+                -> ParserUtil.parseCategoryTag(VALID_TAG_1));
+    }
+
+    @Test
+    public void parseCategoryTag_invalidFormat_throwsParseException() {
+        assertThrows(ParseException.class, Tag.MESSAGE_CONSTRAINTS, ()
+                -> ParserUtil.parseCategoryTag(INVALID_TAG));
+    }
+
+    @Test
+    public void parseCategoryTag_validValueWithoutWhitespace_returnsTag() throws Exception {
+        Tag expectedTag = new Tag("Student");
+        assertEquals(expectedTag, ParserUtil.parseCategoryTag("student"));
+    }
+
+    @Test
+    public void parseCategoryTag_validValueWithWhitespace_returnsNormalizedTag() throws Exception {
+        String categoryTagWithWhitespace = WHITESPACE + "parent" + WHITESPACE;
+        Tag expectedTag = new Tag("Parent");
+        assertEquals(expectedTag, ParserUtil.parseCategoryTag(categoryTagWithWhitespace));
+    }
+
+    @Test
     public void parseTags_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseTags(null));
     }
