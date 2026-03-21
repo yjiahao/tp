@@ -38,6 +38,16 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Returns the person in the address book who has the specified {@code Id}.
+     */
+    public Optional<Person> findPersonById(Id id) {
+        return internalList.stream()
+                .filter(person -> person.getId().equals(id))
+                .findFirst();
+    }
+
+
+    /**
      * Adds a person to the list.
      * The person must not already exist in the list.
      */

@@ -60,7 +60,8 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "del 9";
-        assertCommandException(deleteCommand, DeleteCommand.MESSAGE_EMPTY_CONTACT_LIST);
+        assertCommandException(deleteCommand,
+                String.format(Messages.MESSAGE_INVALID_PERSON_ID, 9));
     }
 
     @Test

@@ -70,6 +70,13 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Returns the person in the address book who has the specified {@code Id}.
+     */
+    public Optional<Person> findPersonById(Id id) {
+        return persons.findPersonById(id);
+    }
+
+    /**
      * Adds a person to the address book.
      * The person must not already exist in the address book.
      */
