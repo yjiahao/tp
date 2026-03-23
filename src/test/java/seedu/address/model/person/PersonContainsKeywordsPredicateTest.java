@@ -163,7 +163,7 @@ public class PersonContainsKeywordsPredicateTest {
                 .withName("Alice Bob")
                 .withAddress("123 Clementi Road")
                 .build()));
-        
+
         // Tag search enabled, but no tag matches
         predicate = new PersonContainsKeywordsPredicate(Collections.singletonList("enemy"),
                 false, false, false, true);
