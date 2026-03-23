@@ -10,10 +10,13 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Id;
+import seedu.address.model.person.Person;
+import seedu.address.testutil.PersonBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -43,6 +46,34 @@ public class CopyCommandTest {
         String expectedMessage = String.format(CopyCommand.MESSAGE_PERSON_NOT_FOUND, anyId.getValue());
 
         assertCommandFailure(copyCommand, emptyModel, expectedMessage);
+    }
+
+    @Test
+    public void execute_emptyPhoneField_throwsCommandException() {
+        Person personWithEmptyPhone = new PersonBuilder().withId(67).withPhone("").build();
+        AddressBook ab = new AddressBook();
+        ab.addPerson(personWithEmptyPhone);
+        Model modelWithEmptyPhone = new ModelManager(ab, new UserPrefs());
+        Id id = Id.of(67);
+        CopyCommand copyCommand = new CopyCommand(id, CopyCommand.FIELD_PHONE);
+
+        String expectedMessage = String.format(CopyCommand.MESSAGE_EMPTY_FIELD_VALUE, "phone number");
+
+        assertCommandFailure(copyCommand, modelWithEmptyPhone, expectedMessage);
+    }
+
+    @Test
+    public void execute_emptyAddressField_throwsCommandException() {
+        Person personWithEmptyAddress = new PersonBuilder().withId(67).withAddress("").build();
+        AddressBook ab = new AddressBook();
+        ab.addPerson(personWithEmptyAddress);
+        Model modelWithEmptyAddress = new ModelManager(ab, new UserPrefs());
+        Id id = Id.of(67);
+        CopyCommand copyCommand = new CopyCommand(id, CopyCommand.FIELD_ADDRESS);
+
+        String expectedMessage = String.format(CopyCommand.MESSAGE_EMPTY_FIELD_VALUE, "address");
+
+        assertCommandFailure(copyCommand, modelWithEmptyAddress, expectedMessage);
     }
 
     @Test
