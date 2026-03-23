@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.tag.Tag;
 
 /**
  * Tests whether a {@code Person} matches any keyword in the enabled fields.
@@ -13,17 +14,16 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private final boolean searchName;
     private final boolean searchAddress;
     private final boolean searchPhone;
-    // To be implemented
     private final boolean searchTag;
 
     /**
      * Creates a predicate that searches only the specified fields.
      */
     public PersonContainsKeywordsPredicate(List<String> keywords,
-                                           boolean searchName,
-                                           boolean searchAddress,
-                                           boolean searchPhone,
-                                           boolean searchTag) {
+            boolean searchName,
+            boolean searchAddress,
+            boolean searchPhone,
+            boolean searchTag) {
         this.keywords = keywords;
         this.searchName = searchName;
         this.searchAddress = searchAddress;
@@ -39,9 +39,21 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
         return keywords.stream().anyMatch(keyword -> {
             String lower = keyword.toLowerCase();
+            // one person can have many tags, need to search through
+            boolean matchesTag = false;
+            if (searchTag) {
+                for (Tag tag : person.getTags()) {
+                    if (tag.tagName.toLowerCase().contains(lower)) {
+                        matchesTag = true;
+                        break;
+                    }
+                }
+            }
+
             return (searchName && name.contains(lower))
                     || (searchAddress && address.contains(lower))
-                    || (searchPhone && phone.contains(keyword));
+                    || (searchPhone && phone.contains(keyword))
+                    || matchesTag;
         });
     }
 
