@@ -32,7 +32,7 @@ public class CopyCommandParser implements Parser<CopyCommand> {
         }
 
         Id id = ParserUtil.parseId(parts[0]);
-        String field = parts[1].toLowerCase();
+        String field = parts[1];
 
         if (!isValidField(field)) {
             throw new ParseException(CopyCommand.MESSAGE_INVALID_FIELD);

@@ -30,17 +30,17 @@ public class CopyCommand extends Command {
             + FIELD_NAME + ", " + FIELD_PHONE + ", " + FIELD_ADDRESS + ")\n"
             + "Example: " + COMMAND_WORD + " 1 " + FIELD_PHONE;
 
-    public static final String MESSAGE_COPY_SUCCESS = "Copied $s's $s to clipboard!";
+    public static final String MESSAGE_COPY_SUCCESS = "Copied %s's %s to clipboard!";
 
     public static final String MESSAGE_INVALID_FIELD = "Invalid field. The valid fields include: "
             + FIELD_NAME + ", " + FIELD_PHONE + ", " + FIELD_ADDRESS;
 
-    public static final String MESSAGE_PERSON_NOT_FOUND = "No contact with ID $d found.";
+    public static final String MESSAGE_PERSON_NOT_FOUND = "No contact with ID %d found.";
 
     public static final String MESSAGE_MISSING_FIELD = "Please specify a field to copy. Valid fields: "
             + FIELD_NAME + ", " + FIELD_PHONE + ", " + FIELD_ADDRESS;
 
-    public static final String MESSAGE_EMPTY_FIELD_VALUE = "There is no $s to copy for this contact.";
+    public static final String MESSAGE_EMPTY_FIELD_VALUE = "There is no %s to copy for this contact.";
 
     private final Id targetId;
     private final String field;
