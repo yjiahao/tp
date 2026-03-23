@@ -2,6 +2,8 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
+import java.util.Set;
+
 import seedu.address.logic.commands.CopyCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Id;
@@ -10,6 +12,9 @@ import seedu.address.model.person.Id;
  * Parses input arguments and creates a new CopyCommand object.
  */
 public class CopyCommandParser implements Parser<CopyCommand> {
+
+    private static final Set<String> VALID_FIELDS = Set.of(
+            CopyCommand.FIELD_NAME, CopyCommand.FIELD_PHONE, CopyCommand.FIELD_ADDRESS);
 
     /**
      * Parses the given {@code String} of arguments in the context of the CopyCommand
@@ -42,8 +47,6 @@ public class CopyCommandParser implements Parser<CopyCommand> {
     }
 
     private boolean isValidField(String field) {
-        return field.equals(CopyCommand.FIELD_NAME)
-                || field.equals(CopyCommand.FIELD_PHONE)
-                || field.equals(CopyCommand.FIELD_ADDRESS);
+        return VALID_FIELDS.contains(field);
     }
 }

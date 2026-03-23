@@ -18,9 +18,9 @@ public class CopyCommand extends Command {
 
     public static final String COMMAND_WORD = "copy";
 
-    public static final String FIELD_NAME = "/n";
-    public static final String FIELD_PHONE = "/p";
-    public static final String FIELD_ADDRESS = "/a";
+    public static final String FIELD_NAME = "n/";
+    public static final String FIELD_PHONE = "p/";
+    public static final String FIELD_ADDRESS = "a/";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Copies a field of the person identified by their ID to the clipboard.\n"
