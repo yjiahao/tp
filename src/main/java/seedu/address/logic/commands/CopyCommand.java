@@ -80,7 +80,7 @@ public class CopyCommand extends Command {
         case FIELD_NAME:
             return person.getName().fullName;
         case FIELD_PHONE:
-            return person.getPhone().value;
+            return person.getPhone().map(p -> p.value).orElse("");
         case FIELD_ADDRESS:
             return person.getAddress().value;
         default:
