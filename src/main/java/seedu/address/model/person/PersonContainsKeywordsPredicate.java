@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.tag.Tag;
 
 /**
  * Tests whether a {@code Person} matches any keyword in the enabled fields.
@@ -16,6 +15,9 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> tagKeywords;
     private final MatchMode matchWord;
 
+    /**
+     * Determines how matches across different fields are combined.
+     */
     public enum MatchMode {
         OR,
         AND
