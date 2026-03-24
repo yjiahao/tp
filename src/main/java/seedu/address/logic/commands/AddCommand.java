@@ -24,7 +24,6 @@ public class AddCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Only " + PREFIX_NAME + "NAME is required. Phone, address, and tags are optional.\n"
             + "Example:\n"
             + "         " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
