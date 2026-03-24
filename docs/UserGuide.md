@@ -28,7 +28,7 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 a/1A Kent Ridge Rd, Singapore 119224` : Adds a contact named `John Doe` with a phone number and address to the Address Book.
+   * `add n/John Doe p/98765432 a/1A Kent Ridge Rd, 119224` : Adds a contact named `John Doe` with a phone number and address to the Address Book.
 
    * `del 3` : Deletes the contact with an `ID` of 3.
 
