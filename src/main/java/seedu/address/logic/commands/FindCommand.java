@@ -23,7 +23,7 @@ public class FindCommand extends Command {
             + "Examples: " + COMMAND_WORD + " n/Ali n/August\n"
             + "          " + COMMAND_WORD + " a/119224\n"
             + "          " + COMMAND_WORD + " n/Clement p/9234\n"
-            + "          " + COMMAND_WORD + " t/friend\n";
+            + "          " + COMMAND_WORD + " t/student\n";
 
     private final PersonContainsKeywordsPredicate predicate;
 
