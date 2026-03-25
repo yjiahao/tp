@@ -20,9 +20,26 @@ public class TagTest {
     }
 
     @Test
+    public void constructor_validTagNameWithSpaces_trimsAndStoresTag() {
+        Tag tag = new Tag("  follow up  ");
+
+        assertTrue(tag.equals(new Tag("follow up")));
+    }
+
+    @Test
     public void isValidTagName_nullTagName_throwsNullPointerException() {
         // null tag name
         assertThrows(NullPointerException.class, () -> Tag.isValidTagName(null));
+    }
+
+    @Test
+    public void isValidTagName_validAndInvalidInputs_returnsExpectedResult() {
+        assertTrue(Tag.isValidTagName("friend"));
+        assertTrue(Tag.isValidTagName("follow up"));
+
+        assertFalse(Tag.isValidTagName(""));
+        assertFalse(Tag.isValidTagName(" "));
+        assertFalse(Tag.isValidTagName("follow-up"));
     }
 
     @Test
