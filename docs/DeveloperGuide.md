@@ -311,7 +311,7 @@ Guarantees:
 * If the operation fails, the stored contacts remain unchanged.
 
 MSS:
-1. User requests to add a contact by providing a name, and optionally a phone number and address.
+1. User requests to add a contact by providing a name. Optionally, he can also provide a phone number, an address and a list of tags.
 2. EduConnect validates the provided details.
 3. EduConnect adds the contact.
 4. EduConnect shows a success message with the added contact details.
@@ -323,7 +323,7 @@ Extensions:
   * 1a2. User re-enters the contact details.
   * Steps 1a1-1a2 are repeated until valid input is provided.
   * Use case resumes from step 2.
-* 2a. User provides an invalid phone number format.
+* 2a. User provides an invalid format for at least one of the fields.
   * 2a1. EduConnect shows an error message.
   * 2a2. User re-enters the contact details.
   * Steps 2a1-2a2 are repeated until valid input is provided.
@@ -333,7 +333,7 @@ Extensions:
   * 2b2. User re-enters the contact details.
   * Steps 2b1-2b2 are repeated until valid input is provided.
   * Use case resumes from step 2.
-* 2c. The contact duplicates an existing contact.
+* 2c. The new contact is a duplicate of an existing contact.
   * 2c1. EduConnect shows a duplicate contact error.
   * 2c2. User re-enters the contact details.
   * Steps 2c1-2c2 are repeated until valid input is provided.
@@ -515,13 +515,13 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
+   1. Test case: `del 1`<br>
       Expected: The contact with `ID` 1 is deleted from the address book. Details of the deleted contact shown as a person card. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
+   1. Test case: `del 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete this`, `delete -1`, `delete x`, `...` (where `x` is not found in the address book)<br>
+   1. Other incorrect delete commands to try: `del`, `del this`, `del -1`, `del x`, `...` (where `x` is not found in the address book)<br>
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
