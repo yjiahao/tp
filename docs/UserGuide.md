@@ -141,7 +141,6 @@ Examples:
 * `find n/aleX a/seran` returns persons whose name contains `aleX` or whose address contains `seran`
 * `find t/student` returns persons whose tags contain `student`
 * `find n/Ali n/August` returns persons whose names contain `Ali` or `August`
-  ![result for 'find n/aleX a/seran'](images/find_AlexSeranResult.png)
 
 Notes:
 - Every search term must be attached to a prefix.
