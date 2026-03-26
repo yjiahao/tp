@@ -1,6 +1,9 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -18,28 +21,28 @@ public class CopyCommand extends Command {
 
     public static final String COMMAND_WORD = "copy";
 
-    public static final String FIELD_NAME = "n/";
-    public static final String FIELD_PHONE = "p/";
-    public static final String FIELD_ADDRESS = "a/";
-
     public static final String EMPTY_STRING = "";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Copies a field of the person identified by their ID to the clipboard.\n"
             + "Parameters: ID (must be a positive integer) FIELD ("
-            + FIELD_NAME + ", " + FIELD_PHONE + ", " + FIELD_ADDRESS + ")\n"
+
+            + PREFIX_NAME + ", " + PREFIX_PHONE + ", " + PREFIX_ADDRESS + ")\n"
             + "Example:\n"
-            + "\t" + COMMAND_WORD + " 1 " + FIELD_PHONE + "\n";
+            + "\t" + COMMAND_WORD + " 1 " + PREFIX_PHONE + "\n";
 
     public static final String MESSAGE_COPY_SUCCESS = "Copied %s's %s to clipboard!";
 
     public static final String MESSAGE_INVALID_FIELD = "Invalid field. The valid fields include: "
-            + FIELD_NAME + ", " + FIELD_PHONE + ", " + FIELD_ADDRESS;
+            + PREFIX_NAME + ", " + PREFIX_PHONE + ", " + PREFIX_ADDRESS;
 
     public static final String MESSAGE_MISSING_FIELD = "Please specify a field to copy. Valid fields: "
-            + FIELD_NAME + ", " + FIELD_PHONE + ", " + FIELD_ADDRESS;
+            + PREFIX_NAME + ", " + PREFIX_PHONE + ", " + PREFIX_ADDRESS;
 
     public static final String MESSAGE_EMPTY_FIELD_VALUE = "There is no %s to copy for this contact.";
+    private static final String FIELD_NAME = "n/";
+    private static final String FIELD_PHONE = "p/";
+    private static final String FIELD_ADDRESS = "a/";
 
     private final Id targetId;
     private final String field;
