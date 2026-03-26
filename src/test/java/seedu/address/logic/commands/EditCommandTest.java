@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_CATEGORY_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FOLLOW_UP;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonWithId;
@@ -68,10 +67,10 @@ public class EditCommandTest {
 
         PersonBuilder personBuilderForMaxId = new PersonBuilder(personWithMaxId);
         Person editedPerson = personBuilderForMaxId.withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
-                .withTags("Tutor", VALID_TAG_HUSBAND).build();
+                .withTags("Tutor", VALID_CATEGORY_PARENT).build();
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB).withTags(VALID_TAG_HUSBAND).build();
+                .withPhone(VALID_PHONE_BOB).withTags(VALID_CATEGORY_PARENT).build();
         EditCommand editCommand = new EditCommand(maxId, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
@@ -85,14 +84,14 @@ public class EditCommandTest {
 
     @Test
     public void execute_idInAddressBookAppendTag_success() {
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags(VALID_TAG_FOLLOW_UP).build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags(VALID_CATEGORY_PARENT).build();
         EditCommand editCommand = new EditCommand(ID_FIRST, descriptor);
 
         Optional<Person> personToEditFound = model.findPersonById(ID_FIRST);
         assertTrue(personToEditFound.isPresent());
         Person personToEdit = personToEditFound.get();
         Person editedPerson = new PersonBuilder(personToEdit)
-                .withTags("Student", VALID_TAG_FOLLOW_UP).build();
+                .withTags("Student", VALID_CATEGORY_PARENT).build();
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
 
