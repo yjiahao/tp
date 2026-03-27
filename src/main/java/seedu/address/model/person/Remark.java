@@ -10,10 +10,12 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Remark {
 
     public static final String MESSAGE_CONSTRAINTS =
-        "Remarks should not be blank, and should only contain alphabets, numbers, \"-\", \",\", and \" \".";
+        "Remark cannot be empty or only spaces, and cannot contain tabs or newlines.";
+    
     /*
-     * The first character of the address must be alphabetical,
-     * otherwise " " (a blank string) becomes a valid input.
+     * Requires at least one non-whitespace character, and allows only printable ASCII characters.
+     * This rejects empty strings, strings containing only spaces, and control characters
+     * such as tabs and newlines.
      */
     public static final String VALIDATION_REGEX = "^(?=.*\\S)[\\x20-\\x7E]+$";
 
