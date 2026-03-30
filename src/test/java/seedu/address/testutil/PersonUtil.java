@@ -46,14 +46,18 @@ public class PersonUtil {
         StringBuilder sb = new StringBuilder();
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         if (descriptor.isPhoneChanged()) {
-            descriptor.getPhone().ifPresentOrElse(
-                    phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "),
-                    () -> sb.append(PREFIX_PHONE).append(" "));
+            if (descriptor.getPhone().isPresent()) {
+                sb.append(PREFIX_PHONE).append(descriptor.getPhone().get().value).append(" ");
+            } else {
+                sb.append(PREFIX_PHONE).append(" ");
+            }
         }
         if (descriptor.isAddressChanged()) {
-            descriptor.getAddress().ifPresentOrElse(
-                    address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "),
-                    () -> sb.append(PREFIX_ADDRESS).append(" "));
+            if (descriptor.getAddress().isPresent()) {
+                sb.append(PREFIX_ADDRESS).append(descriptor.getAddress().get().value).append(" ");
+            } else {
+                sb.append(PREFIX_ADDRESS).append(" ");
+            }
         }
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
