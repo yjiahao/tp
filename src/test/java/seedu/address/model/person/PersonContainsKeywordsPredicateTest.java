@@ -197,6 +197,13 @@ public class PersonContainsKeywordsPredicateTest {
                 .withAddress("123 Clementi Road")
                 .build()));
 
+        // Address search enabled, but person has no address
+        predicate = addressPredicate(Collections.singletonList("Clementi"));
+        assertFalse(predicate.test(new PersonBuilder()
+                .withName("Alice Bob")
+                .withoutAddress()
+                .build()));
+
         // Tag search enabled, but no tag matches
         predicate = tagPredicate(Collections.singletonList("enemy"));
         assertFalse(predicate.test(new PersonBuilder()

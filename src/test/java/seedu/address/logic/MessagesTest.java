@@ -65,4 +65,18 @@ public class MessagesTest {
         assertEquals("Bob; Phone: ; Address: 311, Clementi Ave 2; Tags: ", formatted);
     }
 
+    @Test
+    public void format_personWithoutAddress_success() {
+        Person person = new Person(
+                Id.of(1),
+                new Name("Bob"),
+                Optional.of(new Phone("98765432")),
+                Optional.empty(),
+                new HashSet<Tag>());
+
+        String formatted = Messages.format(person);
+
+        assertEquals("Bob; Phone: 98765432; Address: ; Tags: ", formatted);
+    }
+
 }

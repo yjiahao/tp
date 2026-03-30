@@ -156,6 +156,32 @@ public class EditCommandParserTest {
     }
 
     @Test
+    public void parse_resetAddress_success() {
+        Id targetId = ID_SECOND;
+        String userInput = targetId.getValue() + " " + PREFIX_ADDRESS;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withoutAddress().build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_resetAddressWithOtherField_success() {
+        Id targetId = ID_SECOND;
+        String userInput = targetId.getValue() + PHONE_DESC_AMY + " " + PREFIX_ADDRESS;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withPhone(VALID_PHONE_AMY)
+                .withoutAddress()
+                .build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
     public void parse_multipleRepeatedFields_failure() {
         Id targetId = ID_FIRST;
         String userInput = targetId.getValue() + INVALID_PHONE_DESC + PHONE_DESC_BOB;
