@@ -132,7 +132,7 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void parse_multipleCategoriesSpecified_success() {
+    public void parse_multipleTagsSpecified_success() {
         Id targetId = ID_THIRD;
         String userInput = targetId.getValue() + TAG_DESC_STUDENT + TAG_DESC_PARENT;
 

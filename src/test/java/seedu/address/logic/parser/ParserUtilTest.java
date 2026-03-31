@@ -140,7 +140,7 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseTag_unsupportedCategory_throwsParseException() {
+    public void parseTag_unsupportedTag_throwsParseException() {
         assertThrows(ParseException.class, Tag.MESSAGE_TAG_CONSTRAINTS, () ->
                 ParserUtil.parseTag(UNSUPPORTED_TAG));
     }
