@@ -119,7 +119,7 @@ Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [t/TAG]…​`
 * Existing values will be updated to the input values.
 * Use this command for all tag updates. EduConnect does not provide a separate `tag` command.
 * When editing tags, the provided tags will be appended to the person’s existing tags.
-* Only the supported tags may be used: `Student`, `Parent`, `Tutor`.
+* Only valid tags may be used: `Student`, `Parent`, `Tutor`.
 * Repeating an existing tag has no effect because duplicate tags are not stored.
 * You can remove all the person’s tags by typing `t/` without specifying any tag after it.
 * `t/` must be used on its own. Do not combine `t/` with tag values in the same command.

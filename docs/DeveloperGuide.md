@@ -400,7 +400,7 @@ Extensions:
   * 2a2. User re-submits the edit request.
   * Steps 2a1-2a2 are repeated until valid input is provided.
   * Use case resumes from step 2.
-* 2b. The provided tag is not a supported tag.
+* 2b. The provided tag is not a valid tag.
   * 2b1. EduConnect shows an error message.
   * 2b2. User re-submits the edit request.
   * Steps 2b1-2b2 are repeated until valid input is provided.
