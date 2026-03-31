@@ -405,7 +405,7 @@ Extensions:
   * 2b2. User re-submits the edit request.
   * Steps 2b1-2b2 are repeated until valid input is provided.
   * Use case resumes from step 2.
-* 2c. The user combines `t/` with one or more tag values.
+* 2c. The user requests to clear all tags and also provides one or more tag values.
   * 2c1. EduConnect shows an error message.
   * 2c2. User re-submits the edit request.
   * Steps 2c1-2c2 are repeated until valid input is provided.
@@ -413,7 +413,7 @@ Extensions:
 * 3a. The selected contact already has one or more tags.
   * 3a1. EduConnect appends any missing tags and keeps existing tags unchanged.
   * Use case resumes from step 4.
-* 3b. The user enters `t/` with no tag value.
+* 3b. The user requests to clear all existing tags.
   * 3b1. EduConnect clears all existing tags for the selected contact.
   * Use case resumes from step 4.
 
