@@ -447,7 +447,7 @@ Actor: User
 Guarantees:
 * On successful completion, the specified contact is updated with the provided values.
 * Name and phone replace their previous values when provided.
-* Address replaces its previous value when a non-empty `a/ADDRESS` is provided, and is cleared when `a/` is provided with no value.
+* Address replaces its previous value when provided.
 * Provided tags are added cumulatively to the contact's existing tags, unless the user explicitly requests to clear all tags.
 * If the operation fails, the stored contacts remain unchanged.
 
@@ -481,9 +481,6 @@ Extensions:
   * Use case resumes from step 4.
 * 3b. The user requests to clear all tags.
   * 3b1. EduConnect clears all tags from the contact.
-  * Use case resumes from step 4.
-* 3c. The user provides `a/` with no value.
-  * 3c1. EduConnect clears the contact's stored address.
   * Use case resumes from step 4.
 
 #### Use case: UC06 - Search Contacts by Specified Fields
