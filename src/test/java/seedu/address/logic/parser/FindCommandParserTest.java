@@ -200,6 +200,9 @@ public class FindCommandParserTest {
     public void parse_multipleModes_throwsParseException() {
         assertParseFailure(parser, " " + PREFIX_MODE + "and " + PREFIX_MODE + "or" + NAME_DESC_AMY,
                 String.format(MESSAGE_MORE_THAN_ONE_MODE, FindCommand.MESSAGE_USAGE));
+
+        assertParseFailure(parser, " " + PREFIX_MODE + "and " + PREFIX_MODE + NAME_DESC_AMY,
+                String.format(MESSAGE_MORE_THAN_ONE_MODE, FindCommand.MESSAGE_USAGE));
     }
 
     @Test

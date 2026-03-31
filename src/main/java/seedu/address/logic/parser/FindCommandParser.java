@@ -60,11 +60,12 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> addressKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_ADDRESS));
         List<String> phoneKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_PHONE));
         List<String> tagKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_TAG));
-        List<String> modeKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_MODE));
+        List<String> rawModeKeywords = argMultimap.getAllValues(PREFIX_MODE);
+        List<String> modeKeywords = getSanitizedKeywords(rawModeKeywords);
 
         MatchMode modeKeyword;
         // By default, modeKeyword is OR
-        if (modeKeywords.size() > 1) {
+        if (rawModeKeywords.size() > 1) {
             throw new ParseException(String.format(MESSAGE_MORE_THAN_ONE_MODE, FindCommand.MESSAGE_USAGE));
         } else if (modeKeywords.isEmpty()) {
             modeKeyword = MatchMode.OR;

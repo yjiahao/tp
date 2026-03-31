@@ -33,8 +33,10 @@ public class AddressBookParser {
      * Used for initial separation of command word and args.
      */
     private static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
+    // Reject actual mode usage on non-find commands without blocking arbitrary "m/..." text in field values.
     private static final Pattern MODE_PREFIX_PATTERN =
-            Pattern.compile("(^|\\s)" + Pattern.quote(PREFIX_MODE.getPrefix()));
+            Pattern.compile("(^|\\s)" + Pattern.quote(PREFIX_MODE.getPrefix())
+                    + "(?:(?=\\s|$)|(?i:and|or)(?=\\s|$))");
     private static final Logger logger = LogsCenter.getLogger(AddressBookParser.class);
 
     /**

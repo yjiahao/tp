@@ -168,6 +168,13 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_addWithAddressContainingModeLikeText_returnsAddCommand() throws Exception {
+        Person person = new PersonBuilder().withAddress("Block m/11, 1A Kent Ridge Rd").build();
+        AddCommand command = (AddCommand) parser.parseCommand(PersonUtil.getAddCommand(person), currentMaxId);
+        assertEquals(new AddCommand(person), command);
+    }
+
+    @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
         assertThrows(ParseException.class,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT,
