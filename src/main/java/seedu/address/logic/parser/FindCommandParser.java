@@ -2,7 +2,10 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_MORE_THAN_ONE_MODE;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_MODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -14,6 +17,7 @@ import java.util.List;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.PersonContainsKeywordsPredicate.MatchMode;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -43,7 +47,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS,
-                PREFIX_TAG);
+                PREFIX_TAG, PREFIX_MODE);
 
         boolean hasPrefixes = arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_TAG);
 
@@ -56,6 +60,21 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> addressKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_ADDRESS));
         List<String> phoneKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_PHONE));
         List<String> tagKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_TAG));
+        List<String> modeKeywords = getSanitizedKeywords(argMultimap.getAllValues(PREFIX_MODE));
+        
+        MatchMode modeKeyword;
+        // By default, modeKeyword is OR
+        if (modeKeywords.size() > 1) {
+            throw new ParseException(String.format(MESSAGE_MORE_THAN_ONE_MODE, FindCommand.MESSAGE_USAGE));
+        } else if (modeKeywords.isEmpty()) {
+            modeKeyword = MatchMode.OR;
+        } else if (modeKeywords.get(0).equalsIgnoreCase("and")) {
+            modeKeyword = MatchMode.AND;
+        } else if (modeKeywords.get(0).equalsIgnoreCase("or")) {
+            modeKeyword = MatchMode.OR;
+        } else {
+            throw new ParseException(String.format(MESSAGE_INVALID_MODE, FindCommand.MESSAGE_USAGE));
+        }
 
         // Ensure there are no blank strings in Keywords
         assert nameKeywords.stream().noneMatch(String::isBlank);
@@ -73,7 +92,7 @@ public class FindCommandParser implements Parser<FindCommand> {
                 addressKeywords,
                 phoneKeywords,
                 tagKeywords,
-                PersonContainsKeywordsPredicate.MatchMode.OR
+                modeKeyword
         ));
     }
 

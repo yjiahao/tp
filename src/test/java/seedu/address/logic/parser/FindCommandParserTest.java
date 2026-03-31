@@ -14,6 +14,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -127,6 +128,14 @@ public class FindCommandParserTest {
                         Collections.singletonList(VALID_TAG_STUDENT), MatchMode.OR));
         assertParseSuccess(parser, NAME_DESC_AMY + ADDRESS_DESC_AMY + PHONE_DESC_AMY + TAG_DESC_STUDENT,
                 expectedFindCommand);
+    }
+
+    @Test
+    public void parse_andModeWithMultipleNamePrefixes_returnsFindCommand() {
+        FindCommand expectedFindCommand = new FindCommand(
+                new PersonContainsKeywordsPredicate(Arrays.asList(VALID_NAME_AMY, VALID_NAME_BOB),
+                        Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), MatchMode.AND));
+        assertParseSuccess(parser, " " + PREFIX_MODE + "and" + NAME_DESC_AMY + NAME_DESC_BOB, expectedFindCommand);
     }
 
     @Test

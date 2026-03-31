@@ -258,6 +258,25 @@ public class PersonContainsKeywordsPredicateTest {
     }
 
     @Test
+    public void test_andMode_requiresAllKeywordsWithinEnabledField() {
+        PersonContainsKeywordsPredicate predicate = predicate(Arrays.asList("Ali", "Lim"),
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), MatchMode.AND);
+
+        assertTrue(predicate.test(new PersonBuilder().withName("Ali Lim").build()));
+        assertFalse(predicate.test(new PersonBuilder().withName("Ali Tan").build()));
+    }
+
+    @Test
+    public void test_andMode_requiresAllEnabledFields() {
+        PersonContainsKeywordsPredicate predicate = predicate(Collections.singletonList("Ali"),
+                Collections.emptyList(), Collections.singletonList("345"),
+                Collections.emptyList(), MatchMode.AND);
+
+        assertTrue(predicate.test(new PersonBuilder().withName("Ali Lim").withPhone("12345678").build()));
+        assertFalse(predicate.test(new PersonBuilder().withName("Ali Lim").withPhone("99999999").build()));
+    }
+
+    @Test
     public void toStringMethod() {
         List<String> keywords = List.of("keyword1", "keyword2");
         PersonContainsKeywordsPredicate predicate = namePredicate(keywords);
@@ -270,8 +289,13 @@ public class PersonContainsKeywordsPredicateTest {
 
     private PersonContainsKeywordsPredicate predicate(List<String> nameKeywords, List<String> addressKeywords,
             List<String> phoneKeywords, List<String> tagKeywords) {
+        return predicate(nameKeywords, addressKeywords, phoneKeywords, tagKeywords, MatchMode.OR);
+    }
+
+    private PersonContainsKeywordsPredicate predicate(List<String> nameKeywords, List<String> addressKeywords,
+            List<String> phoneKeywords, List<String> tagKeywords, MatchMode matchMode) {
         return new PersonContainsKeywordsPredicate(nameKeywords, addressKeywords, phoneKeywords, tagKeywords,
-                MatchMode.OR);
+                matchMode);
     }
 
     private PersonContainsKeywordsPredicate namePredicate(List<String> keywords) {

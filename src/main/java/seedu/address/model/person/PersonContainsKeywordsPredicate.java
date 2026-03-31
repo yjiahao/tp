@@ -26,7 +26,8 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     /**
-     * Creates a predicate that searches the specified keywords in their respective fields.
+     * Creates a predicate that searches the specified keywords in their respective
+     * fields.
      */
     public PersonContainsKeywordsPredicate(List<String> nameKeywords,
             List<String> addressKeywords,
@@ -37,7 +38,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         this.addressKeywords = addressKeywords;
         this.phoneKeywords = phoneKeywords;
         this.tagKeywords = tagKeywords;
-        // To be implemented
         this.matchWord = matchWord;
 
         // Defensive Programming
@@ -53,22 +53,37 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         String name = person.getName().fullName.toLowerCase();
         String address = person.getAddress().value.toLowerCase();
         String phone = person.getPhone().map(phoneObj -> phoneObj.value).orElse("");
+        boolean isAndMode = matchWord == MatchMode.AND;
 
-        boolean matchesName = nameKeywords.stream()
-                .anyMatch(keyword -> name.contains(keyword.toLowerCase()));
+        boolean matchesName = isAndMode
+                ? nameKeywords.stream().allMatch(keyword -> name.contains(keyword.toLowerCase()))
+                : nameKeywords.stream().anyMatch(keyword -> name.contains(keyword.toLowerCase()));
 
-        boolean matchesAddress = addressKeywords.stream()
-                .anyMatch(keyword -> address.contains(keyword.toLowerCase()));
+        boolean matchesAddress = isAndMode
+                ? addressKeywords.stream().allMatch(keyword -> address.contains(keyword.toLowerCase()))
+                : addressKeywords.stream().anyMatch(keyword -> address.contains(keyword.toLowerCase()));
 
-        boolean matchesPhone = phoneKeywords.stream()
-                .anyMatch(phone::contains);
+        boolean matchesPhone = isAndMode
+                ? phoneKeywords.stream().allMatch(phone::contains)
+                : phoneKeywords.stream().anyMatch(phone::contains);
 
-        boolean matchesTag = tagKeywords.stream()
-                .anyMatch(keyword -> person.getTags().stream()
+        boolean matchesTag = isAndMode
+                ? tagKeywords.stream().allMatch(keyword -> person.getTags().stream()
+                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())))
+                : tagKeywords.stream().anyMatch(keyword -> person.getTags().stream()
                         .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())));
 
-        // Currently only OR semantics are supported.
-        return matchesName || matchesAddress || matchesPhone || matchesTag;
+        if (matchWord == MatchMode.OR) {
+            return matchesName || matchesAddress || matchesPhone || matchesTag;
+        } else if (matchWord == MatchMode.AND) {
+            boolean nameOk = nameKeywords.isEmpty() || matchesName;
+            boolean addressOk = addressKeywords.isEmpty() || matchesAddress;
+            boolean phoneOk = phoneKeywords.isEmpty() || matchesPhone;
+            boolean tagOk = tagKeywords.isEmpty() || matchesTag;
+            return nameOk && addressOk && phoneOk && tagOk;
+        } else {
+            throw new AssertionError("Unhandled match mode: " + matchWord);
+        }
     }
 
     @Override
