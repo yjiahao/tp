@@ -9,7 +9,10 @@ import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.logic.parser.Prefix;
+import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -46,18 +49,14 @@ public class PersonUtil {
         StringBuilder sb = new StringBuilder();
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         if (descriptor.isPhoneChanged()) {
-            if (descriptor.getPhone().isPresent()) {
-                sb.append(PREFIX_PHONE).append(descriptor.getPhone().get().value).append(" ");
-            } else {
-                sb.append(PREFIX_PHONE).append(" ");
-            }
+            Runnable appendClearedPhone = () -> appendClearedEditDetail(sb, PREFIX_PHONE);
+            descriptor.getPhone().ifPresentOrElse(
+                    phone -> appendPhoneEditDetail(sb, phone), appendClearedPhone);
         }
         if (descriptor.isAddressChanged()) {
-            if (descriptor.getAddress().isPresent()) {
-                sb.append(PREFIX_ADDRESS).append(descriptor.getAddress().get().value).append(" ");
-            } else {
-                sb.append(PREFIX_ADDRESS).append(" ");
-            }
+            Runnable appendClearedAddress = () -> appendClearedEditDetail(sb, PREFIX_ADDRESS);
+            descriptor.getAddress().ifPresentOrElse(
+                    address -> appendAddressEditDetail(sb, address), appendClearedAddress);
         }
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
@@ -68,5 +67,17 @@ public class PersonUtil {
             }
         }
         return sb.toString();
+    }
+
+    private static void appendPhoneEditDetail(StringBuilder sb, Phone phone) {
+        sb.append(PREFIX_PHONE).append(phone.value).append(" ");
+    }
+
+    private static void appendAddressEditDetail(StringBuilder sb, Address address) {
+        sb.append(PREFIX_ADDRESS).append(address.value).append(" ");
+    }
+
+    private static void appendClearedEditDetail(StringBuilder sb, Prefix prefix) {
+        sb.append(prefix).append(" ");
     }
 }
