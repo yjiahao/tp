@@ -26,15 +26,15 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : List all contacts.
+   * `list`: List all contacts.
 
-   * `add n/John Doe p/98765432 a/1A Kent Ridge Rd, 119224` : Add a contact named `John Doe` with a phone number `98765432` and address `1A Kent Ridge Rd, 119224` to the Address Book.
+   * `add n/John Doe p/98765432 a/1A Kent Ridge Rd, 119224`: Add a contact named `John Doe` with a phone number `98765432` and address `1A Kent Ridge Rd, 119224` to the Address Book.
 
-   * `del 3` : Delete the contact with an `ID` of 3.
+   * `del 3`: Delete the contact with an `ID` of 3.
 
-   * `clear` : Delete all contacts.
+   * `clear`: Delete all contacts.
 
-   * `exit` : Exit the app.
+   * `exit`: Exit the app.
 
 1. Refer to the [Features](#features) below for details of each command.
 
@@ -64,7 +64,7 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-### Viewing help : `help`
+### Viewing help: `help`
 
 Show a message explaining how to access the help page.
 
@@ -99,7 +99,7 @@ Examples:
 The first example gives the following expected output:
   ![result for 'add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01'](images/AddCommandResult.png)
 
-### Listing all persons : `list`
+### Listing all persons: `list`
 
 Show a list of all persons in the address book.
 
@@ -109,7 +109,7 @@ Format: `list`
 
   ![result for 'list' with no phone number and address](images/missingPhoneNumberAndAddress.png)
 
-### Editing a person : `edit`
+### Editing a person: `edit`
 
 Edit an existing person in the address book.
 
@@ -159,7 +159,7 @@ Notes:
 - Every search term must be attached to a prefix.
 - Contacts matching multiple keywords still appear only once in the filtered list.
 
-### Deleting a person : `del`
+### Deleting a person: `del`
 
 Delete the specified person from the address book.
 
@@ -189,13 +189,13 @@ Examples:
 * `copy 9 a/`: Copy the address of the person with `ID` 9 to the clipboard.
 * `copy 1 p/`: Fail if `ID` 1 is not found or the phone number field of the person with `ID` 1 is empty. 
 
-### Clearing all entries : `clear`
+### Clearing all entries: `clear`
 
 Clear all entries from the address book, whilst displaying all the contacts that have been removed.
 
 Format: `clear`
 
-### Exiting the program : `exit`
+### Exiting the program: `exit`
 
 Exit the program.
 
