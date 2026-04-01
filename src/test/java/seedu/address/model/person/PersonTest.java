@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
@@ -33,6 +34,10 @@ public class PersonTest {
 
         // same name, phone number, address, different tags -> returns true
         Person editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PARENT).build();
+        assertTrue(ALICE.isSamePerson(editedAlice));
+
+        // same name, phone number, address, different date -> returns true
+        editedAlice = new PersonBuilder(ALICE).withDate(VALID_DATE_BOB).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
         // null -> returns false
@@ -131,6 +136,10 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PARENT).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different date -> returns false
+        editedAlice = new PersonBuilder(ALICE).withDate(VALID_DATE_BOB).build();
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
@@ -140,6 +149,7 @@ public class PersonTest {
                 + ", name=" + ALICE.getName()
                 + ", phone=" + ALICE.getPhone()
                 + ", address=" + ALICE.getAddress()
+                + ", date=" + ALICE.getDate()
                 + ", tags=" + ALICE.getTags()
                 + ", remark=" + ALICE.getRemark() + "}";
         assertEquals(expected, ALICE.toString());

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -27,6 +28,7 @@ public class PersonBuilder {
     private Name name;
     private Optional<Phone> phone;
     private Address address;
+    private Optional<Date> date;
     private Set<Tag> tags;
     private Optional<Remark> remark;
 
@@ -38,6 +40,7 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         phone = Optional.of(new Phone(DEFAULT_PHONE));
         address = new Address(DEFAULT_ADDRESS);
+        date = Optional.empty();
         tags = new HashSet<>();
         remark = Optional.of(new Remark(DEFAULT_REMARK));
     }
@@ -50,6 +53,7 @@ public class PersonBuilder {
         name = personToCopy.getName();
         phone = personToCopy.getPhone();
         address = personToCopy.getAddress();
+        date = personToCopy.getDate();
         tags = new HashSet<>(personToCopy.getTags());
         remark = personToCopy.getRemark();
     }
@@ -87,6 +91,22 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code Date} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withDate(String date) {
+        this.date = Optional.of(new Date(date));
+        return this;
+    }
+
+    /**
+     * Sets the {@code Date} of the {@code Person} that we are building as empty.
+     */
+    public PersonBuilder withoutDate() {
+        this.date = Optional.empty();
+        return this;
+    }
+
+    /**
      * Sets the {@code Phone} of the {@code Person} that we are building.
      */
     public PersonBuilder withPhone(String phone) {
@@ -119,7 +139,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(id, name, phone, address, tags, remark);
+        return new Person(id, name, phone, address, date, tags, remark);
     }
 
 }

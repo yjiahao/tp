@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -31,6 +32,7 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String address;
+    private final String date;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final String remark;
 
@@ -42,12 +44,14 @@ class JsonAdaptedPerson {
             @JsonProperty("name") String name,
             @JsonProperty("phone") String phone,
             @JsonProperty("address") String address,
+            @JsonProperty("date") String date,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("remark") String remark) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.date = date;
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -63,6 +67,8 @@ class JsonAdaptedPerson {
         phone = source.getPhone().map(x -> x.value)
             .orElse(EMPTY_STRING);
         address = source.getAddress().value;
+        date = source.getDate().map(x -> x.value)
+            .orElse(EMPTY_STRING);
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -84,11 +90,31 @@ class JsonAdaptedPerson {
 
         final Address modelAddress = getModelAddress();
 
+        final Optional<Date> modelDate = getModelDate();
+
         final Set<Tag> modelTags = getModelTags();
 
         final Optional<Remark> modelRemark = getModelRemark();
 
-        return new Person(modelId, modelName, modelPhone, modelAddress, modelTags, modelRemark);
+        return new Person(modelId, modelName, modelPhone, modelAddress, modelDate, modelTags, modelRemark);
+    }
+
+    private Optional<Date> getModelDate() throws IllegalValueException {
+        validateDate();
+        if (date == null || date.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new Date(date));
+    }
+
+    private void validateDate() throws IllegalValueException {
+        if (date == null) {
+            return;
+        }
+        if (!Date.isValidDateOrEmptyString(date)) {
+            throw new IllegalValueException(Date.MESSAGE_CONSTRAINTS);
+        }
     }
 
     private Optional<Remark> getModelRemark() throws IllegalValueException {

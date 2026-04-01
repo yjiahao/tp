@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -23,22 +24,22 @@ public class SampleDataUtil {
         return new Person[] {
             new Person(Id.of(1), new Name("Alex Yeoh"), Optional.of(new Phone("87438807")),
                 new Address("Blk 30 Geylang Street 29, #06-40"),
-                getTagSet("Student"), Optional.of(new Remark("First student"))),
+                Optional.<Date>empty(), getTagSet("Student"), Optional.of(new Remark("First student"))),
             new Person(Id.of(2), new Name("Bernice Yu"), Optional.of(new Phone("99272758")),
                 new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
-                getTagSet("Parent"), Optional.empty()),
+                Optional.<Date>empty(), getTagSet("Parent"), Optional.empty()),
             new Person(Id.of(3), new Name("Charlotte Oliveiro"), Optional.of(new Phone("93210283")),
                 new Address("Blk 11 Ang Mo Kio Street 74, #11-04"),
-                getTagSet("Tutor"), Optional.empty()),
+                Optional.<Date>empty(), getTagSet("Tutor"), Optional.empty()),
             new Person(Id.of(4), new Name("David Li"), Optional.of(new Phone("91031282")),
                 new Address("Blk 436 Serangoon Gardens Street 26, #16-43"),
-                getTagSet("Student"), Optional.of(new Remark("2nd student"))),
+                Optional.<Date>empty(), getTagSet("Student"), Optional.of(new Remark("2nd student"))),
             new Person(Id.of(5), new Name("Irfan Ibrahim"), Optional.of(new Phone("92492021")),
                 new Address("Blk 47 Tampines Street 20, #17-35"),
-                getTagSet("Parent"), Optional.of(new Remark("new student"))),
+                Optional.<Date>empty(), getTagSet("Parent"), Optional.of(new Remark("new student"))),
             new Person(Id.of(6), new Name("Roy Balakrishnan"), Optional.of(new Phone("92624417")),
                 new Address("Blk 45 Aljunied Street 85, #11-31"),
-                getTagSet("Tutor"), Optional.empty())
+                Optional.<Date>empty(), getTagSet("Tutor"), Optional.empty())
         };
     }
 

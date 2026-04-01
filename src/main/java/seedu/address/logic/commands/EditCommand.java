@@ -20,6 +20,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -106,12 +107,13 @@ public class EditCommand extends Command {
             ? editPersonDescriptor.getPhone()
             : personToEdit.getPhone();
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
+        Optional<Date> updatedDate = personToEdit.getDate();
         Set<Tag> updatedTags = createUpdatedTags(personToEdit.getTags(), editPersonDescriptor);
         Optional<Remark> updatedRemark = editPersonDescriptor.isRemarkChanged()
             ? editPersonDescriptor.getRemark()
             : personToEdit.getRemark();
 
-        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTags, updatedRemark);
+        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedDate, updatedTags, updatedRemark);
     }
 
     private static Set<Tag> createUpdatedTags(Set<Tag> existingTags, EditPersonDescriptor editPersonDescriptor) {

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.Prefix;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -60,6 +61,7 @@ public class MessagesTest {
                 new Name("Bob"),
                 Optional.<Phone>empty(),
                 new Address("311, Clementi Ave 2"),
+                Optional.<Date>empty(),
                 new HashSet<Tag>(),
                 Optional.<Remark>of(new Remark("Test remark 1")));
 
@@ -75,6 +77,7 @@ public class MessagesTest {
                 new Name("Bob"),
                 Optional.<Phone>of(new Phone("91234567")),
                 new Address("311, Clementi Ave 2"),
+                Optional.<Date>empty(),
                 new HashSet<Tag>(),
                 Optional.<Remark>empty());
 
