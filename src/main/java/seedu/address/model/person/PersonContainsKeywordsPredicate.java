@@ -65,38 +65,34 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
             .orElse(EMPTY_STRING);
         boolean isAndMode = matchWord == MatchMode.AND;
 
-        boolean matchesName = isAndMode
-                ? nameKeywords.stream().allMatch(keyword -> name.contains(keyword.toLowerCase()))
-                : nameKeywords.stream().anyMatch(keyword -> name.contains(keyword.toLowerCase()));
+        boolean matchesName = matchesKeywords(nameKeywords,
+                keyword -> name.contains(keyword.toLowerCase()), isAndMode);
 
-        boolean matchesAddress = isAndMode
-                ? addressKeywords.stream().allMatch(keyword -> address.contains(keyword.toLowerCase()))
-                : addressKeywords.stream().anyMatch(keyword -> address.contains(keyword.toLowerCase()));
+        boolean matchesAddress = matchesKeywords(addressKeywords,
+                keyword -> address.contains(keyword.toLowerCase()), isAndMode);
 
-        boolean matchesPhone = isAndMode
-                ? phoneKeywords.stream().allMatch(phone::contains)
-                : phoneKeywords.stream().anyMatch(phone::contains);
+        boolean matchesPhone = matchesKeywords(phoneKeywords, phone::contains, isAndMode);
 
-        boolean matchesTag = isAndMode
-                ? tagKeywords.stream().allMatch(keyword -> person.getTags().stream()
-                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())))
-                : tagKeywords.stream().anyMatch(keyword -> person.getTags().stream()
-                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())));
+        boolean matchesTag = matchesKeywords(tagKeywords,
+                keyword -> person.getTags().stream()
+                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())),
+                isAndMode);
 
-        boolean matchesRemark = remarkKeywords.stream()
-                .anyMatch(remark::contains);
+        boolean matchesRemark = matchesKeywords(remarkKeywords, remark::contains, isAndMode);
 
         if (matchWord == MatchMode.OR) {
             return matchesName || matchesAddress || matchesPhone || matchesTag || matchesRemark;
         } else if (matchWord == MatchMode.AND) {
-            boolean nameOk = nameKeywords.isEmpty() || matchesName;
-            boolean addressOk = addressKeywords.isEmpty() || matchesAddress;
-            boolean phoneOk = phoneKeywords.isEmpty() || matchesPhone;
-            boolean tagOk = tagKeywords.isEmpty() || matchesTag;
-            return nameOk && addressOk && phoneOk && tagOk;
+            return matchesName && matchesAddress && matchesPhone && matchesTag && matchesRemark;
         } else {
             throw new AssertionError("Unhandled match mode: " + matchWord);
         }
+    }
+
+    private boolean matchesKeywords(List<String> keywords, Predicate<String> matcher, boolean isAndMode) {
+        return isAndMode
+                ? keywords.stream().allMatch(matcher)
+                : keywords.stream().anyMatch(matcher);
     }
 
     @Override

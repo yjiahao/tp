@@ -68,10 +68,12 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         MatchMode modeKeyword;
         // By default, modeKeyword is OR
-        if (rawModeKeywords.size() > 1) {
+        if (rawModeKeywords.isEmpty()) {
+            modeKeyword = MatchMode.OR;
+        } else if (rawModeKeywords.size() > 1) {
             throw new ParseException(String.format(MESSAGE_MORE_THAN_ONE_MODE, FindCommand.MESSAGE_USAGE));
         } else if (modeKeywords.isEmpty()) {
-            modeKeyword = MatchMode.OR;
+            throw new ParseException(String.format(MESSAGE_INVALID_MODE, FindCommand.MESSAGE_USAGE));
         } else if (modeKeywords.get(0).equalsIgnoreCase("and")) {
             modeKeyword = MatchMode.AND;
         } else if (modeKeywords.get(0).equalsIgnoreCase("or")) {

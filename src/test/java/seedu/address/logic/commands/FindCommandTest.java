@@ -95,6 +95,7 @@ public class FindCommandTest {
                 Collections.singletonList("Clementi"),
                 Collections.singletonList("9876"),
                 Collections.singletonList("Parent"),
+                Collections.emptyList(),
                 MatchMode.AND);
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);

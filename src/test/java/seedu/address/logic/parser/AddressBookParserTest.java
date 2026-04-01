@@ -138,7 +138,7 @@ public class AddressBookParserTest {
                 currentMaxId);
         assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(
                 Collections.singletonList("Benson"), Collections.emptyList(), Collections.emptyList(),
-                Collections.singletonList("Parent"), MatchMode.AND)), command);
+                Collections.singletonList("Parent"), Collections.emptyList(), MatchMode.AND)), command);
     }
 
     @Test
