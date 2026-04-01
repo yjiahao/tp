@@ -2,6 +2,7 @@ package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DATE_AMY;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,13 +46,14 @@ public class MessagesTest {
                 .withName("Alice")
                 .withPhone("91234567")
                 .withAddress("123, Jurong West Ave 6")
+                .withDate(VALID_DATE_AMY)
                 .withTags("Student")
                 .build();
 
         String formatted = Messages.format(person);
 
-        assertEquals("Alice; Phone: 91234567; Address: 123, Jurong West Ave 6; Tags: [Student]; Remark: first student",
-            formatted);
+        assertEquals("Alice; Phone: 91234567; Address: 123, Jurong West Ave 6; Date: 2026-04-01;"
+                + " Tags: [Student]; Remark: first student", formatted);
     }
 
     @Test
@@ -67,7 +69,8 @@ public class MessagesTest {
 
         String formatted = Messages.format(person);
 
-        assertEquals("Bob; Phone: ; Address: 311, Clementi Ave 2; Tags: ; Remark: Test remark 1", formatted);
+        assertEquals("Bob; Phone: ; Address: 311, Clementi Ave 2; Date: ; Tags: ; Remark: Test remark 1",
+                formatted);
     }
 
     @Test
@@ -83,6 +86,6 @@ public class MessagesTest {
 
         String formatted = Messages.format(person);
 
-        assertEquals("Bob; Phone: 91234567; Address: 311, Clementi Ave 2; Tags: ; Remark: ", formatted);
+        assertEquals("Bob; Phone: 91234567; Address: 311, Clementi Ave 2; Date: ; Tags: ; Remark: ", formatted);
     }
 }

@@ -21,12 +21,14 @@ public class PersonCard extends UiPart<Region> {
 
     private static final String MESSAGE_MISSING_PHONE_NUMBER = "No phone number provided";
     private static final String MESSAGE_MISSING_ADDRESS = "No address provided";
+    private static final String MESSAGE_MISSING_DATE = "No date provided";
     private static final String MESSAGE_MISSING_REMARK = "No remark provided";
 
     private static final String CSS_CLASS_MISSING_FIELD = "missing-field";
 
     private static final String PHONE_ICON = "\uD83D\uDCDE";
     private static final String ADDRESS_ICON = "\uD83C\uDFE0";
+    private static final String DATE_ICON = "\uD83D\uDCC5";
     private static final String REMARK_ICON = "\uD83D\uDCDD";
 
     /**
@@ -50,6 +52,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label address;
     @FXML
+    private Label date;
+    @FXML
     private FlowPane tags;
     @FXML
     private Label remark;
@@ -67,6 +71,7 @@ public class PersonCard extends UiPart<Region> {
         renderNameWithId(person, nameWithId);
         renderPhone(person, phone);
         renderAddress(person, address);
+        renderDate(person, date);
         renderTags(person);
         renderRemark(person, remark);
     }
@@ -118,6 +123,13 @@ public class PersonCard extends UiPart<Region> {
         } else {
             addressLabel.setText(ADDRESS_ICON + " " + address);
         }
+    }
+
+    private void renderDate(Person person, Label dateLabel) {
+        person.getDate().ifPresentOrElse(dateValue -> dateLabel.setText(DATE_ICON + " " + dateValue.value), () -> {
+            dateLabel.setText(DATE_ICON + " " + MESSAGE_MISSING_DATE);
+            addCssClass(dateLabel, CSS_CLASS_MISSING_FIELD);
+        });
     }
 
     /**
