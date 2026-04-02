@@ -12,12 +12,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -32,9 +32,14 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String address;
-    private final String date;
+    private final String time;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final String remark;
+
+    public JsonAdaptedPerson(int id, String name, String phone, String address, String time,
+            List<JsonAdaptedTag> tags, String remark) {
+        this(id, name, phone, address, time, null, tags, remark);
+    }
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -44,14 +49,15 @@ class JsonAdaptedPerson {
             @JsonProperty("name") String name,
             @JsonProperty("phone") String phone,
             @JsonProperty("address") String address,
-            @JsonProperty("date") String date,
+            @JsonProperty("time") String time,
+            @JsonProperty("date") String legacyDate,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("remark") String remark) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.address = address;
-        this.date = date;
+        this.time = resolveStoredTime(time, legacyDate);
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -67,7 +73,7 @@ class JsonAdaptedPerson {
         phone = source.getPhone().map(x -> x.value)
             .orElse(EMPTY_STRING);
         address = source.getAddress().value;
-        date = source.getDate().map(x -> x.value)
+        time = source.getTime().map(x -> x.value)
             .orElse(EMPTY_STRING);
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -90,31 +96,41 @@ class JsonAdaptedPerson {
 
         final Address modelAddress = getModelAddress();
 
-        final Optional<Date> modelDate = getModelDate();
+        final Optional<Time> modelTime = getModelTime();
 
         final Set<Tag> modelTags = getModelTags();
 
         final Optional<Remark> modelRemark = getModelRemark();
 
-        return new Person(modelId, modelName, modelPhone, modelAddress, modelDate, modelTags, modelRemark);
+        return new Person(modelId, modelName, modelPhone, modelAddress, modelTime, modelTags, modelRemark);
     }
 
-    private Optional<Date> getModelDate() throws IllegalValueException {
-        validateDate();
-        if (date == null || date.isEmpty()) {
+    private Optional<Time> getModelTime() throws IllegalValueException {
+        validateTime();
+        if (time == null || time.isEmpty()) {
             return Optional.empty();
         }
 
-        return Optional.of(new Date(date));
+        return Optional.of(new Time(time));
     }
 
-    private void validateDate() throws IllegalValueException {
-        if (date == null) {
+    private void validateTime() throws IllegalValueException {
+        if (time == null) {
             return;
         }
-        if (!Date.isValidDateOrEmptyString(date)) {
-            throw new IllegalValueException(Date.MESSAGE_CONSTRAINTS);
+        if (!Time.isValidTimeOrEmptyString(time)) {
+            throw new IllegalValueException(Time.MESSAGE_CONSTRAINTS);
         }
+    }
+
+    private static String resolveStoredTime(String time, String legacyDate) {
+        if (time != null) {
+            return time;
+        }
+        if (legacyDate == null) {
+            return null;
+        }
+        return Time.isValidTimeOrEmptyString(legacyDate) ? legacyDate : EMPTY_STRING;
     }
 
     private Optional<Remark> getModelRemark() throws IllegalValueException {

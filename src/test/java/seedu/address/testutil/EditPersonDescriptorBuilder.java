@@ -7,11 +7,11 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -37,7 +37,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setName(person.getName());
         descriptor.setPhone(person.getPhone());
         descriptor.setAddress(person.getAddress());
-        descriptor.setDate(person.getDate());
+        descriptor.setTime(person.getTime());
         descriptor.setTags(person.getTags());
         descriptor.setRemark(person.getRemark());
     }
@@ -67,18 +67,18 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Date} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Time} of the {@code EditPersonDescriptor} that we are building.
      */
-    public EditPersonDescriptorBuilder withDate(String date) {
-        descriptor.setDate(Optional.of(new Date(date)));
+    public EditPersonDescriptorBuilder withTime(String time) {
+        descriptor.setTime(Optional.of(new Time(time)));
         return this;
     }
 
     /**
-     * Clears the {@code Date} of the {@code EditPersonDescriptor} that we are building.
+     * Clears the {@code Time} of the {@code EditPersonDescriptor} that we are building.
      */
-    public EditPersonDescriptorBuilder withoutDate() {
-        descriptor.setDate(Optional.empty());
+    public EditPersonDescriptorBuilder withoutTime() {
+        descriptor.setTime(Optional.empty());
         return this;
     }
 
@@ -93,7 +93,7 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Remark} of the {@code EditPersonDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withRemark(String remark) {
         descriptor.setRemark(Optional.of(new Remark(remark)));

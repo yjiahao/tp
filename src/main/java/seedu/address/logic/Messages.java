@@ -42,8 +42,8 @@ public class Messages {
                 .append(person.getPhone().map(x -> x.toString()).orElse(EMPTY_STRING))
                 .append("; Address: ")
                 .append(person.getAddress())
-                .append("; Date: ")
-                .append(person.getDate().map(x -> x.toString()).orElse(EMPTY_STRING))
+                .append("; Time: ")
+                .append(person.getTime().map(x -> x.toString()).orElse(EMPTY_STRING))
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         builder.append("; Remark: ")

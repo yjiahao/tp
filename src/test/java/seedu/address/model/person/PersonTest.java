@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_BOB;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
@@ -37,8 +37,8 @@ public class PersonTest {
         Person editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PARENT).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
-        // same name, phone number, address, different date -> returns true
-        editedAlice = new PersonBuilder(ALICE).withDate(VALID_DATE_BOB).build();
+        // same name, phone number, address, different time -> returns true
+        editedAlice = new PersonBuilder(ALICE).withTime(VALID_TIME_BOB).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
         // null -> returns false
@@ -138,8 +138,8 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PARENT).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different date -> returns false
-        editedAlice = new PersonBuilder(ALICE).withDate(VALID_DATE_BOB).build();
+        // different time -> returns false
+        editedAlice = new PersonBuilder(ALICE).withTime(VALID_TIME_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different remark -> returns false
@@ -160,7 +160,7 @@ public class PersonTest {
                 + ", name=" + ALICE.getName()
                 + ", phone=" + ALICE.getPhone()
                 + ", address=" + ALICE.getAddress()
-                + ", date=" + ALICE.getDate()
+                + ", time=" + ALICE.getTime()
                 + ", tags=" + ALICE.getTags()
                 + ", remark=" + ALICE.getRemark() + "}";
         assertEquals(expected, ALICE.toString());

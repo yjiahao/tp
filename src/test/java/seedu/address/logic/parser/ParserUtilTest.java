@@ -15,25 +15,25 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
     private static final String INVALID_PHONE = "+651234";
-    private static final String INVALID_DATE = "2026-02-30";
+    private static final String INVALID_TIME = "25:00";
     private static final String INVALID_TAG = "#friend";
     private static final String UNSUPPORTED_TAG = "friend";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "12345678";
     private static final String VALID_ADDRESS = "123 Main Street #0505";
-    private static final String VALID_DATE = "2026-04-02";
-    private static final String VALID_DATE_ALTERNATE = "2/4/2026";
+    private static final String VALID_TIME = "18:00";
+    private static final String VALID_TIME_ALTERNATE = "1800";
     private static final String VALID_TAG_1 = "Student";
     private static final String VALID_TAG_2 = "Parent";
 
@@ -137,42 +137,42 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseDate_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseDate(null));
+    public void parseTime_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseTime(null));
     }
 
     @Test
-    public void parseDate_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, () -> ParserUtil.parseDate(Optional.of(INVALID_DATE)));
+    public void parseTime_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseTime(Optional.of(INVALID_TIME)));
     }
 
     @Test
-    public void parseDate_validValueWithoutWhitespace_returnsDate() throws Exception {
-        Optional<Date> expectedDate = Optional.of(new Date(VALID_DATE));
-        assertEquals(expectedDate, ParserUtil.parseDate(Optional.of(VALID_DATE)));
+    public void parseTime_validValueWithoutWhitespace_returnsTime() throws Exception {
+        Optional<Time> expectedTime = Optional.of(new Time(VALID_TIME));
+        assertEquals(expectedTime, ParserUtil.parseTime(Optional.of(VALID_TIME)));
     }
 
     @Test
-    public void parseDate_alternateValidValueWithoutWhitespace_returnsCanonicalDate() throws Exception {
-        Optional<Date> expectedDate = Optional.of(new Date(VALID_DATE));
-        assertEquals(expectedDate, ParserUtil.parseDate(Optional.of(VALID_DATE_ALTERNATE)));
+    public void parseTime_alternateValidValueWithoutWhitespace_returnsCanonicalTime() throws Exception {
+        Optional<Time> expectedTime = Optional.of(new Time(VALID_TIME));
+        assertEquals(expectedTime, ParserUtil.parseTime(Optional.of(VALID_TIME_ALTERNATE)));
     }
 
     @Test
-    public void parseDate_validValueWithWhitespace_returnsTrimmedDate() throws Exception {
-        String dateWithWhitespace = WHITESPACE + VALID_DATE + WHITESPACE;
-        Optional<Date> expectedDate = Optional.of(new Date(VALID_DATE));
-        assertEquals(expectedDate, ParserUtil.parseDate(Optional.of(dateWithWhitespace)));
+    public void parseTime_validValueWithWhitespace_returnsTrimmedTime() throws Exception {
+        String timeWithWhitespace = WHITESPACE + VALID_TIME + WHITESPACE;
+        Optional<Time> expectedTime = Optional.of(new Time(VALID_TIME));
+        assertEquals(expectedTime, ParserUtil.parseTime(Optional.of(timeWithWhitespace)));
     }
 
     @Test
-    public void parseDate_emptyOptional_returnsEmptyOptional() throws Exception {
-        assertEquals(Optional.empty(), ParserUtil.parseDate(Optional.empty()));
+    public void parseTime_emptyOptional_returnsEmptyOptional() throws Exception {
+        assertEquals(Optional.empty(), ParserUtil.parseTime(Optional.empty()));
     }
 
     @Test
-    public void parseDate_emptyStringInOptional_returnsOptionalEmpty() throws Exception {
-        assertEquals(Optional.empty(), ParserUtil.parseDate(Optional.of("")));
+    public void parseTime_emptyStringInOptional_returnsOptionalEmpty() throws Exception {
+        assertEquals(Optional.empty(), ParserUtil.parseTime(Optional.of("")));
     }
 
     @Test

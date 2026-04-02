@@ -9,11 +9,11 @@ import java.util.Set;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -101,26 +101,26 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String date} into a {@code Date}.
+     * Parses a {@code String time} into a {@code Time}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code date} is invalid.
+     * @throws ParseException if the given {@code time} is invalid.
      */
-    public static Optional<Date> parseDate(Optional<String> date) throws ParseException {
-        requireNonNull(date);
+    public static Optional<Time> parseTime(Optional<String> time) throws ParseException {
+        requireNonNull(time);
 
-        date = date.filter(dateString -> !dateString.isEmpty());
-        if (date.isEmpty()) {
+        time = time.filter(timeString -> !timeString.isEmpty());
+        if (time.isEmpty()) {
             return Optional.empty();
         }
 
-        Date parsedDate = date.map(dateString -> requireNonNull(dateString))
-                .map(dateString -> dateString.trim())
-                .filter(trimmedDateString -> Date.isValidDate(trimmedDateString))
-                .map(trimmedDateString -> new Date(trimmedDateString))
-                .orElseThrow(() -> new ParseException(Date.MESSAGE_CONSTRAINTS));
+        Time parsedTime = time.map(timeString -> requireNonNull(timeString))
+                .map(String::trim)
+                .filter(Time::isValidTime)
+                .map(Time::new)
+                .orElseThrow(() -> new ParseException(Time.MESSAGE_CONSTRAINTS));
 
-        return Optional.of(parsedDate);
+        return Optional.of(parsedTime);
     }
 
     /**

@@ -3,30 +3,30 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.DATE_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.DATE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_DATE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TIME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_STUDENT;
+import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.UNSUPPORTED_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_DATE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_AMY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIds.ID_FIRST;
@@ -38,10 +38,10 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
@@ -73,7 +73,7 @@ public class EditCommandParserTest {
     public void parse_invalidValue_failure() {
         assertParseFailure(parser, "1" + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + INVALID_DATE_DESC, Date.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + INVALID_TIME_DESC, Time.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS);
         assertParseFailure(parser, "1" + UNSUPPORTED_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS);
 
@@ -92,10 +92,10 @@ public class EditCommandParserTest {
     public void parse_allFieldsSpecified_success() {
         Id targetId = ID_SECOND;
         String userInput = targetId.getValue() + PHONE_DESC_BOB + TAG_DESC_PARENT
-                + ADDRESS_DESC_AMY + DATE_DESC_AMY + NAME_DESC_AMY + TAG_DESC_STUDENT;
+                + ADDRESS_DESC_AMY + TIME_DESC_AMY + NAME_DESC_AMY + TAG_DESC_STUDENT;
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withPhone(VALID_PHONE_BOB).withAddress(VALID_ADDRESS_AMY).withDate(VALID_DATE_AMY)
+                .withPhone(VALID_PHONE_BOB).withAddress(VALID_ADDRESS_AMY).withTime(VALID_TIME_AMY)
                 .withTags(VALID_TAG_PARENT, VALID_TAG_STUDENT).build();
         EditCommand expectedCommand = new EditCommand(targetId, descriptor);
 
@@ -132,8 +132,8 @@ public class EditCommandParserTest {
         expectedCommand = new EditCommand(targetId, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
-        userInput = targetId.getValue() + DATE_DESC_AMY;
-        descriptor = new EditPersonDescriptorBuilder().withDate(VALID_DATE_AMY).build();
+        userInput = targetId.getValue() + TIME_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withTime(VALID_TIME_AMY).build();
         expectedCommand = new EditCommand(targetId, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
@@ -177,18 +177,18 @@ public class EditCommandParserTest {
         assertParseFailure(parser, userInput, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
         userInput = targetId.getValue() + PHONE_DESC_AMY + ADDRESS_DESC_AMY
-                + DATE_DESC_AMY + TAG_DESC_STUDENT + PHONE_DESC_AMY + ADDRESS_DESC_AMY
-                + DATE_DESC_AMY + TAG_DESC_STUDENT + PHONE_DESC_BOB + ADDRESS_DESC_BOB
-                + DATE_DESC_BOB + TAG_DESC_PARENT;
+                + TIME_DESC_AMY + TAG_DESC_STUDENT + PHONE_DESC_AMY + ADDRESS_DESC_AMY
+                + TIME_DESC_AMY + TAG_DESC_STUDENT + PHONE_DESC_BOB + ADDRESS_DESC_BOB
+                + TIME_DESC_BOB + TAG_DESC_PARENT;
 
         assertParseFailure(parser, userInput,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_DATE));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_TIME));
 
         userInput = targetId.getValue() + INVALID_NAME_DESC + INVALID_PHONE_DESC
-                + INVALID_DATE_DESC + INVALID_PHONE_DESC + INVALID_NAME_DESC + DATE_DESC_AMY;
+                + INVALID_TIME_DESC + INVALID_PHONE_DESC + INVALID_NAME_DESC + TIME_DESC_AMY;
 
         assertParseFailure(parser, userInput,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_NAME, PREFIX_DATE));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_NAME, PREFIX_TIME));
     }
 
     @Test
@@ -203,22 +203,22 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void parse_clearDate_success() {
+    public void parse_clearTime_success() {
         Id targetId = ID_THIRD;
-        String userInput = targetId.getValue() + " " + PREFIX_DATE;
+        String userInput = targetId.getValue() + " " + PREFIX_TIME;
 
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withoutDate().build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withoutTime().build();
         EditCommand expectedCommand = new EditCommand(targetId, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test
-    public void parse_alternateDateFormat_success() {
+    public void parse_alternateTimeFormat_success() {
         Id targetId = ID_SECOND;
-        String userInput = targetId.getValue() + " " + PREFIX_DATE + "2/4/2026";
+        String userInput = targetId.getValue() + " " + PREFIX_TIME + "1800";
 
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withDate("2026-04-02").build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTime("18:00").build();
         EditCommand expectedCommand = new EditCommand(targetId, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);

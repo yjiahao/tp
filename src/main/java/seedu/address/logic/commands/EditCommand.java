@@ -2,11 +2,11 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Collections;
@@ -21,12 +21,12 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -43,15 +43,16 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_DATE + "DATE] "
+            + "[" + PREFIX_TIME + "TIME] "
             + "[" + PREFIX_TAG + "CATEGORY] "
             + "[" + PREFIX_REMARK + "REMARK]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_DATE + "2026-04-02 "
+            + PREFIX_TIME + "18:00 "
             + PREFIX_TAG + "Student " + PREFIX_REMARK + "needs additional practices\n"
             + "To clear all existing tags, use " + COMMAND_WORD + " 1 " + PREFIX_TAG + "\n"
-            + "To clear the stored date, use " + COMMAND_WORD + " 1 " + PREFIX_DATE;
+            + "To clear the stored time, use " + COMMAND_WORD + " 1 " + PREFIX_TIME + "\n"
+            + "Accepted time formats: HH:mm or HHmm";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -111,15 +112,15 @@ public class EditCommand extends Command {
             ? editPersonDescriptor.getPhone()
             : personToEdit.getPhone();
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Optional<Date> updatedDate = editPersonDescriptor.isDateChanged()
-                ? editPersonDescriptor.getDate()
-                : personToEdit.getDate();
+        Optional<Time> updatedTime = editPersonDescriptor.isTimeChanged()
+                ? editPersonDescriptor.getTime()
+                : personToEdit.getTime();
         Set<Tag> updatedTags = createUpdatedTags(personToEdit.getTags(), editPersonDescriptor);
         Optional<Remark> updatedRemark = editPersonDescriptor.isRemarkChanged()
             ? editPersonDescriptor.getRemark()
             : personToEdit.getRemark();
 
-        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedDate, updatedTags, updatedRemark);
+        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTime, updatedTags, updatedRemark);
     }
 
     private static Set<Tag> createUpdatedTags(Set<Tag> existingTags, EditPersonDescriptor editPersonDescriptor) {
@@ -177,8 +178,8 @@ public class EditCommand extends Command {
         private Optional<Phone> phone;
         private boolean phoneChanged;
         private Address address;
-        private Optional<Date> date;
-        private boolean dateChanged;
+        private Optional<Time> time;
+        private boolean timeChanged;
         private Set<Tag> tags;
         private Optional<Remark> remark;
         private boolean remarkChanged;
@@ -190,8 +191,8 @@ public class EditCommand extends Command {
             this.phoneChanged = false;
             this.phone = Optional.empty();
 
-            this.dateChanged = false;
-            this.date = Optional.empty();
+            this.timeChanged = false;
+            this.time = Optional.empty();
 
             this.remarkChanged = false;
             this.remark = Optional.empty();
@@ -207,7 +208,7 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setPhone(toCopy.phone, toCopy.phoneChanged);
             setAddress(toCopy.address);
-            setDate(toCopy.date, toCopy.dateChanged);
+            setTime(toCopy.time, toCopy.timeChanged);
             setTags(toCopy.tags);
             setRemark(toCopy.remark, toCopy.remarkChanged);
         }
@@ -218,7 +219,7 @@ public class EditCommand extends Command {
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, address, tags)
                     || phoneChanged
-                    || dateChanged
+                    || timeChanged
                     || remarkChanged;
         }
 
@@ -290,38 +291,38 @@ public class EditCommand extends Command {
         }
 
         /**
-         * Sets the edited date value.
+         * Sets the edited time value.
          * For public use.
          */
-        public void setDate(Optional<Date> date) {
-            Optional.ofNullable(date)
-                    .ifPresentOrElse(d -> setDate(d, true), () -> setDate(Optional.empty(), false));
+        public void setTime(Optional<Time> time) {
+            Optional.ofNullable(time)
+                    .ifPresentOrElse(d -> setTime(d, true), () -> setTime(Optional.empty(), false));
         }
 
         /**
-         * Sets edited date value and explicit edit state.
+         * Sets edited time value and explicit edit state.
          * For private use.
          */
-        private void setDate(Optional<Date> date, boolean dateChanged) {
-            requireNonNull(date);
-            requireNonNull(dateChanged);
+        private void setTime(Optional<Time> time, boolean timeChanged) {
+            requireNonNull(time);
+            requireNonNull(timeChanged);
 
-            this.date = date;
-            this.dateChanged = dateChanged;
+            this.time = time;
+            this.timeChanged = timeChanged;
         }
 
         /**
-         * Returns true if date field was explicitly edited by the user.
+         * Returns true if time field was explicitly edited by the user.
          */
-        public boolean isDateChanged() {
-            return dateChanged;
+        public boolean isTimeChanged() {
+            return timeChanged;
         }
 
         /**
-         * Returns the edited date if it was provided.
+         * Returns the edited time if it was provided.
          */
-        public Optional<Date> getDate() {
-            return Optional.ofNullable(date)
+        public Optional<Time> getTime() {
+            return Optional.ofNullable(time)
                     .flatMap(dateValue -> dateValue);
         }
 
@@ -396,8 +397,8 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && phoneChanged == otherEditPersonDescriptor.phoneChanged
                     && Objects.equals(address, otherEditPersonDescriptor.address)
-                    && Objects.equals(date, otherEditPersonDescriptor.date)
-                    && dateChanged == otherEditPersonDescriptor.dateChanged
+                    && Objects.equals(time, otherEditPersonDescriptor.time)
+                    && timeChanged == otherEditPersonDescriptor.timeChanged
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
                     && Objects.equals(remark, otherEditPersonDescriptor.remark)
                     && remarkChanged == otherEditPersonDescriptor.remarkChanged;
@@ -409,7 +410,7 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("phone", phone)
                     .add("address", address)
-                    .add("date", date)
+                    .add("time", time)
                     .add("tags", tags)
                     .add("remark", remark)
                     .toString();

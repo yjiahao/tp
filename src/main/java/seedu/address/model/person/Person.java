@@ -23,7 +23,7 @@ public class Person {
     private final Address address;
 
     // Data fields
-    private final Optional<Date> date;
+    private final Optional<Time> time;
     private final Set<Tag> tags = new HashSet<>();
     private final Optional<Remark> remark;
 
@@ -35,7 +35,7 @@ public class Person {
         Name name,
         Optional<Phone> phone,
         Address address,
-        Optional<Date> date,
+        Optional<Time> time,
         Set<Tag> tags,
         Optional<Remark> remark
     ) {
@@ -43,7 +43,7 @@ public class Person {
         this.name = name;
         this.phone = phone;
         this.address = address;
-        this.date = date;
+        this.time = time;
         this.tags.addAll(tags);
         this.remark = remark;
     }
@@ -64,8 +64,8 @@ public class Person {
         return address;
     }
 
-    public Optional<Date> getDate() {
-        return date;
+    public Optional<Time> getTime() {
+        return time;
     }
 
     /**
@@ -131,7 +131,7 @@ public class Person {
         return name.equals(otherPerson.name)
                 && phone.equals(otherPerson.phone)
                 && address.equals(otherPerson.address)
-                && date.equals(otherPerson.date)
+                && time.equals(otherPerson.time)
                 && tags.equals(otherPerson.tags)
                 && remark.equals(otherPerson.remark);
     }
@@ -139,7 +139,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, address, date, tags, remark);
+        return Objects.hash(name, phone, address, time, tags, remark);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class Person {
                 .add("name", name)
                 .add("phone", phone)
                 .add("address", address)
-                .add("date", date)
+                .add("time", time)
                 .add("tags", tags)
                 .add("remark", remark)
                 .toString();

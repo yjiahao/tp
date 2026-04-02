@@ -1,11 +1,11 @@
 package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 
 import java.util.Set;
 
@@ -52,8 +52,8 @@ public class PersonUtil {
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
         descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
-        if (descriptor.isDateChanged()) {
-            appendDateEditDetail(sb, descriptor);
+        if (descriptor.isTimeChanged()) {
+            appendTimeEditDetail(sb, descriptor);
         }
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
@@ -67,11 +67,11 @@ public class PersonUtil {
         return sb.toString();
     }
 
-    private static void appendDateEditDetail(StringBuilder sb, EditPersonDescriptor descriptor) {
-        if (descriptor.getDate().isPresent()) {
-            sb.append(PREFIX_DATE).append(descriptor.getDate().get().value).append(" ");
+    private static void appendTimeEditDetail(StringBuilder sb, EditPersonDescriptor descriptor) {
+        if (descriptor.getTime().isPresent()) {
+            sb.append(PREFIX_TIME).append(descriptor.getTime().get().value).append(" ");
         } else {
-            sb.append(PREFIX_DATE).append(" ");
+            sb.append(PREFIX_TIME).append(" ");
         }
     }
 }

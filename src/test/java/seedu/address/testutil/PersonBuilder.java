@@ -5,12 +5,12 @@ import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -28,7 +28,7 @@ public class PersonBuilder {
     private Name name;
     private Optional<Phone> phone;
     private Address address;
-    private Optional<Date> date;
+    private Optional<Time> time;
     private Set<Tag> tags;
     private Optional<Remark> remark;
 
@@ -40,7 +40,7 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         phone = Optional.of(new Phone(DEFAULT_PHONE));
         address = new Address(DEFAULT_ADDRESS);
-        date = Optional.empty();
+        time = Optional.empty();
         tags = new HashSet<>();
         remark = Optional.of(new Remark(DEFAULT_REMARK));
     }
@@ -53,7 +53,7 @@ public class PersonBuilder {
         name = personToCopy.getName();
         phone = personToCopy.getPhone();
         address = personToCopy.getAddress();
-        date = personToCopy.getDate();
+        time = personToCopy.getTime();
         tags = new HashSet<>(personToCopy.getTags());
         remark = personToCopy.getRemark();
     }
@@ -91,18 +91,18 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code Date} of the {@code Person} that we are building.
+     * Sets the {@code Time} of the {@code Person} that we are building.
      */
-    public PersonBuilder withDate(String date) {
-        this.date = Optional.of(new Date(date));
+    public PersonBuilder withTime(String time) {
+        this.time = Optional.of(new Time(time));
         return this;
     }
 
     /**
-     * Sets the {@code Date} of the {@code Person} that we are building as empty.
+     * Sets the {@code Time} of the {@code Person} that we are building as empty.
      */
-    public PersonBuilder withoutDate() {
-        this.date = Optional.empty();
+    public PersonBuilder withoutTime() {
+        this.time = Optional.empty();
         return this;
     }
 
@@ -123,7 +123,7 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code Person} that we are building.
+     * Sets the {@code Remark} of the {@code Person} that we are building.
      */
     public PersonBuilder withRemark(String remarkString) {
         this.remark = Optional.of(new Remark(remarkString));
@@ -131,7 +131,7 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code Person} that we are building as empty.
+     * Sets the {@code Remark} of the {@code Person} that we are building as empty.
      */
     public PersonBuilder withoutRemark() {
         this.remark = Optional.empty();
@@ -139,7 +139,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(id, name, phone, address, date, tags, remark);
+        return new Person(id, name, phone, address, time, tags, remark);
     }
 
 }

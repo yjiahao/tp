@@ -3,11 +3,11 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
@@ -41,8 +41,8 @@ public class CommandTestUtil {
     public static final String VALID_PHONE_BOB = "22222222";
     public static final String VALID_ADDRESS_AMY = "Block 312, Amy Street 1";
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
-    public static final String VALID_DATE_AMY = "2026-04-01";
-    public static final String VALID_DATE_BOB = "2026-04-02";
+    public static final String VALID_TIME_AMY = "18:00";
+    public static final String VALID_TIME_BOB = "09:30";
     public static final String VALID_REMARK_AMY = "first student";
     public static final String VALID_REMARK_BOB = "2nd student";
 
@@ -52,8 +52,8 @@ public class CommandTestUtil {
     public static final String PHONE_DESC_BOB = " " + PREFIX_PHONE + VALID_PHONE_BOB;
     public static final String ADDRESS_DESC_AMY = " " + PREFIX_ADDRESS + VALID_ADDRESS_AMY;
     public static final String ADDRESS_DESC_BOB = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOB;
-    public static final String DATE_DESC_AMY = " " + PREFIX_DATE + VALID_DATE_AMY;
-    public static final String DATE_DESC_BOB = " " + PREFIX_DATE + VALID_DATE_BOB;
+    public static final String TIME_DESC_AMY = " " + PREFIX_TIME + VALID_TIME_AMY;
+    public static final String TIME_DESC_BOB = " " + PREFIX_TIME + VALID_TIME_BOB;
     public static final String REMARK_DESC_AMY = " " + PREFIX_REMARK + VALID_REMARK_AMY;
     public static final String REMARK_DESC_BOB = " " + PREFIX_REMARK + VALID_REMARK_BOB;
     public static final String TAG_DESC_STUDENT = " " + PREFIX_TAG + VALID_TAG_STUDENT;
@@ -64,7 +64,7 @@ public class CommandTestUtil {
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     // public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS;
-    public static final String INVALID_DATE_DESC = " " + PREFIX_DATE + "2026-02-30";
+    public static final String INVALID_TIME_DESC = " " + PREFIX_TIME + "25:00";
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";

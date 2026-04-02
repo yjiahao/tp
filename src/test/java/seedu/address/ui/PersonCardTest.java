@@ -36,13 +36,13 @@ public class PersonCardTest {
     }
 
     @Test
-    public void constructor_personWithDate_rendersDateAndExistingFields() throws Exception {
+    public void constructor_personWithTime_rendersTimeAndExistingFields() throws Exception {
         Person person = new PersonBuilder()
                 .withId(2)
                 .withName("Bart Bass")
                 .withPhone("91234567")
                 .withAddress("1 Upper East Side")
-                .withDate("2026-04-02")
+                .withTime("18:00")
                 .withTags("Student", "Tutor")
                 .withRemark("Bring notes")
                 .build();
@@ -53,27 +53,27 @@ public class PersonCardTest {
         assertEquals("Bart Bass (ID: 2)", getLabelText(personCard, "nameWithId"));
         assertEquals("\uD83D\uDCDE 91234567", getLabelText(personCard, "phone"));
         assertEquals("\uD83C\uDFE0 1 Upper East Side", getLabelText(personCard, "address"));
-        assertEquals("\uD83D\uDCC5 Apr 2 2026", getLabelText(personCard, "date"));
+        assertEquals("\u23F0 18:00", getLabelText(personCard, "time"));
         assertEquals("\uD83D\uDCDD Bring notes", getLabelText(personCard, "remark"));
-        assertFalse(hasCssClass(personCard, "date", CSS_CLASS_MISSING_FIELD));
+        assertFalse(hasCssClass(personCard, "time", CSS_CLASS_MISSING_FIELD));
         assertEquals(2, getTagsPane(personCard).getChildren().size());
     }
 
     @Test
-    public void constructor_personWithoutDate_rendersMissingDateIndicator() throws Exception {
+    public void constructor_personWithoutTime_rendersMissingTimeIndicator() throws Exception {
         Person person = new PersonBuilder()
                 .withId(5)
                 .withName("Nate Archibald")
                 .withoutPhone()
                 .withAddress("")
-                .withoutDate()
+                .withoutTime()
                 .withoutRemark()
                 .build();
 
         PersonCard personCard = createPersonCard(person, 1);
 
-        assertEquals("\uD83D\uDCC5 No date provided", getLabelText(personCard, "date"));
-        assertTrue(hasCssClass(personCard, "date", CSS_CLASS_MISSING_FIELD));
+        assertEquals("\u23F0 No time provided", getLabelText(personCard, "time"));
+        assertTrue(hasCssClass(personCard, "time", CSS_CLASS_MISSING_FIELD));
         assertEquals("\uD83D\uDCDE No phone number provided", getLabelText(personCard, "phone"));
         assertEquals("\uD83C\uDFE0 No address provided", getLabelText(personCard, "address"));
         assertEquals("\uD83D\uDCDD No remark provided", getLabelText(personCard, "remark"));

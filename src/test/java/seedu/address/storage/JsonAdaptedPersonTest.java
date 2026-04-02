@@ -15,12 +15,12 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Date;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 
 public class JsonAdaptedPersonTest {
     private static final int INVALID_ID = -1;
@@ -33,8 +33,8 @@ public class JsonAdaptedPersonTest {
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_PHONE = BENSON.getPhone().get().value.toString();
     private static final String VALID_ADDRESS = BENSON.getAddress().toString();
-    private static final String VALID_DATE = "2026-04-02";
-    private static final String INVALID_DATE = "2026-02-30";
+    private static final String VALID_TIME = "18:00";
+    private static final String INVALID_TIME = "25:00";
     private static final List<JsonAdaptedTag> VALID_TAGS = BENSON.getTags().stream()
             .map(JsonAdaptedTag::new)
             .collect(Collectors.toList());
@@ -70,21 +70,30 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_validDate_returnsPersonWithDate() throws Exception {
+    public void toModelType_validTime_returnsPersonWithTime() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
-                VALID_ID, VALID_NAME, VALID_PHONE, VALID_ADDRESS, VALID_DATE, VALID_TAGS, VALID_REMARK);
+                VALID_ID, VALID_NAME, VALID_PHONE, VALID_ADDRESS, VALID_TIME, VALID_TAGS, VALID_REMARK);
         Person modelPerson = person.toModelType();
 
-        assertEquals(Optional.of(new Date(VALID_DATE)), modelPerson.getDate());
+        assertEquals(Optional.of(new Time(VALID_TIME)), modelPerson.getTime());
     }
 
     @Test
-    public void toModelType_missingDate_returnsPersonWithEmptyDate() throws Exception {
+    public void toModelType_missingTime_returnsPersonWithEmptyTime() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
                 VALID_ID, VALID_NAME, VALID_PHONE, VALID_ADDRESS, null, VALID_TAGS, VALID_REMARK);
         Person modelPerson = person.toModelType();
 
-        assertEquals(Optional.empty(), modelPerson.getDate());
+        assertEquals(Optional.empty(), modelPerson.getTime());
+    }
+
+    @Test
+    public void toModelType_legacyDateValue_returnsPersonWithEmptyTime() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_ID, VALID_NAME, VALID_PHONE, VALID_ADDRESS, null, "2026-04-02", VALID_TAGS, VALID_REMARK);
+        Person modelPerson = person.toModelType();
+
+        assertEquals(Optional.empty(), modelPerson.getTime());
     }
 
     @Test
@@ -144,10 +153,10 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_invalidDate_throwsIllegalValueException() {
+    public void toModelType_invalidTime_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ID, VALID_NAME, VALID_PHONE,
-                VALID_ADDRESS, INVALID_DATE, VALID_TAGS, VALID_REMARK);
-        String expectedMessage = Date.MESSAGE_CONSTRAINTS;
+                VALID_ADDRESS, INVALID_TIME, VALID_TAGS, VALID_REMARK);
+        String expectedMessage = Time.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 
