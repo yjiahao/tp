@@ -38,6 +38,26 @@ public class EditPersonDescriptorTest {
     }
 
     @Test
+    public void getAddress_addressFieldIsNull_returnsEmptyOptional() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+
+        descriptor.setAddress(null);
+
+        assertTrue(descriptor.getAddress().isEmpty());
+    }
+
+    @Test
+    public void setAddress_nullAddress_resetsAddressAndEditState() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+
+        descriptor.setAddress(null);
+
+        assertTrue(descriptor.getAddress().isEmpty());
+        assertFalse(descriptor.isAddressChanged());
+        assertFalse(descriptor.isAnyFieldEdited());
+    }
+
+    @Test
     public void equals() {
         // same values -> returns true
         EditPersonDescriptor descriptorWithSameValues = new EditPersonDescriptor(DESC_AMY);
@@ -78,8 +98,9 @@ public class EditPersonDescriptorTest {
         String expected = EditPersonDescriptor.class.getCanonicalName() + "{name="
                 + editPersonDescriptor.getName().orElse(null) + ", phone="
                 + editPersonDescriptor.getPhone() + ", address="
-                + editPersonDescriptor.getAddress().orElse(null) + ", tags="
-                + editPersonDescriptor.getTags().orElse(null) + "}";
+                + editPersonDescriptor.getAddress() + ", tags="
+                + editPersonDescriptor.getTags().orElse(null) + ", remark="
+                + editPersonDescriptor.getRemark() + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }
 }

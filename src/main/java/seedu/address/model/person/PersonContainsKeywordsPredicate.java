@@ -57,12 +57,14 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         String name = person.getName().fullName.toLowerCase();
-        String address = person.getAddress().value.toLowerCase();
+        String address = person.getAddress()
+                .map(addressObject -> addressObject.value.toLowerCase())
+                .orElse(EMPTY_STRING);
         String phone = person.getPhone().map(phoneObj -> phoneObj.value).orElse(EMPTY_STRING);
         String remark = person.getRemark()
-                .map(remarkString -> remarkString.value)
-                .map(remarkString -> remarkString.toLowerCase())
-                .orElse(EMPTY_STRING);
+            .map(remarkValue -> remarkValue.value.toLowerCase())
+            .orElse(EMPTY_STRING);
+            
         boolean isAndMode = matchWord == MatchMode.AND;
 
         boolean matchesName = matchesKeywords(nameKeywords,
