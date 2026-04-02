@@ -1,8 +1,8 @@
 package seedu.address.logic.parser;
 
-import java.util.ArrayList;
-
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+
+import java.util.ArrayList;
 
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
