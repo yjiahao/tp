@@ -13,6 +13,8 @@ import static seedu.address.testutil.TypicalIds.ID_FIRST;
 import static seedu.address.testutil.TypicalIds.ID_SECOND;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.lang.reflect.Method;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.AddressBook;
@@ -69,7 +71,7 @@ public class CopyCommandTest {
 
     @Test
     public void execute_emptyAddressField_throwsCommandException() {
-        Person personWithEmptyAddress = new PersonBuilder().withId(67).withAddress("").build();
+        Person personWithEmptyAddress = new PersonBuilder().withId(67).withoutAddress().build();
         AddressBook ab = new AddressBook();
         ab.addPerson(personWithEmptyAddress);
         Model modelWithEmptyAddress = new ModelManager(ab, new UserPrefs());
@@ -79,6 +81,18 @@ public class CopyCommandTest {
         String expectedMessage = String.format(CopyCommand.MESSAGE_EMPTY_FIELD_VALUE, "address");
 
         assertCommandFailure(copyCommand, modelWithEmptyAddress, expectedMessage);
+    }
+
+    @Test
+    public void getFieldValue_addressPresent_returnsAddress() throws Exception {
+        Person personWithAddress = new PersonBuilder().withAddress("123 Clementi Road").build();
+        CopyCommand copyCommand = new CopyCommand(ID_FIRST, PREFIX_ADDRESS.getPrefix());
+        Method getFieldValueMethod = CopyCommand.class.getDeclaredMethod("getFieldValue", Person.class);
+        getFieldValueMethod.setAccessible(true);
+
+        String fieldValue = (String) getFieldValueMethod.invoke(copyCommand, personWithAddress);
+
+        assertEquals("123 Clementi Road", fieldValue);
     }
 
     @Test

@@ -158,6 +158,7 @@ Examples:
 Notes:
 - Every search term must be attached to a prefix.
 - Contacts matching multiple keywords still appear only once in the filtered list.
+- Contacts without an address will not match `a/` keywords.
 
 ### Deleting a person: `del`
 
