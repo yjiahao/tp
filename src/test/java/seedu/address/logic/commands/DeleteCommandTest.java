@@ -8,6 +8,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonWithId;
 import static seedu.address.testutil.TypicalIds.ID_FIRST;
 import static seedu.address.testutil.TypicalIds.ID_SECOND;
+import static seedu.address.testutil.TypicalIds.ID_THIRD;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.ArrayList;
@@ -104,6 +105,46 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(personToDelete);
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multipleIdsInAddressBook_success() {
+        ArrayList<Id> ids = new ArrayList<>();
+        ids.add(ID_FIRST);
+        ids.add(ID_SECOND);
+        ids.add(ID_THIRD);
+        DeleteCommand deleteCommand = new DeleteCommand(ids);
+
+        Optional<Person> first = model.findPersonById(ID_FIRST);
+        Optional<Person> second = model.findPersonById(ID_SECOND);
+        Optional<Person> third = model.findPersonById(ID_THIRD);
+
+        String expectedMessage = DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS;
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        ArrayList<Person> personsToDelete = new ArrayList<>();
+        personsToDelete.add(first.get());
+        personsToDelete.add(second.get());
+        personsToDelete.add(third.get());
+        expectedModel.deletePersons(personsToDelete);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_oneOfMultipleIdsNotInAddressBook_throwsCommandExceptionAndDeletesNothing() {
+        Id invalidId = Id.fromCurrentMaxId(model.findMaxId());
+
+        ArrayList<Id> ids = new ArrayList<Id>();
+        ids.add(ID_FIRST);
+        ids.add(invalidId);
+        DeleteCommand deleteCommand = new DeleteCommand(ids);
+
+        String expectedMessage = String.format(Messages.MESSAGE_INVALID_PERSON_ID, invalidId.getValue());
+
+        ModelManager modelSnapshot = new ModelManager(model.getAddressBook(), new UserPrefs());
+        assertCommandFailure(deleteCommand, model, expectedMessage);
+        assertEquals(modelSnapshot.getAddressBook(), model.getAddressBook());
     }
 
     @Test

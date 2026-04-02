@@ -33,6 +33,12 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_invalidArgs_throwsParseException() {
         assertParseFailure(parser, "a", Id.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "", Id.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " ", Id.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "-1", Id.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1 a", Id.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "a 1", Id.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1 -1 2", Id.MESSAGE_CONSTRAINTS);
     }
 
     @Test

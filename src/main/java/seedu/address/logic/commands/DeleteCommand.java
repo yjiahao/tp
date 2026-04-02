@@ -45,7 +45,7 @@ public class DeleteCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        ArrayList<Person> personsToDelete = new ArrayList<>();
+        ArrayList<Person> personsToDelete = new ArrayList<Person>();
         for (Id id : targetIds) {
             Person person = model.findPersonById(id)
                     .orElseThrow(() -> new CommandException(String.format(Messages.MESSAGE_INVALID_PERSON_ID,
