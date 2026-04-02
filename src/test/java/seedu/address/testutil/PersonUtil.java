@@ -11,6 +11,8 @@ import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.logic.parser.Prefix;
+import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.Tag;
 
@@ -33,10 +35,8 @@ public class PersonUtil {
         StringBuilder sb = new StringBuilder();
         sb.append(PREFIX_NAME + person.getName().fullName + " ");
 
-        assert (person.getPhone() != null) && (person.getPhone().isPresent());
-
-        sb.append(PREFIX_PHONE + person.getPhone().get().value + " ");
-        sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
+        person.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
+        person.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         person.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")
         );
@@ -51,9 +51,15 @@ public class PersonUtil {
         StringBuilder sb = new StringBuilder();
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
-        descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
+        if (descriptor.isAddressChanged()) {
+            Runnable appendClearedAddress = () -> appendClearedEditDetail(sb, PREFIX_ADDRESS);
+            descriptor.getAddress().ifPresentOrElse(
+                    address -> appendAddressEditDetail(sb, address), appendClearedAddress);
+        }
         if (descriptor.isTimeChanged()) {
-            appendTimeEditDetail(sb, descriptor);
+            Runnable appendClearedTime = () -> appendClearedEditDetail(sb, PREFIX_TIME);
+            descriptor.getTime().ifPresentOrElse(
+                    time -> appendTimeEditDetail(sb, time.value), appendClearedTime);
         }
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
@@ -67,11 +73,15 @@ public class PersonUtil {
         return sb.toString();
     }
 
-    private static void appendTimeEditDetail(StringBuilder sb, EditPersonDescriptor descriptor) {
-        if (descriptor.getTime().isPresent()) {
-            sb.append(PREFIX_TIME).append(descriptor.getTime().get().value).append(" ");
-        } else {
-            sb.append(PREFIX_TIME).append(" ");
-        }
+    private static void appendAddressEditDetail(StringBuilder sb, Address address) {
+        sb.append(PREFIX_ADDRESS).append(address.value).append(" ");
+    }
+
+    private static void appendClearedEditDetail(StringBuilder sb, Prefix prefix) {
+        sb.append(prefix).append(" ");
+    }
+
+    private static void appendTimeEditDetail(StringBuilder sb, String timeValue) {
+        sb.append(PREFIX_TIME).append(timeValue).append(" ");
     }
 }

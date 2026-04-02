@@ -20,7 +20,7 @@ public class Person {
     // Identity fields
     private final Name name;
     private final Optional<Phone> phone;
-    private final Address address;
+    private final Optional<Address> address;
 
     // Data fields
     private final Optional<Time> time;
@@ -28,13 +28,13 @@ public class Person {
     private final Optional<Remark> remark;
 
     /**
-     * Creates a Person object with an overload constructor.
+     * Creates a {@code Person} with the provided fields.
      */
     public Person(
         Id id,
         Name name,
         Optional<Phone> phone,
-        Address address,
+        Optional<Address> address,
         Optional<Time> time,
         Set<Tag> tags,
         Optional<Remark> remark
@@ -60,7 +60,7 @@ public class Person {
         return phone;
     }
 
-    public Address getAddress() {
+    public Optional<Address> getAddress() {
         return address;
     }
 

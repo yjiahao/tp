@@ -77,12 +77,12 @@ public class PersonCardTest {
     }
 
     @Test
-    public void constructor_personWithoutTime_rendersMissingTimeIndicator() throws Exception {
+    public void constructor_personWithoutOptionalFields_rendersMissingIndicators() throws Exception {
         Person person = new PersonBuilder()
                 .withId(5)
                 .withName("Nate Archibald")
                 .withoutPhone()
-                .withAddress("")
+                .withoutAddress()
                 .withoutTime()
                 .withoutRemark()
                 .build();

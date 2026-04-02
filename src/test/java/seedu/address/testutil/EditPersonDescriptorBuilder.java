@@ -59,10 +59,26 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
+     * Clears the {@code Phone} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withoutPhone() {
+        descriptor.setPhone(Optional.empty());
+        return this;
+    }
+
+    /**
      * Sets the {@code Address} of the {@code EditPersonDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withAddress(String address) {
-        descriptor.setAddress(new Address(address));
+        descriptor.setAddress(Optional.of(new Address(address)));
+        return this;
+    }
+
+    /**
+     * Clears the {@code Address} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withoutAddress() {
+        descriptor.setAddress(Optional.empty());
         return this;
     }
 

@@ -62,7 +62,7 @@ public class MessagesTest {
                 Id.of(1),
                 new Name("Bob"),
                 Optional.<Phone>empty(),
-                new Address("311, Clementi Ave 2"),
+                Optional.of(new Address("311, Clementi Ave 2")),
                 Optional.<Time>empty(),
                 new HashSet<Tag>(),
                 Optional.<Remark>of(new Remark("Test remark 1")));
@@ -79,7 +79,7 @@ public class MessagesTest {
                 Id.of(1),
                 new Name("Bob"),
                 Optional.<Phone>of(new Phone("91234567")),
-                new Address("311, Clementi Ave 2"),
+                Optional.of(new Address("311, Clementi Ave 2")),
                 Optional.<Time>empty(),
                 new HashSet<Tag>(),
                 Optional.<Remark>empty());
@@ -88,4 +88,21 @@ public class MessagesTest {
 
         assertEquals("Bob; Phone: 91234567; Address: 311, Clementi Ave 2; Time: ; Tags: ; Remark: ", formatted);
     }
+
+    @Test
+    public void format_personWithoutAddress_success() {
+        Person person = new Person(
+                Id.of(1),
+                new Name("Bob"),
+                Optional.of(new Phone("98765432")),
+                Optional.empty(),
+                Optional.<Time>empty(),
+                new HashSet<Tag>(),
+                Optional.<Remark>empty());
+
+        String formatted = Messages.format(person);
+
+        assertEquals("Bob; Phone: 98765432; Address: ; Time: ; Tags: ; Remark: ", formatted);
+    }
+
 }

@@ -114,23 +114,24 @@ Format: `list`
 
 Edit an existing person in the address book.
 
-Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [h/TIME] [t/CATEGORY]…​`
+Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [h/TIME] [t/TAG]…​`
 
 * `ID` specifies the person to be edited.
 * `ID` **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
+* You can remove the stored address by typing `a/` without specifying any value after it.
 * `h/TIME` updates the stored meeting time for that contact. You can store either a single time or a duration.
 * The accepted input formats are `HH:mm`, `HHmm`, `HH:mm - HH:mm`, and `HHmm - HHmm`.
 * You can remove the stored time by typing `h/` without specifying any value after it.
 * Times are displayed in EduConnect in normalized form. For example, `1800` is shown as `18:00`, while
   `1800 - 1930` is shown as `18:00 - 19:30`.
-* Use this command for all category updates. EduConnect does not provide a separate `tag` command.
-* When editing tags, the provided categories will be appended to the person’s existing tags.
-* Only the supported categories may be used as edit tags: `Student`, `Parent`, `Tutor`.
-* Repeating an existing category has no effect because duplicate categories are not stored.
-* You can remove all the person’s tags by typing `t/` without specifying any category after it.
-* `t/` must be used on its own. Do not combine `t/` with category values in the same command.
+* Use this command for all tag updates. EduConnect does not provide a separate `tag` command.
+* When editing tags, the provided tags will be appended to the person’s existing tags.
+* Only valid tags may be used: `Student`, `Parent`, `Tutor`.
+* Repeating an existing tag has no effect because duplicate tags are not stored.
+* You can remove all the person’s tags by typing `t/` without specifying any tag after it.
+* `t/` must be used on its own. Do not combine `t/` with tag values in the same command.
 
 Examples:
 *  `edit 1 p/91234567`: Edit the phone number of the person with `ID` 1, changing it to `91234567`.
@@ -167,6 +168,7 @@ Examples:
 Notes:
 - Every search term must be attached to a prefix.
 - Contacts matching multiple keywords still appear only once in the filtered list.
+- Contacts without an address will not match `a/` keywords.
 
 ### Deleting a person: `del`
 
@@ -250,7 +252,7 @@ Action | Format, Examples
 **Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]…​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/22224444 a/123, Clementi Rd, 1234665 t/Parent t/Tutor`
 **Clear** | `clear`
 **Delete** | `del ID`<br> e.g., `del 3`
-**Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [h/TIME] [t/CATEGORY]…​`<br> e.g.,`edit 2 h/18:00`, `edit 2 t/Parent t/Tutor`
+**Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [h/TIME] [t/TAG]…​`<br> e.g.,`edit 2 h/18:00`, `edit 2 t/Parent t/Tutor`
 **Find** | `find [n/NAME]... [a/ADDRESS]... [p/PHONE]... [t/TAG]...`<br> e.g., `find n/James t/Student`
 **List** | `list`
 **Help** | `help`

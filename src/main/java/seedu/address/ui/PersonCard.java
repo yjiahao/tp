@@ -115,14 +115,17 @@ public class PersonCard extends UiPart<Region> {
     }
 
     private void renderAddress(Person person, Label addressLabel) {
-        String address = person.getAddress().value;
+        person.getAddress().ifPresentOrElse(address -> renderPresentAddress(address.value, addressLabel), () ->
+                renderMissingAddress(addressLabel));
+    }
 
-        if (address.isEmpty()) {
-            addressLabel.setText(ADDRESS_ICON + " " + MESSAGE_MISSING_ADDRESS);
-            addCssClass(addressLabel, CSS_CLASS_MISSING_FIELD);
-        } else {
-            addressLabel.setText(ADDRESS_ICON + " " + address);
-        }
+    private void renderPresentAddress(String addressValue, Label addressLabel) {
+        addressLabel.setText(ADDRESS_ICON + " " + addressValue);
+    }
+
+    private void renderMissingAddress(Label addressLabel) {
+        addressLabel.setText(ADDRESS_ICON + " " + MESSAGE_MISSING_ADDRESS);
+        addCssClass(addressLabel, CSS_CLASS_MISSING_FIELD);
     }
 
     private void renderTime(Person person, Label timeLabel) {

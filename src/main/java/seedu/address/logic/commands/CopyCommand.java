@@ -95,7 +95,7 @@ public class CopyCommand extends Command {
         } else if (field.equals(PREFIX_PHONE.getPrefix())) {
             return person.getPhone().map(p -> p.value).orElse(EMPTY_STRING);
         } else if (field.equals(PREFIX_ADDRESS.getPrefix())) {
-            return person.getAddress().value;
+            return person.getAddress().map(address -> address.value).orElse(EMPTY_STRING);
         } else {
             throw new IllegalStateException("Unexpected invalid field: " + field);
         }
