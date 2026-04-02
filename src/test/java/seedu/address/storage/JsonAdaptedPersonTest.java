@@ -34,6 +34,7 @@ public class JsonAdaptedPersonTest {
     private static final String VALID_PHONE = BENSON.getPhone().get().value.toString();
     private static final String VALID_ADDRESS = BENSON.getAddress().toString();
     private static final String VALID_TIME = "18:00";
+    private static final String VALID_TIME_DURATION = "18:00 - 19:30";
     private static final String INVALID_TIME = "25:00";
     private static final List<JsonAdaptedTag> VALID_TAGS = BENSON.getTags().stream()
             .map(JsonAdaptedTag::new)
@@ -76,6 +77,15 @@ public class JsonAdaptedPersonTest {
         Person modelPerson = person.toModelType();
 
         assertEquals(Optional.of(new Time(VALID_TIME)), modelPerson.getTime());
+    }
+
+    @Test
+    public void toModelType_validDuration_returnsPersonWithTime() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_ID, VALID_NAME, VALID_PHONE, VALID_ADDRESS, VALID_TIME_DURATION, VALID_TAGS, VALID_REMARK);
+        Person modelPerson = person.toModelType();
+
+        assertEquals(Optional.of(new Time(VALID_TIME_DURATION)), modelPerson.getTime());
     }
 
     @Test

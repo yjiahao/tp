@@ -52,7 +52,7 @@ public class EditCommand extends Command {
             + PREFIX_TAG + "Student " + PREFIX_REMARK + "needs additional practices\n"
             + "To clear all existing tags, use " + COMMAND_WORD + " 1 " + PREFIX_TAG + "\n"
             + "To clear the stored time, use " + COMMAND_WORD + " 1 " + PREFIX_TIME + "\n"
-            + "Accepted time formats: HH:mm or HHmm";
+            + "Accepted time formats: HH:mm, HHmm, HH:mm - HH:mm, or HHmm - HHmm";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";

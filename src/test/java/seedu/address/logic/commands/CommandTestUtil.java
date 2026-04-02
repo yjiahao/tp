@@ -43,6 +43,7 @@ public class CommandTestUtil {
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
     public static final String VALID_TIME_AMY = "18:00";
     public static final String VALID_TIME_BOB = "09:30";
+    public static final String VALID_TIME_DURATION_BOB = "09:30 - 10:30";
     public static final String VALID_REMARK_AMY = "first student";
     public static final String VALID_REMARK_BOB = "2nd student";
 
@@ -54,6 +55,7 @@ public class CommandTestUtil {
     public static final String ADDRESS_DESC_BOB = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOB;
     public static final String TIME_DESC_AMY = " " + PREFIX_TIME + VALID_TIME_AMY;
     public static final String TIME_DESC_BOB = " " + PREFIX_TIME + VALID_TIME_BOB;
+    public static final String TIME_DESC_DURATION_BOB = " " + PREFIX_TIME + VALID_TIME_DURATION_BOB;
     public static final String REMARK_DESC_AMY = " " + PREFIX_REMARK + VALID_REMARK_AMY;
     public static final String REMARK_DESC_BOB = " " + PREFIX_REMARK + VALID_REMARK_BOB;
     public static final String TAG_DESC_STUDENT = " " + PREFIX_TAG + VALID_TAG_STUDENT;
@@ -65,6 +67,7 @@ public class CommandTestUtil {
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     // public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS;
     public static final String INVALID_TIME_DESC = " " + PREFIX_TIME + "25:00";
+    public static final String INVALID_TIME_DURATION_DESC = " " + PREFIX_TIME + "18:00 - 17:30";
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";

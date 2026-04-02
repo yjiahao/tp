@@ -60,6 +60,23 @@ public class PersonCardTest {
     }
 
     @Test
+    public void constructor_personWithTimeDuration_rendersNormalizedDuration() throws Exception {
+        Person person = new PersonBuilder()
+                .withId(4)
+                .withName("Blair Waldorf")
+                .withPhone("98765432")
+                .withAddress("3 Upper East Side")
+                .withTime("1800 - 1930")
+                .withRemark("Confirm venue")
+                .build();
+
+        PersonCard personCard = createPersonCard(person, 2);
+
+        assertEquals("\u23F0 18:00 - 19:30", getLabelText(personCard, "time"));
+        assertFalse(hasCssClass(personCard, "time", CSS_CLASS_MISSING_FIELD));
+    }
+
+    @Test
     public void constructor_personWithoutTime_rendersMissingTimeIndicator() throws Exception {
         Person person = new PersonBuilder()
                 .withId(5)

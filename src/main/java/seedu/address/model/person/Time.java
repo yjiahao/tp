@@ -16,16 +16,18 @@ import java.util.List;
 public class Time {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Times should be in the format HH:mm or HHmm, and be a valid 24-hour time";
+            "Times should be in the format HH:mm or HHmm. Durations should be in the format "
+                    + "HH:mm - HH:mm or HHmm - HHmm. All values must be valid 24-hour times, "
+                    + "and a duration must not end before it starts";
     private static final String EMPTY_STRING = "";
-    private static final DateTimeFormatter DISPLAY_TIME_FORMATTER = formatter("HH:mm");
+    private static final String DURATION_SEPARATOR = " - ";
+    private static final String DURATION_SPLIT_REGEX = "\\s*-\\s*";
     private static final DateTimeFormatter STORAGE_TIME_FORMATTER = formatter("HH:mm");
     private static final List<DateTimeFormatter> USER_TIME_FORMATTERS = List.of(
             formatter("HH:mm"),
             formatter("HHmm"));
 
     public final String value;
-    private final LocalTime localTime;
 
     /**
      * Constructs a {@code Time}.
@@ -34,9 +36,9 @@ public class Time {
      */
     public Time(String time) {
         requireNonNull(time);
-        checkArgument(isValidTime(time), MESSAGE_CONSTRAINTS);
-        localTime = parseTime(time);
-        value = localTime.format(STORAGE_TIME_FORMATTER);
+        String canonicalValue = getCanonicalValue(time);
+        checkArgument(canonicalValue != null, MESSAGE_CONSTRAINTS);
+        value = canonicalValue;
     }
 
     private static DateTimeFormatter formatter(String pattern) {
@@ -48,10 +50,59 @@ public class Time {
      */
     public static boolean isValidTime(String test) {
         requireNonNull(test);
-        return parseTime(test) != null;
+        return getCanonicalValue(test) != null;
     }
 
-    private static LocalTime parseTime(String time) {
+    private static String getCanonicalValue(String time) {
+        String trimmedTime = time.trim();
+        if (trimmedTime.isEmpty()) {
+            return null;
+        }
+
+        if (!trimmedTime.contains("-")) {
+            return getCanonicalSingleTime(trimmedTime);
+        }
+
+        return getCanonicalDuration(trimmedTime);
+    }
+
+    private static String getCanonicalSingleTime(String time) {
+        LocalTime parsedTime = parseSingleTime(time);
+        if (parsedTime == null) {
+            return null;
+        }
+
+        return formatTime(parsedTime);
+    }
+
+    private static String getCanonicalDuration(String duration) {
+        String[] durationParts = duration.split(DURATION_SPLIT_REGEX, -1);
+        if (durationParts.length != 2) {
+            return null;
+        }
+
+        String startTimeString = durationParts[0].trim();
+        String endTimeString = durationParts[1].trim();
+        if (!isMatchingTimeFormat(startTimeString, endTimeString)) {
+            return null;
+        }
+
+        LocalTime startTime = parseSingleTime(startTimeString);
+        LocalTime endTime = parseSingleTime(endTimeString);
+        if (startTime == null || endTime == null || endTime.isBefore(startTime)) {
+            return null;
+        }
+
+        return formatTime(startTime) + DURATION_SEPARATOR + formatTime(endTime);
+    }
+
+    private static boolean isMatchingTimeFormat(String startTime, String endTime) {
+        boolean startUsesColon = startTime.contains(":");
+        boolean endUsesColon = endTime.contains(":");
+        return startUsesColon == endUsesColon;
+    }
+
+    private static LocalTime parseSingleTime(String time) {
         String trimmedTime = time.trim();
 
         for (DateTimeFormatter formatter : USER_TIME_FORMATTERS) {
@@ -65,11 +116,15 @@ public class Time {
         return null;
     }
 
+    private static String formatTime(LocalTime time) {
+        return time.format(STORAGE_TIME_FORMATTER);
+    }
+
     /**
      * Returns the display value of the time.
      */
     public String getDisplayValue() {
-        return localTime.format(DISPLAY_TIME_FORMATTER);
+        return value;
     }
 
     /**
