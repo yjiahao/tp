@@ -10,7 +10,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
 
 import org.junit.jupiter.api.Test;
 
