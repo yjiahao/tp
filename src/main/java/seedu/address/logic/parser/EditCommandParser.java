@@ -5,6 +5,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_DELETE;
 
@@ -17,8 +18,10 @@ import java.util.Set;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Address;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -36,7 +39,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_TAG,
-                        PREFIX_TAG_DELETE);
+                        PREFIX_TAG_DELETE, PREFIX_REMARK);
 
         Id id;
 
@@ -46,20 +49,33 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_REMARK);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
-        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
+        populateNameIfExists(argMultimap, editPersonDescriptor);
+        populatePhoneIfExists(argMultimap, editPersonDescriptor);
+        populateAddressIfExists(argMultimap, editPersonDescriptor);
+        populateTagsIfExists(argMultimap, editPersonDescriptor);
+        populateRemarkIfExists(argMultimap, editPersonDescriptor);
+
+        if (!editPersonDescriptor.isAnyFieldEdited()) {
+            throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
-        if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
-            Optional<Phone> optionalPhone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE));
-            editPersonDescriptor.setPhone(optionalPhone);
+
+        return new EditCommand(id, editPersonDescriptor);
+    }
+
+    private void populateRemarkIfExists(ArgumentMultimap argMultimap, EditPersonDescriptor editPersonDescriptor)
+            throws ParseException {
+        if (argMultimap.getValue(PREFIX_REMARK).isPresent()) {
+            Optional<Remark> optionalRemark = ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK));
+            editPersonDescriptor.setRemark(optionalRemark);
         }
-        if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
-            editPersonDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
-        }
+    }
+
+    private void populateTagsIfExists(ArgumentMultimap argMultimap, EditPersonDescriptor editPersonDescriptor)
+            throws ParseException {
         Optional<Set<Tag>> tagsToAdd = parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG));
         Optional<Set<Tag>> tagsToDelete = parseTagsToDeleteForEdit(argMultimap.getAllValues(PREFIX_TAG_DELETE));
 
@@ -67,12 +83,29 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         tagsToAdd.ifPresent(editPersonDescriptor::setTags);
         tagsToDelete.ifPresent(editPersonDescriptor::setTagsToDelete);
+    }
 
-        if (!editPersonDescriptor.isAnyFieldEdited()) {
-            throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
+    private void populateAddressIfExists(ArgumentMultimap argMultimap, EditPersonDescriptor editPersonDescriptor)
+            throws ParseException {
+        if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
+            Optional<Address> optionalAddress = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS));
+            editPersonDescriptor.setAddress(optionalAddress);
         }
+    }
 
-        return new EditCommand(id, editPersonDescriptor);
+    private void populatePhoneIfExists(ArgumentMultimap argMultimap, EditPersonDescriptor editPersonDescriptor)
+            throws ParseException {
+        if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
+            Optional<Phone> optionalPhone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE));
+            editPersonDescriptor.setPhone(optionalPhone);
+        }
+    }
+
+    private void populateNameIfExists(ArgumentMultimap argMultimap, EditPersonDescriptor editPersonDescriptor)
+            throws ParseException {
+        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
+            editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
+        }
     }
 
     /**
@@ -87,7 +120,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             return Optional.empty();
         }
 
-        // A bare t/ clears all tags, but it cannot be combined with category or tdel/ values.
+        // A bare t/ clears all tags, but it cannot be combined with tag values or tdel/ values.
         if (isTagReset(tags)) {
             return Optional.of(Collections.emptySet());
         }

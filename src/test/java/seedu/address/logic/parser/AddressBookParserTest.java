@@ -80,14 +80,17 @@ public class AddressBookParserTest {
     public void parseCommand_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
-        EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + ID_FIRST.getValue() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor),
+
+        String userInput = EditCommand.COMMAND_WORD + " " + ID_FIRST.getValue()
+                + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor);
+
+        EditCommand command = (EditCommand) parser.parseCommand(userInput,
                 currentMaxId);
         assertEquals(new EditCommand(ID_FIRST, descriptor), command);
     }
 
     @Test
-    public void parseCommand_editWithCategories() throws Exception {
+    public void parseCommand_editWithTags() throws Exception {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
                 .withTags(VALID_TAG_STUDENT, VALID_TAG_PARENT).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
@@ -123,7 +126,7 @@ public class AddressBookParserTest {
                 currentMaxId);
         assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(
                 keywords, Collections.emptyList(), Collections.emptyList(),
-                Collections.emptyList(), MatchMode.OR)), command);
+                Collections.emptyList(), Collections.emptyList(), MatchMode.OR)), command);
     }
 
     @Test
@@ -133,7 +136,7 @@ public class AddressBookParserTest {
                 currentMaxId);
         assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
-                Collections.singletonList("Student"), MatchMode.OR)), command);
+                Collections.singletonList("Student"), Collections.emptyList(), MatchMode.OR)), command);
     }
 
     @Test

@@ -10,6 +10,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -36,6 +37,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setPhone(person.getPhone());
         descriptor.setAddress(person.getAddress());
         descriptor.setTags(person.getTags());
+        descriptor.setRemark(person.getRemark());
     }
 
     /**
@@ -55,10 +57,26 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
+     * Clears the {@code Phone} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withoutPhone() {
+        descriptor.setPhone(Optional.empty());
+        return this;
+    }
+
+    /**
      * Sets the {@code Address} of the {@code EditPersonDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withAddress(String address) {
-        descriptor.setAddress(new Address(address));
+        descriptor.setAddress(Optional.of(new Address(address)));
+        return this;
+    }
+
+    /**
+     * Clears the {@code Address} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withoutAddress() {
+        descriptor.setAddress(Optional.empty());
         return this;
     }
 
@@ -79,6 +97,14 @@ public class EditPersonDescriptorBuilder {
     public EditPersonDescriptorBuilder withTagsToDelete(String... tags) {
         Set<Tag> tagSet = Stream.of(tags).map(Tag::new).collect(Collectors.toSet());
         descriptor.setTagsToDelete(tagSet);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Remark} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withRemark(String remark) {
+        descriptor.setRemark(Optional.of(new Remark(remark)));
         return this;
     }
 

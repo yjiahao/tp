@@ -10,6 +10,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +36,26 @@ public class EditPersonDescriptorTest {
 
         assertTrue(descriptor.getPhone().isEmpty());
         assertFalse(descriptor.isPhoneChanged());
+        assertFalse(descriptor.isAnyFieldEdited());
+    }
+
+    @Test
+    public void getAddress_addressFieldIsNull_returnsEmptyOptional() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+
+        descriptor.setAddress(null);
+
+        assertTrue(descriptor.getAddress().isEmpty());
+    }
+
+    @Test
+    public void setAddress_nullAddress_resetsAddressAndEditState() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+
+        descriptor.setAddress(null);
+
+        assertTrue(descriptor.getAddress().isEmpty());
+        assertFalse(descriptor.isAddressChanged());
         assertFalse(descriptor.isAnyFieldEdited());
     }
 
@@ -83,9 +104,10 @@ public class EditPersonDescriptorTest {
         String expected = EditPersonDescriptor.class.getCanonicalName() + "{name="
                 + editPersonDescriptor.getName().orElse(null) + ", phone="
                 + editPersonDescriptor.getPhone() + ", address="
-                + editPersonDescriptor.getAddress().orElse(null) + ", tags="
+                + editPersonDescriptor.getAddress() + ", tags="
                 + editPersonDescriptor.getTags().orElse(null) + ", tagsToDelete="
-                + editPersonDescriptor.getTagsToDelete().orElse(null) + "}";
+                + editPersonDescriptor.getTagsToDelete().orElse(null) + ", remark="
+                + editPersonDescriptor.getRemark() + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }
 }
