@@ -41,7 +41,7 @@ public class Messages {
                 .append("; Phone: ")
                 .append(person.getPhone().map(x -> x.toString()).orElse(EMPTY_STRING))
                 .append("; Address: ")
-                .append(person.getAddress())
+                .append(person.getAddress().map(address -> address.toString()).orElse(EMPTY_STRING))
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         builder.append("; Remark: ")

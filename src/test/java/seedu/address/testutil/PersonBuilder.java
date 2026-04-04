@@ -26,7 +26,7 @@ public class PersonBuilder {
     private Id id;
     private Name name;
     private Optional<Phone> phone;
-    private Address address;
+    private Optional<Address> address;
     private Set<Tag> tags;
     private Optional<Remark> remark;
 
@@ -37,7 +37,7 @@ public class PersonBuilder {
         id = Id.of(DEFAULT_ID);
         name = new Name(DEFAULT_NAME);
         phone = Optional.of(new Phone(DEFAULT_PHONE));
-        address = new Address(DEFAULT_ADDRESS);
+        address = Optional.of(new Address(DEFAULT_ADDRESS));
         tags = new HashSet<>();
         remark = Optional.of(new Remark(DEFAULT_REMARK));
     }
@@ -82,7 +82,7 @@ public class PersonBuilder {
      * Sets the {@code Address} of the {@code Person} that we are building.
      */
     public PersonBuilder withAddress(String address) {
-        this.address = new Address(address);
+        this.address = Optional.of(new Address(address));
         return this;
     }
 
@@ -103,7 +103,15 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code Person} that we are building.
+     * Sets the {@code Address} of the {@code Person} that we are building as empty.
+     */
+    public PersonBuilder withoutAddress() {
+        this.address = Optional.empty();
+        return this;
+    }
+
+    /**
+     * Sets the {@code Remark} of the {@code Person} that we are building.
      */
     public PersonBuilder withRemark(String remarkString) {
         this.remark = Optional.of(new Remark(remarkString));
@@ -111,7 +119,7 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code Person} that we are building as empty.
+     * Sets the {@code Remark} of the {@code Person} that we are building as empty.
      */
     public PersonBuilder withoutRemark() {
         this.remark = Optional.empty();
