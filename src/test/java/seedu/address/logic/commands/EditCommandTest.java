@@ -36,6 +36,8 @@ import seedu.address.testutil.PersonBuilder;
  * Contains integration tests (interaction with the Model) and unit tests for EditCommand.
  */
 public class EditCommandTest {
+    private static final String TAG_TEST_PHONE = "91234567";
+    private static final String TAG_TEST_ADDRESS = "42 Tag Test Avenue";
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
@@ -193,6 +195,24 @@ public class EditCommandTest {
         expectedModel.setPerson(personToEdit, personToEdit);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_repeatedSameTagInputAcrossExistingTagStates_success() {
+        // Repeated tag inputs such as `t/Student t/Student` are deduplicated by the parser.
+        // These cases verify the resulting edit behavior for all relevant initial tag states.
+        assertRepeatedStudentTagAdditionSuccess(
+                createTagTestPerson(40, VALID_TAG_STUDENT, VALID_TAG_PARENT),
+                VALID_TAG_STUDENT, VALID_TAG_PARENT);
+        assertRepeatedStudentTagAdditionSuccess(
+                createTagTestPerson(41, VALID_TAG_STUDENT),
+                VALID_TAG_STUDENT);
+        assertRepeatedStudentTagAdditionSuccess(
+                createTagTestPerson(42, VALID_TAG_PARENT),
+                VALID_TAG_PARENT, VALID_TAG_STUDENT);
+        assertRepeatedStudentTagAdditionSuccess(
+                createTagTestPerson(43),
+                VALID_TAG_STUDENT);
     }
 
     @Test
@@ -411,5 +431,30 @@ public class EditCommandTest {
         String expected = EditCommand.class.getCanonicalName() + "{id=" + ID_FIRST + ", editPersonDescriptor="
                 + editPersonDescriptor + "}";
         assertEquals(expected, editCommand.toString());
+    }
+
+    private void assertRepeatedStudentTagAdditionSuccess(Person personToEdit, String... expectedTags) {
+        AddressBook addressBook = new AddressBook();
+        addressBook.addPerson(personToEdit);
+        Model modelWithPerson = new ModelManager(addressBook, new UserPrefs());
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags(VALID_TAG_STUDENT).build();
+        EditCommand editCommand = new EditCommand(personToEdit.getId(), descriptor);
+
+        Person editedPerson = new PersonBuilder(personToEdit).withTags(expectedTags).build();
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(modelWithPerson.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, modelWithPerson, expectedMessage, expectedModel);
+    }
+
+    private Person createTagTestPerson(int id, String... tags) {
+        return new PersonBuilder().withId(id)
+                .withPhone(TAG_TEST_PHONE)
+                .withAddress(TAG_TEST_ADDRESS)
+                .withTags(tags)
+                .build();
     }
 }

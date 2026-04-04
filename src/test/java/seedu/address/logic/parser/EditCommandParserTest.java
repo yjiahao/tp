@@ -163,6 +163,18 @@ public class EditCommandParserTest {
     }
 
     @Test
+    public void parse_repeatedSameTagSpecified_success() {
+        Id targetId = ID_THIRD;
+        String userInput = targetId.getValue() + TAG_DESC_STUDENT + TAG_DESC_STUDENT;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTags(VALID_TAG_STUDENT).build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
     public void parse_multipleCategoriesToDeleteSpecified_success() {
         Id targetId = ID_THIRD;
         String userInput = targetId.getValue() + TAG_DELETE_DESC_STUDENT + TAG_DELETE_DESC_PARENT;
