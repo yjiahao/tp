@@ -18,13 +18,14 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_TAG = "#friend";
-    private static final String UNSUPPORTED_TAG = "friend";
+    private static final String INVALID_UNLISTED_TAG = "friend";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "12345678";
@@ -33,6 +34,9 @@ public class ParserUtilTest {
     private static final String VALID_TAG_2 = "Parent";
 
     private static final String WHITESPACE = " \t\r\n";
+
+    private static final String VALID_REMARK = "my 1st student - graduating soon";
+    private static final String INVALID_REMARK = " ";
 
     @Test
     public void parseId_invalidInput_throwsParseException() {
@@ -112,20 +116,35 @@ public class ParserUtilTest {
 
     @Test
     public void parseAddress_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseAddress((String) null));
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseAddress(null));
+    }
+
+    @Test
+    public void parseAddress_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseAddress(Optional.of(" ")));
     }
 
     @Test
     public void parseAddress_validValueWithoutWhitespace_returnsAddress() throws Exception {
-        Address expectedAddress = new Address(VALID_ADDRESS);
-        assertEquals(expectedAddress, ParserUtil.parseAddress(VALID_ADDRESS));
+        Optional<Address> expectedAddress = Optional.of(new Address(VALID_ADDRESS));
+        assertEquals(expectedAddress, ParserUtil.parseAddress(Optional.of(VALID_ADDRESS)));
     }
 
     @Test
     public void parseAddress_validValueWithWhitespace_returnsTrimmedAddress() throws Exception {
         String addressWithWhitespace = WHITESPACE + VALID_ADDRESS + WHITESPACE;
-        Address expectedAddress = new Address(VALID_ADDRESS);
-        assertEquals(expectedAddress, ParserUtil.parseAddress(addressWithWhitespace));
+        Optional<Address> expectedAddress = Optional.of(new Address(VALID_ADDRESS));
+        assertEquals(expectedAddress, ParserUtil.parseAddress(Optional.of(addressWithWhitespace)));
+    }
+
+    @Test
+    public void parseAddress_emptyOptional_returnsEmptyOptional() throws Exception {
+        assertEquals(Optional.empty(), ParserUtil.parseAddress(Optional.empty()));
+    }
+
+    @Test
+    public void parseAddress_emptyStringInOptional_returnsOptionalEmpty() throws Exception {
+        assertEquals(Optional.empty(), ParserUtil.parseAddress(Optional.of("")));
     }
 
     @Test
@@ -140,9 +159,9 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseTag_unsupportedCategory_throwsParseException() {
+    public void parseTag_invalidUnlistedTag_throwsParseException() {
         assertThrows(ParseException.class, Tag.MESSAGE_TAG_CONSTRAINTS, () ->
-                ParserUtil.parseTag(UNSUPPORTED_TAG));
+                ParserUtil.parseTag(INVALID_UNLISTED_TAG));
     }
 
     @Test
@@ -176,9 +195,9 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseTags_collectionWithUnsupportedTags_throwsParseException() {
+    public void parseTags_collectionWithInvalidUnlistedTags_throwsParseException() {
         assertThrows(ParseException.class, Tag.MESSAGE_TAG_CONSTRAINTS, () ->
-                ParserUtil.parseTags(Arrays.asList(VALID_TAG_1, UNSUPPORTED_TAG)));
+                ParserUtil.parseTags(Arrays.asList(VALID_TAG_1, INVALID_UNLISTED_TAG)));
     }
 
     @Test
@@ -192,5 +211,38 @@ public class ParserUtilTest {
         Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag("Student"), new Tag("Parent")));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseRemark_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseRemark(null));
+    }
+
+    @Test
+    public void parseRemark_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseRemark(Optional.of(INVALID_REMARK)));
+    }
+
+    @Test
+    public void parseRemark_validValueWithoutWhitespace_returnsPhone() throws Exception {
+        Optional<Remark> expectedRemark = Optional.of(new Remark(VALID_REMARK));
+        assertEquals(expectedRemark, ParserUtil.parseRemark(Optional.of(VALID_REMARK)));
+    }
+
+    @Test
+    public void parseRemark_validValueWithWhitespace_returnsTrimmedPhone() throws Exception {
+        String remarkWithWhitespace = WHITESPACE + VALID_REMARK + WHITESPACE;
+        Optional<Remark> expectedPhone = Optional.of(new Remark(VALID_REMARK));
+        assertEquals(expectedPhone, ParserUtil.parseRemark(Optional.of(remarkWithWhitespace)));
+    }
+
+    @Test
+    public void parseRemark_emptyOptional_returnsEmptyOptional() throws Exception {
+        assertEquals(Optional.empty(), ParserUtil.parseRemark(Optional.empty()));
+    }
+
+    @Test
+    public void parseRemark_emptyStringInOptional_returnsOptionalEmpty() throws Exception {
+        assertEquals(Optional.empty(), ParserUtil.parseRemark(Optional.of("")));
     }
 }

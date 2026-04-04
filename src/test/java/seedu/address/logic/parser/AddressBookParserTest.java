@@ -2,10 +2,12 @@ package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.Messages.MESSAGE_CANNOT_USE_MODE;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -82,14 +84,17 @@ public class AddressBookParserTest {
     public void parseCommand_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
-        EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + ID_FIRST.getValue() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor),
+
+        String userInput = EditCommand.COMMAND_WORD + " " + ID_FIRST.getValue()
+                + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor);
+
+        EditCommand command = (EditCommand) parser.parseCommand(userInput,
                 currentMaxId);
         assertEquals(new EditCommand(ID_FIRST, descriptor), command);
     }
 
     @Test
-    public void parseCommand_editWithCategories() throws Exception {
+    public void parseCommand_editWithTags() throws Exception {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
                 .withTags(VALID_TAG_STUDENT, VALID_TAG_PARENT).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
@@ -115,7 +120,7 @@ public class AddressBookParserTest {
                 currentMaxId);
         assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(
                 keywords, Collections.emptyList(), Collections.emptyList(),
-                Collections.emptyList(), MatchMode.OR)), command);
+                Collections.emptyList(), Collections.emptyList(), MatchMode.OR)), command);
     }
 
     @Test
@@ -125,7 +130,18 @@ public class AddressBookParserTest {
                 currentMaxId);
         assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
-                Collections.singletonList("Student"), MatchMode.OR)), command);
+                Collections.singletonList("Student"), Collections.emptyList(), MatchMode.OR)), command);
+    }
+
+    @Test
+    public void parseCommand_findAndMode() throws Exception {
+        FindCommand command = (FindCommand) parser.parseCommand(
+                FindCommand.COMMAND_WORD + " " + PREFIX_MODE + "and "
+                        + PREFIX_NAME + "Benson " + PREFIX_TAG + "Parent",
+                currentMaxId);
+        assertEquals(new FindCommand(new PersonContainsKeywordsPredicate(
+                Collections.singletonList("Benson"), Collections.emptyList(), Collections.emptyList(),
+                Collections.singletonList("Parent"), Collections.emptyList(), MatchMode.AND)), command);
     }
 
     @Test
@@ -145,6 +161,45 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_nonFindCommandWithModePrefix_throwsParseException() {
+        assertThrows(ParseException.class,
+                MESSAGE_CANNOT_USE_MODE, () -> parser.parseCommand(
+                    ClearCommand.COMMAND_WORD + " " + PREFIX_MODE + "and",
+                        currentMaxId));
+
+        assertThrows(ParseException.class,
+                MESSAGE_CANNOT_USE_MODE, () -> parser.parseCommand(
+                    ListCommand.COMMAND_WORD + " " + PREFIX_MODE + "xor",
+                        currentMaxId));
+
+        assertThrows(ParseException.class,
+                MESSAGE_CANNOT_USE_MODE, () -> parser.parseCommand(
+                    HelpCommand.COMMAND_WORD + " " + PREFIX_MODE + "foo",
+                        currentMaxId));
+
+        assertThrows(ParseException.class,
+                MESSAGE_CANNOT_USE_MODE, () -> parser.parseCommand(
+                    ExitCommand.COMMAND_WORD + " " + PREFIX_MODE + "or",
+                        currentMaxId));
+    }
+
+    @Test
+    public void parseCommand_addEndingWithModePrefix_throwsParseException() {
+        assertThrows(ParseException.class, () -> parser.parseCommand(
+                    AddCommand.COMMAND_WORD + " " + PREFIX_NAME + "Ali "
+                            + "a/1A Kent Ridge Rd " + PREFIX_MODE + "and",
+                    currentMaxId));
+    }
+
+    @Test
+    public void parseCommand_editWithModePrefix_throwsParseException() {
+        assertThrows(ParseException.class, () -> parser.parseCommand(
+                    EditCommand.COMMAND_WORD + " " + PREFIX_TAG + "student "
+                            + PREFIX_MODE + "and",
+                    currentMaxId));
+    }
+
+    @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
         assertThrows(ParseException.class,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT,
@@ -155,6 +210,17 @@ public class AddressBookParserTest {
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class,
                 MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand", currentMaxId));
+    }
+
+    @Test
+    public void parseCommand_unknownCommandWithModePrefix_throwsUnknownCommand() {
+        assertThrows(ParseException.class,
+                MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand(
+                    "fin " + PREFIX_MODE + "and " + PREFIX_NAME + "Amy", currentMaxId));
+
+        assertThrows(ParseException.class,
+                MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand(
+                    "helpme " + PREFIX_MODE + "foo", currentMaxId));
     }
 
     @Test

@@ -1,17 +1,21 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_MODE;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.PersonContainsKeywordsPredicate.MatchMode;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -84,35 +88,68 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String address} into an {@code Address}.
+     * Parses an optional {@code String address} into an optional {@code Address}.
      * Leading and trailing whitespaces will be trimmed.
      *
      * @throws ParseException if the given {@code address} is invalid.
      */
-    public static Address parseAddress(String address) throws ParseException {
+    public static Optional<Address> parseAddress(Optional<String> address) throws ParseException {
         requireNonNull(address);
-        String trimmedAddress = address.trim();
-        if (!Address.isValidAddress(trimmedAddress)) {
-            throw new ParseException(Address.MESSAGE_CONSTRAINTS);
+
+        address = address.filter(addressString -> !addressString.isEmpty());
+        if (address.isEmpty()) {
+            return Optional.empty();
         }
-        return new Address(trimmedAddress);
+
+        Address parsedAddress = address.map(addressString -> requireNonNull(addressString))
+                .map(addressString -> addressString.trim())
+                .filter(Address::isValidAddress)
+                .map(Address::new)
+                .orElseThrow(() -> new ParseException(Address.MESSAGE_CONSTRAINTS));
+
+        return Optional.of(parsedAddress);
     }
 
     /**
-     * Parses a {@code String tag} into a supported category {@code Tag}.
+     * Parses a {@code String tag} into a valid {@code Tag}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code tag} is invalid or not a supported category.
+     * @throws ParseException if the given {@code tag} is invalid.
      */
     public static Tag parseTag(String tag) throws ParseException {
         requireNonNull(tag);
         String trimmedTag = tag.trim();
-        String normalizedCategoryTagName = Tag.getNormalizedCategoryTagName(trimmedTag);
-        if (normalizedCategoryTagName == null) {
+        String normalizedTagName = Tag.getNormalizedTagName(trimmedTag);
+        if (normalizedTagName == null) {
             throw new ParseException(Tag.MESSAGE_TAG_CONSTRAINTS);
         }
 
-        return new Tag(normalizedCategoryTagName);
+        return new Tag(normalizedTagName);
+    }
+
+    /**
+     * Parses a {@code String remark} into a {@code Remark}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code remark} is invalid.
+     */
+    public static Optional<Remark> parseRemark(Optional<String> remark) throws ParseException {
+        requireNonNull(remark);
+
+        // need another check here to see if inside is empty string, if so then give
+        // optional empty
+        remark = remark.filter(remarkString -> !remarkString.isEmpty());
+        if (remark.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Remark parsedRemark = remark.map(remarkString -> requireNonNull(remarkString))
+                .map(remarkString -> remarkString.trim())
+                .filter(trimmedRemarkString -> Remark.isValidRemark(trimmedRemarkString))
+                .map(trimmedRemarkString -> new Remark(trimmedRemarkString))
+                .orElseThrow(() -> new ParseException(Remark.MESSAGE_CONSTRAINTS));
+
+        return Optional.of(parsedRemark);
     }
 
     /**
@@ -127,4 +164,22 @@ public class ParserUtil {
         return tagSet;
     }
 
+    /**
+     * Parses a {@code String} mode keyword into a {@code MatchMode}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given mode keyword is not {@code "and"} or {@code "or"}
+     */
+    public static MatchMode parseMatchMode(String stringModeKeyword) throws ParseException {
+        String normalizedModeKeyword = stringModeKeyword.trim().toLowerCase();
+
+        switch (normalizedModeKeyword) {
+        case "and":
+            return MatchMode.AND;
+        case "or":
+            return MatchMode.OR;
+        default:
+            throw new ParseException(String.format(MESSAGE_INVALID_MODE, FindCommand.MESSAGE_USAGE));
+        }
+    }
 }

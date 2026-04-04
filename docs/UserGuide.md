@@ -26,15 +26,15 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list`: List all contacts.
 
-   * `add n/John Doe p/98765432 a/1A Kent Ridge Rd, 119224` : Adds a contact named `John Doe` with a phone number `98765432` and address `1A Kent Ridge Rd, 119224` to the Address Book.
+   * `add n/John Doe p/98765432 a/1A Kent Ridge Rd, 119224`: Add a contact named `John Doe` with a phone number `98765432` and address `1A Kent Ridge Rd, 119224` to the Address Book.
 
-   * `del 3` : Deletes the contact with an `ID` of 3.
+   * `del 3`: Delete the contact with an `ID` of 3.
 
-   * `clear` : Deletes all contacts.
+   * `clear`: Delete all contacts.
 
-   * `exit` : Exits the app.
+   * `exit`: Exit the app.
 
 1. Refer to the [Features](#features) below for details of each command.
 
@@ -64,9 +64,9 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-### Viewing help : `help`
+### Viewing help: `help`
 
-Shows a message explaining how to access the help page.
+Show a message explaining how to access the help page.
 
 ![help message](images/helpMessage.png)
 
@@ -75,70 +75,74 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Add a person to the address book.
 
-Format: `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]…​`
+Format: `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]…​ [r/REMARK]`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tags (including 0)
 </div>
 
 * Only `n/NAME` is required.
-* `p/PHONE_NUMBER`, `a/ADDRESS`, and `t/TAG` are optional.
+* `p/PHONE_NUMBER`, `a/ADDRESS`, `t/TAG`, `r/REMARK` are optional.
 * `add n/John Doe` and `add n/John Doe p/` are both valid. Both create a contact without a phone number.
 * Similarly, `add n/John Doe` and `add n/John Doe a/` are both valid. Both create a contact without an address.
+* This behaviour is similar for remark. `add n/John Doe` and `add n/John Doe r/` are both valid. Both create a contact without a remark.
+* If the new contact is a duplicate of an existing contact, it will not be added. Duplicate contacts are defined as those with the same name, phone number and address.
 
 Examples:
-* `add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01`
+* `add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01 r/new student`
 * `add n/John Doe a/John street, block 123, #01-01 t/Parent t/Tutor`
 * `add n/Jane Doe p/98765432`
 * `add n/Jane Doe p/`
 * `add n/Jane Doe a/`
 
 The first example gives the following expected output:
-  ![result for 'add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01'](images/AddCommandResult.png)
 
-### Listing all persons : `list`
+  ![result for 'add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01 r/new student'](images/AddCommandResult.png)
 
-Shows a list of all persons in the address book.
+### Listing all persons: `list`
+
+Show a list of all persons in the address book.
 
 Format: `list`
 
-* Since phone number and address fields are optional, the UI alerts the user if a particular person has no phone number or address:
+* Since phone number, address and remark fields are optional, the UI alerts the user if a particular person has no phone number or address:
 
-  ![result for 'list' with no phone number and address](images/missingPhoneNumberAndAddress.png)
+  ![result for 'list' with no phone number, address and remark](images/missingPhoneNumberAddressAndRemark.png)
 
-### Editing a person : `edit`
+### Editing a person: `edit`
 
-Edits an existing person in the address book.
+Edit an existing person in the address book.
 
-Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [t/CATEGORY]…​`
+Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [t/TAG]… [r/REMARK]​`
 
-* Edits the person with the specified `ID`. `ID` **must be a positive integer** 1, 2, 3, …​
+* `ID` specifies the person to be edited.
+* `ID` **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* Use this command for all category updates. EduConnect does not provide a separate `tag` command.
-* When editing tags, the provided categories will be appended to the person’s existing tags.
-* Only the supported categories may be used as edit tags: `Student`, `Parent`, `Tutor`.
-* Repeating an existing category has no effect because duplicate categories are not stored.
-* You can remove all the person’s tags by typing `t/` without specifying any category after it.
-* `t/` must be used on its own. Do not combine `t/` with category values in the same command.
+* Use this command for all tag updates. EduConnect does not provide a separate `tag` command.
+* When editing tags, the provided tags will be appended to the person’s existing tags.
+* Only valid tags may be used: `Student`, `Parent`, `Tutor`.
+* Repeating an existing tag has no effect because duplicate tags are not stored.
+* You can remove all the person’s tags by typing `t/` without specifying any tag after it.
+* `t/` must be used on its own. Do not combine `t/` with tag values in the same command.
 
 Examples:
-*  `edit 1 p/91234567` Edits the phone number of the person with `ID` 1, changing it to `91234567`.
-*  `edit 2 t/Parent` Appends the tag `Parent` to the person with `ID` 2.
-*  `edit 2 t/Parent t/Tutor` Appends both `Parent` and `Tutor` to the person with `ID` 2.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the person with `ID` 2, changing it to `Betsy Crower`, whilst clearing all existing tags.
+*  `edit 1 p/91234567`: Edit the phone number of the person with `ID` 1, changing it to `91234567`.
+*  `edit 2 t/Parent`: Append the tag `Parent` to the person with `ID` 2.
+*  `edit 2 t/Parent t/Tutor`: Append both `Parent` and `Tutor` to the person with `ID` 2.
+*  `edit 2 n/Betsy Crower t/`: Edit the name of the person with `ID` 2, changing it to `Betsy Crower`, whilst clearing all existing tags.
 
 ### Locating persons: `find`
 
-Finds persons whose specified fields contain any of the given keywords.
+Find persons whose specified fields contain any of the given keywords.
 
-Format: `find [n/NAME]... [a/ADDRESS]... [p/PHONE]... [t/TAG]...`
+Format: `find [n/NAME]... [a/ADDRESS]... [p/PHONE]... [t/TAG]... [r/REMARK]...`
 
 * At least one prefixed keyword must be provided.
 * Unprefixed input is not allowed. e.g. `find Ali` is invalid.
-* `n/` searches names, `a/` searches addresses, `p/` searches phone numbers, and `t/` searches tags.
+* `n/` searches names, `a/` searches addresses, `p/` searches phone numbers, `t/` searches tags and `r/` searches remarks.
 * The search is case-insensitive for names, addresses, and tags. e.g. `n/hans` will match `Hans` and `t/student` will match `Student`
 * Phone matching is digit-based substring matching. e.g. `p/9435` will match a phone number containing `9435`
 * Partial matches are supported. e.g. `n/Han` will match `Hans`
@@ -152,14 +156,16 @@ Examples:
 * `find n/aleX a/seran` returns persons whose name contains `aleX` or whose address contains `seran`
 * `find t/student` returns persons whose tags contain `student`
 * `find n/Ali n/August` returns persons whose names contain `Ali` or `August`
+* `find r/first` returns persons whose remarks contain `first` or `First` (note that the search in case-insensitive)
 
 Notes:
 - Every search term must be attached to a prefix.
 - Contacts matching multiple keywords still appear only once in the filtered list.
+- Contacts without an address will not match `a/` keywords.
 
-### Deleting a person : `del`
+### Deleting a person: `del`
 
-Deletes the specified person from the address book.
+Delete the specified person from the address book.
 
 Format: `del ID`
 
@@ -167,36 +173,36 @@ Format: `del ID`
 * `ID` **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `del 2` deletes the person with `ID` 2 from the address book.
-* `find n/Betsy` followed by `del 1` deletes the person with `ID` 1 from the address book. Note that it does not delete the first person in the results of the `find` command.
-* `add n/Andrew` followed by `del 1` deletes the person with `ID` 1 from the address book. Note that it does not delete the contact that was just added.
-* `add n/Andrew` followed by `del 1` will fail if there is no person with `ID` 1 in the address book.
+* `del 2`: Delete the person with `ID` 2 from the address book.
+* `find n/Betsy` followed by `del 1`: Delete the person with `ID` 1 from the address book. Note that it does not delete the first person in the results of the `find` command.
+* `add n/Andrew` followed by `del 1`: Delete the person with `ID` 1 from the address book. Note that it does not delete the contact that was just added.
+* `add n/Andrew` followed by `del 1`: Fail if there is no person with `ID` 1 in the address book.
 
-### Copying a person information; `copy`
+### Copying a person information: `copy`
 
 Copy a specified field of a person from the address book to the user clipboard.
 
 Format: `copy ID FIELD`
 
-* Copies the `FIELD` data for the person with the specified `ID` to the user clipboard.
 * Possible fields include `n/` for name, `p/` for phone number, and `a/` for address
+* Copy is not supported for the remark field. The `r/` field is invalid for this command.
 * If the person's field is empty, then nothing will be copy to the clipboard.
 
 Examples:
-* `copy 6 n/` copies the name of the person with `ID` 6 to the clipboard.
-* `copy 7 p/` copies the phone number of the person with `ID` 7 to the clipboard.
-* `copy 9 a/` copies the address of the person with `ID` 9 to the clipboard.
-* `copy 1 p/` will fail if `ID` 1 is not found or the phone number field of the person with `ID` 1 is empty. 
+* `copy 6 n/`: Copy the name of the person with `ID` 6 to the clipboard.
+* `copy 7 p/`: Copy the phone number of the person with `ID` 7 to the clipboard.
+* `copy 9 a/`: Copy the address of the person with `ID` 9 to the clipboard.
+* `copy 1 p/`: Fail if `ID` 1 is not found or the phone number field of the person with `ID` 1 is empty. 
 
-### Clearing all entries : `clear`
+### Clearing all entries: `clear`
 
-Clears all entries from the address book, whilst displaying all the contacts that have been removed.
+Clear all entries from the address book, whilst displaying all the contacts that have been removed.
 
 Format: `clear`
 
-### Exiting the program : `exit`
+### Exiting the program: `exit`
 
-Exits the program.
+Exit the program.
 
 Format: `exit`
 
@@ -237,10 +243,10 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]…​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/22224444 a/123, Clementi Rd, 1234665 t/Parent t/Tutor`
+**Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]… [r/REMARK]​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/22224444 a/123, Clementi Rd, 1234665 t/Parent t/Tutor r/new student`
 **Clear** | `clear`
 **Delete** | `del ID`<br> e.g., `del 3`
-**Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [t/CATEGORY]…​`<br> e.g.,`edit 2 t/Parent t/Tutor`
-**Find** | `find [n/NAME]... [a/ADDRESS]... [p/PHONE]... [t/TAG]...`<br> e.g., `find n/James t/Student`
+**Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]…​ [r/REMARK]`<br> e.g.,`edit 2 t/Parent t/Tutor`
+**Find** | `find [n/NAME]... [a/ADDRESS]... [p/PHONE]... [t/TAG]... [r/REMARK]...`<br> e.g., `find n/James t/Student`
 **List** | `list`
 **Help** | `help`

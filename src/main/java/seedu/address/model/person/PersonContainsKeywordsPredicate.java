@@ -11,10 +11,13 @@ import seedu.address.commons.util.ToStringBuilder;
  * Tests whether a {@code Person} matches any keyword in the enabled fields.
  */
 public class PersonContainsKeywordsPredicate implements Predicate<Person> {
+    private static final String EMPTY_STRING = "";
+
     private final List<String> nameKeywords;
     private final List<String> addressKeywords;
     private final List<String> phoneKeywords;
     private final List<String> tagKeywords;
+    private final List<String> remarkKeywords;
     private final MatchMode matchWord;
 
     /**
@@ -26,18 +29,20 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     /**
-     * Creates a predicate that searches the specified keywords in their respective fields.
+     * Creates a predicate that searches the specified keywords in their respective
+     * fields.
      */
     public PersonContainsKeywordsPredicate(List<String> nameKeywords,
             List<String> addressKeywords,
             List<String> phoneKeywords,
             List<String> tagKeywords,
+            List<String> remarkKeywords,
             MatchMode matchWord) {
         this.nameKeywords = nameKeywords;
         this.addressKeywords = addressKeywords;
         this.phoneKeywords = phoneKeywords;
         this.tagKeywords = tagKeywords;
-        // To be implemented
+        this.remarkKeywords = remarkKeywords;
         this.matchWord = matchWord;
 
         // Defensive Programming
@@ -45,30 +50,50 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         requireNonNull(addressKeywords);
         requireNonNull(phoneKeywords);
         requireNonNull(tagKeywords);
+        requireNonNull(remarkKeywords);
         requireNonNull(matchWord);
     }
 
     @Override
     public boolean test(Person person) {
         String name = person.getName().fullName.toLowerCase();
-        String address = person.getAddress().value.toLowerCase();
-        String phone = person.getPhone().map(phoneObj -> phoneObj.value).orElse("");
+        String address = person.getAddress()
+                .map(addressObject -> addressObject.value.toLowerCase())
+                .orElse(EMPTY_STRING);
+        String phone = person.getPhone().map(phoneObj -> phoneObj.value).orElse(EMPTY_STRING);
+        String remark = person.getRemark()
+                .map(remarkValue -> remarkValue.value.toLowerCase())
+                .orElse(EMPTY_STRING);
 
-        boolean matchesName = nameKeywords.stream()
-                .anyMatch(keyword -> name.contains(keyword.toLowerCase()));
+        boolean isAndMode = matchWord == MatchMode.AND;
 
-        boolean matchesAddress = addressKeywords.stream()
-                .anyMatch(keyword -> address.contains(keyword.toLowerCase()));
+        boolean matchesName = matchesKeywords(nameKeywords,
+                keyword -> name.contains(keyword.toLowerCase()), isAndMode);
 
-        boolean matchesPhone = phoneKeywords.stream()
-                .anyMatch(phone::contains);
+        boolean matchesAddress = matchesKeywords(addressKeywords,
+                keyword -> address.contains(keyword.toLowerCase()), isAndMode);
 
-        boolean matchesTag = tagKeywords.stream()
-                .anyMatch(keyword -> person.getTags().stream()
-                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())));
+        boolean matchesPhone = matchesKeywords(phoneKeywords, phone::contains, isAndMode);
 
-        // Currently only OR semantics are supported.
-        return matchesName || matchesAddress || matchesPhone || matchesTag;
+        boolean matchesTag = matchesKeywords(tagKeywords,
+                keyword -> person.getTags().stream()
+                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())),
+                isAndMode);
+
+        boolean matchesRemark = matchesKeywords(remarkKeywords, remark::contains, isAndMode);
+
+        return switch (matchWord) {
+        case OR -> matchesName || matchesAddress || matchesPhone || matchesTag || matchesRemark;
+        case AND -> matchesName && matchesAddress && matchesPhone && matchesTag && matchesRemark;
+        // defensive programming
+        default -> throw new AssertionError("Unhandled match mode: " + matchWord);
+        };
+    }
+
+    private boolean matchesKeywords(List<String> keywords, Predicate<String> matcher, boolean isAndMode) {
+        return isAndMode
+                ? keywords.stream().allMatch(matcher)
+                : keywords.stream().anyMatch(matcher);
     }
 
     @Override
@@ -86,6 +111,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 && addressKeywords.equals(otherPredicate.addressKeywords)
                 && phoneKeywords.equals(otherPredicate.phoneKeywords)
                 && tagKeywords.equals(otherPredicate.tagKeywords)
+                && remarkKeywords.equals(otherPredicate.remarkKeywords)
                 && matchWord == otherPredicate.matchWord;
     }
 
@@ -96,6 +122,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 .add("addressKeywords", addressKeywords)
                 .add("phoneKeywords", phoneKeywords)
                 .add("tagKeywords", tagKeywords)
+                .add("remarkKeywords", remarkKeywords)
                 .add("matchWord", matchWord)
                 .toString();
     }

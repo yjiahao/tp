@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.ELLE;
 import static seedu.address.testutil.TypicalPersons.FIONA;
@@ -36,9 +37,11 @@ public class FindCommandTest {
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
+                Collections.emptyList(),
                 MatchMode.OR);
         PersonContainsKeywordsPredicate secondPredicate = new PersonContainsKeywordsPredicate(
                 Collections.singletonList("second"),
+                Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
@@ -85,9 +88,26 @@ public class FindCommandTest {
     }
 
     @Test
+    public void execute_andModeOnlyPersonsMatchingAllEnabledFields_found() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Collections.singletonList("Benson"),
+                Collections.singletonList("Clementi"),
+                Collections.singletonList("9876"),
+                Collections.singletonList("Parent"),
+                Collections.emptyList(),
+                MatchMode.AND);
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Collections.singletonList(BENSON), model.getFilteredPersonList());
+    }
+
+    @Test
     public void toStringMethod() {
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(Arrays.asList("keyword"),
-                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), MatchMode.OR);
+                Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(), MatchMode.OR);
         FindCommand findCommand = new FindCommand(predicate);
         String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
@@ -99,6 +119,7 @@ public class FindCommandTest {
     private PersonContainsKeywordsPredicate preparePredicate(String userInput) {
         return new PersonContainsKeywordsPredicate(
                 Arrays.asList(userInput.split("\\s+")),
+                Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),

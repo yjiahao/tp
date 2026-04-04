@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -23,6 +24,7 @@ import seedu.address.model.person.Id;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -39,17 +41,18 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_TAG + "CATEGORY]...\n"
+            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_REMARK + "REMARK]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_TAG + "Student\n"
+            + PREFIX_TAG + "Student " + PREFIX_REMARK + "needs additional practices\n"
             + "To clear all existing tags, use " + COMMAND_WORD + " 1 " + PREFIX_TAG;
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the contact list.";
     public static final String MESSAGE_INVALID_TAG_RESET =
-            "The tag reset prefix t/ cannot be combined with category values.";
+            "The tag reset prefix t/ cannot be combined with tag values.";
 
     private final Id id;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -102,10 +105,15 @@ public class EditCommand extends Command {
         Optional<Phone> updatedPhone = editPersonDescriptor.isPhoneChanged()
             ? editPersonDescriptor.getPhone()
             : personToEdit.getPhone();
-        Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
+        Optional<Address> updatedAddress = editPersonDescriptor.isAddressChanged()
+                ? editPersonDescriptor.getAddress()
+                : personToEdit.getAddress();
         Set<Tag> updatedTags = createUpdatedTags(personToEdit.getTags(), editPersonDescriptor);
+        Optional<Remark> updatedRemark = editPersonDescriptor.isRemarkChanged()
+            ? editPersonDescriptor.getRemark()
+            : personToEdit.getRemark();
 
-        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTags);
+        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTags, updatedRemark);
     }
 
     private static Set<Tag> createUpdatedTags(Set<Tag> existingTags, EditPersonDescriptor editPersonDescriptor) {
@@ -162,8 +170,11 @@ public class EditCommand extends Command {
         private Name name;
         private Optional<Phone> phone;
         private boolean phoneChanged;
-        private Address address;
+        private Optional<Address> address;
+        private boolean addressChanged;
         private Set<Tag> tags;
+        private Optional<Remark> remark;
+        private boolean remarkChanged;
 
         /**
          * Creates an empty descriptor with no edited fields.
@@ -171,6 +182,10 @@ public class EditCommand extends Command {
         public EditPersonDescriptor() {
             this.phoneChanged = false;
             this.phone = Optional.empty();
+            this.addressChanged = false;
+            this.address = Optional.empty();
+            this.remarkChanged = false;
+            this.remark = Optional.empty();
         }
 
         /**
@@ -182,16 +197,19 @@ public class EditCommand extends Command {
 
             setName(toCopy.name);
             setPhone(toCopy.phone, toCopy.phoneChanged);
-            setAddress(toCopy.address);
+            setAddress(toCopy.address, toCopy.addressChanged);
             setTags(toCopy.tags);
+            setRemark(toCopy.remark, toCopy.remarkChanged);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, address, tags)
-                    || phoneChanged;
+            return CollectionUtil.isAnyNonNull(name, tags)
+                    || phoneChanged
+                    || addressChanged
+                    || remarkChanged;
         }
 
         /**
@@ -224,6 +242,8 @@ public class EditCommand extends Command {
          */
         private void setPhone(Optional<Phone> phone, boolean phoneChanged) {
             requireNonNull(phone);
+            requireNonNull(phoneChanged);
+
             this.phone = phone;
             this.phoneChanged = phoneChanged;
         }
@@ -248,15 +268,35 @@ public class EditCommand extends Command {
         /**
          * Sets the edited address.
          */
-        public void setAddress(Address address) {
+        public void setAddress(Optional<Address> address) {
+            Optional.ofNullable(address)
+                    .ifPresentOrElse(a -> setAddress(a, true), () ->
+                            setAddress(Optional.empty(), false));
+        }
+
+        /**
+         * Sets edited address value and explicit edit state.
+         * For private use.
+         */
+        private void setAddress(Optional<Address> address, boolean addressChanged) {
+            requireNonNull(address);
             this.address = address;
+            this.addressChanged = addressChanged;
+        }
+
+        /**
+         * Returns true if address field was explicitly edited by the user.
+         */
+        public boolean isAddressChanged() {
+            return addressChanged;
         }
 
         /**
          * Returns the edited address if it was provided.
          */
         public Optional<Address> getAddress() {
-            return Optional.ofNullable(address);
+            return Optional.ofNullable(address)
+                    .flatMap(address -> address);
         }
 
         /**
@@ -276,6 +316,44 @@ public class EditCommand extends Command {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
         }
 
+        /**
+         * Sets the edited remark value.
+         * For public use.
+         */
+        public void setRemark(Optional<Remark> remark) {
+            Optional.ofNullable(remark)
+                    .ifPresentOrElse(r -> setRemark(r, true), () -> setRemark(Optional.empty(), false));
+        }
+
+        /**
+         * Sets edited remark value and explicit edit state.
+         * For private use.
+         */
+        private void setRemark(Optional<Remark> remark, boolean remarkChanged) {
+            requireNonNull(remark);
+            requireNonNull(remarkChanged);
+
+            this.remark = remark;
+            this.remarkChanged = remarkChanged;
+        }
+
+        /**
+         * Returns true if remark field was explicitly edited by the user.
+         */
+        public boolean isRemarkChanged() {
+            return remarkChanged;
+        }
+
+        /**
+         * Returns the edited remark if it was provided.
+         */
+        public Optional<Remark> getRemark() {
+            // if remark null return Optional.empty
+            // else return Optional<Remark>
+            return Optional.ofNullable(remark)
+                    .flatMap(remark -> remark);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -292,7 +370,10 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && phoneChanged == otherEditPersonDescriptor.phoneChanged
                     && Objects.equals(address, otherEditPersonDescriptor.address)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && addressChanged == otherEditPersonDescriptor.addressChanged
+                    && Objects.equals(tags, otherEditPersonDescriptor.tags)
+                    && Objects.equals(remark, otherEditPersonDescriptor.remark)
+                    && remarkChanged == otherEditPersonDescriptor.remarkChanged;
         }
 
         @Override
@@ -302,6 +383,7 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("address", address)
                     .add("tags", tags)
+                    .add("remark", remark)
                     .toString();
         }
     }

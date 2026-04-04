@@ -18,6 +18,9 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_CANNOT_USE_MODE = "The m/ prefix is not allowed in this command.";
+    public static final String MESSAGE_INVALID_MODE =
+            "Mode must be 'and' or 'or'. Use m/and or m/or. If omitted, the default is m/or.";
     private static final String EMPTY_STRING = "";
 
     /**
@@ -39,11 +42,13 @@ public class Messages {
         final StringBuilder builder = new StringBuilder();
         builder.append(person.getName())
                 .append("; Phone: ")
-                .append(person.getPhone().isEmpty() ? EMPTY_STRING : person.getPhone().get())
+                .append(person.getPhone().map(x -> x.toString()).orElse(EMPTY_STRING))
                 .append("; Address: ")
-                .append(person.getAddress())
+                .append(person.getAddress().map(address -> address.toString()).orElse(EMPTY_STRING))
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
+        builder.append("; Remark: ")
+            .append(person.getRemark().map(x -> x.toString()).orElse(EMPTY_STRING));
         return builder.toString();
     }
 
