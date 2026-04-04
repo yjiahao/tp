@@ -97,7 +97,7 @@ Examples:
 * `add n/Jane Doe a/`
 
 The first example gives the following expected output:
-<!-- TODO: change the .png file to the one where it shows the remark -->
+
   ![result for 'add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01 r/new student'](images/AddCommandResult.png)
 
 ### Listing all persons : `list`
@@ -107,8 +107,8 @@ Shows a list of all persons in the address book.
 Format: `list`
 
 * Since phone number, address and remark fields are optional, the UI alerts the user if a particular person has no phone number or address:
-<!-- TODO: edit the image -->
-  ![result for 'list' with no phone number, address and remark](images/missingPhoneNumberAndAddress.png)
+
+  ![result for 'list' with no phone number, address and remark](images/missingPhoneNumberAddressAndRemark.png)
 
 ### Editing a person : `edit`
 
@@ -183,7 +183,7 @@ Format: `copy ID FIELD`
 
 * Copies the `FIELD` data for the person with the specified `ID` to the user clipboard.
 * Possible fields include `n/` for name, `p/` for phone number, and `a/` for address
-* Copy is not supported for the remark field.
+* Copy is not supported for the remark field. The `r/` field is invalid for this command.
 * If the person's field is empty, then nothing will be copy to the clipboard.
 
 Examples:
@@ -241,7 +241,7 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]… [r/REMARK]​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/22224444 a/123, Clementi Rd, 1234665 t/Parent t/Tutor`
+**Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [t/TAG]… [r/REMARK]​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/22224444 a/123, Clementi Rd, 1234665 t/Parent t/Tutor r/new student`
 **Clear** | `clear`
 **Delete** | `del ID`<br> e.g., `del 3`
 **Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [t/CATEGORY]…​ [r/REMARK]`<br> e.g.,`edit 2 t/Parent t/Tutor`
