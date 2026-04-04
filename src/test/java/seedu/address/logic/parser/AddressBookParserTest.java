@@ -77,7 +77,7 @@ public class AddressBookParserTest {
                 currentMaxId);
         ArrayList<Id> ids = new ArrayList<Id>();
         ids.add(ID_FIRST);
-        assertEquals(ids, command);
+        assertEquals(new DeleteCommand(ids), command);
     }
 
     @Test

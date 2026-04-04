@@ -191,7 +191,7 @@ public class DeleteCommandTest {
         ArrayList<Id> ids = new ArrayList<Id>();
         ids.add(targetId);
         DeleteCommand deleteCommand = new DeleteCommand(ids);
-        String expected = DeleteCommand.class.getCanonicalName() + "{targetId=" + targetId + "}";
+        String expected = DeleteCommand.class.getCanonicalName() + "{targetIds=" + ids + "}";
         assertEquals(expected, deleteCommand.toString());
     }
 
