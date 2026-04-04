@@ -132,10 +132,10 @@ Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [t/TAG]…​ [tdel/TAG]…​`
 
 Examples:
 *  `edit 1 p/91234567`: Edit the phone number of the person with `ID` 1, changing it to `91234567`.
-*  `edit 2 t/Parent`: Append the tag `Parent` to the person with `ID` 2.
-*  `edit 2 t/Parent t/Tutor`: Append both `Parent` and `Tutor` to the person with `ID` 2.
-*  `edit 2 tdel/Student`: Delete the tag `Student` from the person with `ID` 2.
-*  `edit 2 t/Parent tdel/Tutor`: Append the tag `Parent` and delete the tag `Tutor` for the person with `ID` 2.
+*  `edit 1 t/Parent`: Append the tag `Parent` to the person with `ID` 1.
+*  `edit 1 t/Parent t/Tutor`: Append both `Parent` and `Tutor` to the person with `ID` 1.
+*  `edit 1 tdel/Student`: Delete the tag `Student` from the person with `ID` 1.
+*  `edit 1 t/Tutor tdel/Student`: Append the tag `Tutor` and delete the tag `Student` for the person with `ID` 1.
 *  `edit 2 n/Betsy Crower t/`: Edit the name of the person with `ID` 2, changing it to `Betsy Crower`, whilst clearing all existing tags.
 
 ### Locating persons: `find`
