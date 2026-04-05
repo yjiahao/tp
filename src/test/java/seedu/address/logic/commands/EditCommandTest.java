@@ -216,6 +216,22 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_addStudentDeleteParentAcrossExistingTagStates_success() {
+        assertAddStudentDeleteParentSuccess(
+                createTagTestPerson(44, VALID_TAG_STUDENT, VALID_TAG_PARENT),
+                VALID_TAG_STUDENT);
+        assertAddStudentDeleteParentSuccess(
+                createTagTestPerson(45, VALID_TAG_STUDENT),
+                VALID_TAG_STUDENT);
+        assertAddStudentDeleteParentSuccess(
+                createTagTestPerson(46, VALID_TAG_PARENT),
+                VALID_TAG_STUDENT);
+        assertAddStudentDeleteParentSuccess(
+                createTagTestPerson(47),
+                VALID_TAG_STUDENT);
+    }
+
+    @Test
     public void execute_idInAddressBookDeleteSpecificTag_success() {
         Person alanTuring = new PersonBuilder().withId(42).withName("Alan Turing")
                 .withPhone("91234567").withAddress("Computing Avenue")
@@ -439,6 +455,26 @@ public class EditCommandTest {
         Model modelWithPerson = new ModelManager(addressBook, new UserPrefs());
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags(VALID_TAG_STUDENT).build();
+        EditCommand editCommand = new EditCommand(personToEdit.getId(), descriptor);
+
+        Person editedPerson = new PersonBuilder(personToEdit).withTags(expectedTags).build();
+        String expectedMessage = String.format(Messages.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(modelWithPerson.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, modelWithPerson, expectedMessage, expectedModel);
+    }
+
+    private void assertAddStudentDeleteParentSuccess(Person personToEdit, String... expectedTags) {
+        AddressBook addressBook = new AddressBook();
+        addressBook.addPerson(personToEdit);
+        Model modelWithPerson = new ModelManager(addressBook, new UserPrefs());
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTags(VALID_TAG_STUDENT)
+                .withTagsToDelete(VALID_TAG_PARENT)
+                .build();
         EditCommand editCommand = new EditCommand(personToEdit.getId(), descriptor);
 
         Person editedPerson = new PersonBuilder(personToEdit).withTags(expectedTags).build();
