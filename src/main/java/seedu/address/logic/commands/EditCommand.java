@@ -43,7 +43,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_TIME + "DAY TIME] "
+            + "[" + PREFIX_TIME + "DAY_TIME] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "[" + PREFIX_REMARK + "REMARK]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
