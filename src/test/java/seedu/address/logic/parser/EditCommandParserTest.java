@@ -3,22 +3,26 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_MEETING_LINK_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_UNLISTED_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.MEETING_LINK_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_STUDENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_MEETING_LINK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -34,6 +38,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Id;
+import seedu.address.model.person.MeetingLink;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -70,6 +75,7 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1" + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_UNLISTED_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS);
+        assertParseFailure(parser, "1" + INVALID_MEETING_LINK_DESC, MeetingLink.MESSAGE_CONSTRAINTS);
 
         assertParseFailure(parser, "1" + TAG_DESC_STUDENT + TAG_DESC_PARENT + TAG_EMPTY,
                 EditCommand.MESSAGE_INVALID_TAG_RESET);
@@ -129,6 +135,35 @@ public class EditCommandParserTest {
         userInput = targetId.getValue() + TAG_DESC_STUDENT;
         descriptor = new EditPersonDescriptorBuilder().withTags(VALID_TAG_STUDENT).build();
         expectedCommand = new EditCommand(targetId, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        userInput = targetId.getValue() + MEETING_LINK_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withMeetingLink(VALID_MEETING_LINK_AMY).build();
+        expectedCommand = new EditCommand(targetId, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_resetMeetingLink_success() {
+        Id targetId = ID_SECOND;
+        String userInput = targetId.getValue() + " " + PREFIX_MEETING_LINK;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withoutMeetingLink().build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_resetMeetingLinkWithOtherField_success() {
+        Id targetId = ID_SECOND;
+        String userInput = targetId.getValue() + NAME_DESC_AMY + " " + PREFIX_MEETING_LINK;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName(VALID_NAME_AMY).withoutMeetingLink().build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 

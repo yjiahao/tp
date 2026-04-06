@@ -139,6 +139,15 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PARENT).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // has meeting link, original does not -> returns false
+        editedAlice = new PersonBuilder(ALICE).withMeetingLink("https://zoom.us/whatisthis").build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different meeting link values -> returns false
+        Person aliceWithLink = new PersonBuilder(ALICE).withMeetingLink("https://zoom.us/woah").build();
+        Person aliceWithOtherLink = new PersonBuilder(ALICE).withMeetingLink("https://zoom.us/aiya").build();
+        assertFalse(aliceWithLink.equals(aliceWithOtherLink));
     }
 
     @Test

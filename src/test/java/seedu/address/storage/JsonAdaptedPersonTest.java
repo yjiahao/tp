@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Id;
+import seedu.address.model.person.MeetingLink;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -38,6 +39,7 @@ public class JsonAdaptedPersonTest {
 
     private static final String VALID_REMARK = JIM.getRemark().get().value;
     private static final String VALID_MEETING_LINK = "https://zoom.com/testtesttest";
+    private static final String INVALID_MEETING_LINK = "nahThisAintAURL";
     private static final String INVALID_REMARK_SPACES = "   ";
     private static final String INVALID_REMARK_NEWLINE = "\n";
     private static final String INVALID_REMARK_TAB = "\t";
@@ -162,6 +164,40 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ID, VALID_NAME, VALID_PHONE,
                 VALID_ADDRESS, VALID_TAGS, null, "");
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Remark.class.getSimpleName());
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_validMeetingLink_returnsPersonWithMeetingLink() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_ID, VALID_NAME, VALID_PHONE, VALID_ADDRESS, VALID_TAGS, VALID_REMARK, VALID_MEETING_LINK);
+        Person modelPerson = person.toModelType();
+
+        assertEquals(Optional.of(new MeetingLink(VALID_MEETING_LINK)), modelPerson.getMeetingLink());
+    }
+
+    @Test
+    public void toModelType_emptyMeetingLink_returnsPersonWithEmptyMeetingLink() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_ID, VALID_NAME, VALID_PHONE, VALID_ADDRESS, VALID_TAGS, VALID_REMARK, "");
+        Person modelPerson = person.toModelType();
+
+        assertEquals(Optional.empty(), modelPerson.getMeetingLink());
+    }
+
+    @Test
+    public void toModelType_nullMeetingLink_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ID, VALID_NAME, VALID_PHONE,
+                VALID_ADDRESS, VALID_TAGS, VALID_REMARK, null);
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, MeetingLink.class.getSimpleName());
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidMeetingLink_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_ID, VALID_NAME, VALID_PHONE,
+                VALID_ADDRESS, VALID_TAGS, VALID_REMARK, INVALID_MEETING_LINK);
+        String expectedMessage = MeetingLink.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 

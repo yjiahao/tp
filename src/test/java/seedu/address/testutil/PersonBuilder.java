@@ -131,6 +131,22 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code MeetingLink} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withMeetingLink(String meetingLink) {
+        this.meetingLink = Optional.of(new MeetingLink(meetingLink));
+        return this;
+    }
+
+    /**
+     * Sets the {@code MeetingLink} of the {@code Person} that we are building as empty.
+     */
+    public PersonBuilder withoutMeetingLink() {
+        this.meetingLink = Optional.empty();
+        return this;
+    }
+
     public Person build() {
         return new Person(id, name, phone, address, tags, remark, meetingLink);
     }
