@@ -22,6 +22,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -91,7 +92,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         assert remark != null : "Parsed remark should not be null";
         assert meetingLink != null : "Parsed meeting link should not be null";
 
-        Person person = new Person(id, name, phone, address, tagList, remark, meetingLink);
+        Person person = new Person(id, name, phone, address, Optional.<Time>empty(), tagList, remark, meetingLink);
         assert person != null : "Parsed person should not be null";
 
         return new AddCommand(person);

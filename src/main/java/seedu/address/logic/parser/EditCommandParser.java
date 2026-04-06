@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_DELETE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +26,7 @@ import seedu.address.model.person.Id;
 import seedu.address.model.person.MeetingLink;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -41,8 +43,8 @@ public class EditCommandParser implements Parser<EditCommand> {
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS,
-                PREFIX_TAG, PREFIX_TAG_DELETE, PREFIX_REMARK, PREFIX_MEETING_LINK);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_TIME,
+                        PREFIX_TAG, PREFIX_TAG_DELETE, PREFIX_REMARK, PREFIX_MEETING_LINK);
 
         Id id;
 
@@ -52,14 +54,15 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_REMARK,
-                PREFIX_MEETING_LINK);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_TIME,
+                PREFIX_REMARK, PREFIX_MEETING_LINK);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
         populateNameIfExists(argMultimap, editPersonDescriptor);
         populatePhoneIfExists(argMultimap, editPersonDescriptor);
         populateAddressIfExists(argMultimap, editPersonDescriptor);
+        populateTimeIfExists(argMultimap, editPersonDescriptor);
         populateTagsIfExists(argMultimap, editPersonDescriptor);
         populateRemarkIfExists(argMultimap, editPersonDescriptor);
         populateMeetingLinkIfExists(argMultimap, editPersonDescriptor);
@@ -104,6 +107,14 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
             Optional<Address> optionalAddress = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS));
             editPersonDescriptor.setAddress(optionalAddress);
+        }
+    }
+
+    private void populateTimeIfExists(ArgumentMultimap argMultimap, EditPersonDescriptor editPersonDescriptor)
+            throws ParseException {
+        if (argMultimap.getValue(PREFIX_TIME).isPresent()) {
+            Optional<Time> optionalTime = ParserUtil.parseTime(argMultimap.getValue(PREFIX_TIME));
+            editPersonDescriptor.setTime(optionalTime);
         }
     }
 

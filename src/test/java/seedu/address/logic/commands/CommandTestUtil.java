@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_DELETE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
@@ -42,6 +43,9 @@ public class CommandTestUtil {
     public static final String VALID_PHONE_BOB = "22222222";
     public static final String VALID_ADDRESS_AMY = "Block 312, Amy Street 1";
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
+    public static final String VALID_TIME_AMY = "Monday 18:00";
+    public static final String VALID_TIME_BOB = "Tuesday 09:30";
+    public static final String VALID_TIME_DURATION_BOB = "Wednesday 09:30 - 10:30";
     public static final String VALID_REMARK_AMY = "first student";
     public static final String VALID_REMARK_BOB = "2nd student";
     public static final String VALID_MEETING_LINK_AMY = "https://zoom.us/j/amy123";
@@ -54,6 +58,9 @@ public class CommandTestUtil {
     public static final String PHONE_DESC_BOB = " " + PREFIX_PHONE + VALID_PHONE_BOB;
     public static final String ADDRESS_DESC_AMY = " " + PREFIX_ADDRESS + VALID_ADDRESS_AMY;
     public static final String ADDRESS_DESC_BOB = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOB;
+    public static final String TIME_DESC_AMY = " " + PREFIX_TIME + VALID_TIME_AMY;
+    public static final String TIME_DESC_BOB = " " + PREFIX_TIME + VALID_TIME_BOB;
+    public static final String TIME_DESC_DURATION_BOB = " " + PREFIX_TIME + VALID_TIME_DURATION_BOB;
     public static final String REMARK_DESC_AMY = " " + PREFIX_REMARK + VALID_REMARK_AMY;
     public static final String REMARK_DESC_BOB = " " + PREFIX_REMARK + VALID_REMARK_BOB;
     public static final String MEETING_LINK_DESC_AMY = " " + PREFIX_MEETING_LINK + VALID_MEETING_LINK_AMY;
@@ -71,6 +78,9 @@ public class CommandTestUtil {
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     // public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS;
+    public static final String INVALID_TIME_DESC = " " + PREFIX_TIME + "Monday 25:00";
+    public static final String INVALID_TIME_DURATION_DESC = " " + PREFIX_TIME + "Monday 18:00 - 17:30";
+    public static final String INVALID_TIME_NO_DAY_DESC = " " + PREFIX_TIME + "1800";
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
     public static final String INVALID_TAG_DELETE_DESC = " " + PREFIX_TAG_DELETE + "hubby*";
 

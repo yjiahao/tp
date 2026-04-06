@@ -18,6 +18,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -32,9 +33,25 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String address;
+    private final String time;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final String remark;
     private final String meetingLink;
+
+    public JsonAdaptedPerson(int id, String name, String phone, String address, String time,
+            List<JsonAdaptedTag> tags, String remark) {
+        this(id, name, phone, address, time, null, tags, remark, EMPTY_STRING);
+    }
+
+    public JsonAdaptedPerson(int id, String name, String phone, String address, String time,
+            List<JsonAdaptedTag> tags, String remark, String meetingLink) {
+        this(id, name, phone, address, time, null, tags, remark, meetingLink);
+    }
+
+    public JsonAdaptedPerson(int id, String name, String phone, String address,
+            List<JsonAdaptedTag> tags, String remark, String meetingLink) {
+        this(id, name, phone, address, EMPTY_STRING, null, tags, remark, meetingLink);
+    }
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -44,6 +61,8 @@ class JsonAdaptedPerson {
             @JsonProperty("name") String name,
             @JsonProperty("phone") String phone,
             @JsonProperty("address") String address,
+            @JsonProperty("time") String time,
+            @JsonProperty("date") String legacyDate,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("remark") String remark,
             @JsonProperty("meetingLink") String meetingLink) {
@@ -51,6 +70,7 @@ class JsonAdaptedPerson {
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.time = resolveStoredTime(time, legacyDate);
         if (tags != null) {
             this.tags.addAll(tags);
         }
@@ -67,6 +87,8 @@ class JsonAdaptedPerson {
         phone = source.getPhone().map(x -> x.value)
             .orElse(EMPTY_STRING);
         address = source.getAddress().map(x -> x.value)
+                .orElse(EMPTY_STRING);
+        time = source.getTime().map(x -> x.value)
                 .orElse(EMPTY_STRING);
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -91,13 +113,44 @@ class JsonAdaptedPerson {
 
         final Optional<Address> modelAddress = getModelAddress();
 
+        final Optional<Time> modelTime = getModelTime();
+
         final Set<Tag> modelTags = getModelTags();
 
         final Optional<Remark> modelRemark = getModelRemark();
 
         final Optional<MeetingLink> modelMeetingLink = getModelMeetingLink();
 
-        return new Person(modelId, modelName, modelPhone, modelAddress, modelTags, modelRemark, modelMeetingLink);
+        return new Person(modelId, modelName, modelPhone, modelAddress, modelTime, modelTags, modelRemark,
+                modelMeetingLink);
+    }
+
+    private Optional<Time> getModelTime() throws IllegalValueException {
+        validateTime();
+        if (time == null || time.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(Time.fromStoredValue(time));
+    }
+
+    private void validateTime() throws IllegalValueException {
+        if (time == null) {
+            return;
+        }
+        if (!Time.isValidTimeOrEmptyString(time)) {
+            throw new IllegalValueException(Time.MESSAGE_CONSTRAINTS);
+        }
+    }
+
+    private static String resolveStoredTime(String time, String legacyDate) {
+        if (time != null) {
+            return time;
+        }
+        if (legacyDate == null) {
+            return null;
+        }
+        return Time.isValidTimeOrEmptyString(legacyDate) ? legacyDate : EMPTY_STRING;
     }
 
     private void validateMeetingLink() throws IllegalValueException {

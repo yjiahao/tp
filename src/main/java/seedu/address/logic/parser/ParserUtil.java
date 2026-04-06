@@ -19,6 +19,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.PersonContainsKeywordsPredicate.MatchMode;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -114,7 +115,30 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String remark} into a {@code Remark}.
+     * Parses an optional {@code String time} into an optional {@code Time}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code time} is invalid.
+     */
+    public static Optional<Time> parseTime(Optional<String> time) throws ParseException {
+        requireNonNull(time);
+
+        time = time.filter(timeString -> !timeString.isEmpty());
+        if (time.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Time parsedTime = time.map(timeString -> requireNonNull(timeString))
+                .map(String::trim)
+                .filter(Time::isValidTime)
+                .map(Time::new)
+                .orElseThrow(() -> new ParseException(Time.MESSAGE_CONSTRAINTS));
+
+        return Optional.of(parsedTime);
+    }
+
+    /**
+     * Parses an optional {@code String remark} into an optional {@code Remark}.
      * Leading and trailing whitespaces will be trimmed.
      *
      * @throws ParseException if the given {@code remark} is invalid.

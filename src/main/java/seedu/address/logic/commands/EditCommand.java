@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_DELETE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Collections;
@@ -28,6 +29,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -45,16 +47,22 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_TIME + "DAY_TIME] "
             + "[" + PREFIX_REMARK + "REMARK] "
             + "[" + PREFIX_MEETING_LINK + "MEETING_LINK] "
             + "[" + PREFIX_TAG + "TAG]... "
             + "[" + PREFIX_TAG_DELETE + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
+            + PREFIX_TIME + "Monday 18:00 "
             + PREFIX_REMARK + "Needs additional practices "
+            + PREFIX_MEETING_LINK + "https://zoom.us/j/123456789 "
             + PREFIX_TAG + "Student "
             + PREFIX_TAG_DELETE + "Parent\n"
-            + "To clear all existing tags, use " + COMMAND_WORD + " 1 " + PREFIX_TAG;
+            + "To clear all existing tags, use " + COMMAND_WORD + " 1 " + PREFIX_TAG + "\n"
+            + "To clear the stored time, use " + COMMAND_WORD + " 1 " + PREFIX_TIME + "\n"
+            + "To clear the stored meeting link, use " + COMMAND_WORD + " 1 " + PREFIX_MEETING_LINK + "\n"
+            + "Accepted time formats: Day HH:mm, Day HHmm, Day HH:mm - HH:mm, or Day HHmm - HHmm";
 
     private final Id id;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -111,6 +119,9 @@ public class EditCommand extends Command {
         Optional<Address> updatedAddress = editPersonDescriptor.isAddressChanged()
                 ? editPersonDescriptor.getAddress()
                 : personToEdit.getAddress();
+        Optional<Time> updatedTime = editPersonDescriptor.isTimeChanged()
+                ? editPersonDescriptor.getTime()
+                : personToEdit.getTime();
         Set<Tag> updatedTags = createUpdatedTags(personToEdit.getTags(), editPersonDescriptor);
         Optional<Remark> updatedRemark = editPersonDescriptor.isRemarkChanged()
                 ? editPersonDescriptor.getRemark()
@@ -119,8 +130,8 @@ public class EditCommand extends Command {
                 ? editPersonDescriptor.getMeetingLink()
                 : personToEdit.getMeetingLink();
 
-        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTags, updatedRemark,
-                updatedMeetingLink);
+        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTime, updatedTags,
+                updatedRemark, updatedMeetingLink);
     }
 
     private static Set<Tag> createUpdatedTags(Set<Tag> existingTags, EditPersonDescriptor editPersonDescriptor) {
@@ -192,6 +203,8 @@ public class EditCommand extends Command {
         private boolean phoneChanged;
         private Optional<Address> address;
         private boolean addressChanged;
+        private Optional<Time> time;
+        private boolean timeChanged;
         private Set<Tag> tags;
         private Set<Tag> tagsToDelete;
         private Optional<Remark> remark;
@@ -207,6 +220,8 @@ public class EditCommand extends Command {
             this.phone = Optional.empty();
             this.addressChanged = false;
             this.address = Optional.empty();
+            this.timeChanged = false;
+            this.time = Optional.empty();
             this.remarkChanged = false;
             this.remark = Optional.empty();
             this.meetingLinkChanged = false;
@@ -223,6 +238,7 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setPhone(toCopy.phone, toCopy.phoneChanged);
             setAddress(toCopy.address, toCopy.addressChanged);
+            setTime(toCopy.time, toCopy.timeChanged);
             setTags(toCopy.tags);
             setTagsToDelete(toCopy.tagsToDelete);
             setRemark(toCopy.remark, toCopy.remarkChanged);
@@ -236,6 +252,7 @@ public class EditCommand extends Command {
             return CollectionUtil.isAnyNonNull(name, tags, tagsToDelete)
                     || phoneChanged
                     || addressChanged
+                    || timeChanged
                     || remarkChanged
                     || meetingLinkChanged;
         }
@@ -325,6 +342,42 @@ public class EditCommand extends Command {
         public Optional<Address> getAddress() {
             return Optional.ofNullable(address)
                     .flatMap(address -> address);
+        }
+
+        /**
+         * Sets the edited time value.
+         * For public use.
+         */
+        public void setTime(Optional<Time> time) {
+            Optional.ofNullable(time)
+                    .ifPresentOrElse(d -> setTime(d, true), () -> setTime(Optional.empty(), false));
+        }
+
+        /**
+         * Sets edited time value and explicit edit state.
+         * For private use.
+         */
+        private void setTime(Optional<Time> time, boolean timeChanged) {
+            requireNonNull(time);
+            requireNonNull(timeChanged);
+
+            this.time = time;
+            this.timeChanged = timeChanged;
+        }
+
+        /**
+         * Returns true if time field was explicitly edited by the user.
+         */
+        public boolean isTimeChanged() {
+            return timeChanged;
+        }
+
+        /**
+         * Returns the edited time if it was provided.
+         */
+        public Optional<Time> getTime() {
+            return Optional.ofNullable(time)
+                    .flatMap(dateValue -> dateValue);
         }
 
         /**
@@ -451,6 +504,8 @@ public class EditCommand extends Command {
                     && phoneChanged == otherEditPersonDescriptor.phoneChanged
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && addressChanged == otherEditPersonDescriptor.addressChanged
+                    && Objects.equals(time, otherEditPersonDescriptor.time)
+                    && timeChanged == otherEditPersonDescriptor.timeChanged
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
                     && Objects.equals(tagsToDelete, otherEditPersonDescriptor.tagsToDelete)
                     && Objects.equals(remark, otherEditPersonDescriptor.remark)
@@ -465,9 +520,11 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("phone", phone)
                     .add("address", address)
+                    .add("time", time)
                     .add("tags", tags)
                     .add("tagsToDelete", tagsToDelete)
                     .add("remark", remark)
+                    .add("meetingLink", meetingLink)
                     .toString();
         }
     }

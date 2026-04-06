@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_BOB;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
@@ -33,6 +35,10 @@ public class PersonTest {
 
         // same name, phone number, address, different tags -> returns true
         Person editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PARENT).build();
+        assertTrue(ALICE.isSamePerson(editedAlice));
+
+        // same name, phone number, address, different time -> returns true
+        editedAlice = new PersonBuilder(ALICE).withTime(VALID_TIME_BOB).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
         // null -> returns false
@@ -145,6 +151,14 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_PARENT).build();
         assertFalse(ALICE.equals(editedAlice));
 
+        // different time -> returns false
+        editedAlice = new PersonBuilder(ALICE).withTime(VALID_TIME_BOB).build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different remark -> returns false
+        editedAlice = new PersonBuilder(ALICE).withRemark(VALID_REMARK_BOB).build();
+        assertFalse(ALICE.equals(editedAlice));
+
         // has meeting link, original does not -> returns false
         editedAlice = new PersonBuilder(ALICE).withMeetingLink("https://zoom.us/whatisthis").build();
         assertFalse(ALICE.equals(editedAlice));
@@ -174,6 +188,7 @@ public class PersonTest {
                 + ", name=" + ALICE.getName()
                 + ", phone=" + ALICE.getPhone()
                 + ", address=" + ALICE.getAddress()
+                + ", time=" + ALICE.getTime()
                 + ", tags=" + ALICE.getTags()
                 + ", remark=" + ALICE.getRemark()
                 + ", meetingLink=" + ALICE.getMeetingLink() + "}";

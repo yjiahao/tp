@@ -11,6 +11,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -29,6 +30,7 @@ public class PersonBuilder {
     private Name name;
     private Optional<Phone> phone;
     private Optional<Address> address;
+    private Optional<Time> time;
     private Set<Tag> tags;
     private Optional<Remark> remark;
     private Optional<MeetingLink> meetingLink;
@@ -41,6 +43,7 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         phone = Optional.of(new Phone(DEFAULT_PHONE));
         address = Optional.of(new Address(DEFAULT_ADDRESS));
+        time = Optional.empty();
         tags = new HashSet<>();
         remark = Optional.of(new Remark(DEFAULT_REMARK));
         meetingLink = Optional.empty();
@@ -54,6 +57,7 @@ public class PersonBuilder {
         name = personToCopy.getName();
         phone = personToCopy.getPhone();
         address = personToCopy.getAddress();
+        time = personToCopy.getTime();
         tags = new HashSet<>(personToCopy.getTags());
         remark = personToCopy.getRemark();
         meetingLink = personToCopy.getMeetingLink();
@@ -88,6 +92,22 @@ public class PersonBuilder {
      */
     public PersonBuilder withAddress(String address) {
         this.address = Optional.of(new Address(address));
+        return this;
+    }
+
+    /**
+     * Sets the {@code Time} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withTime(String time) {
+        this.time = Optional.of(new Time(time));
+        return this;
+    }
+
+    /**
+     * Sets the {@code Time} of the {@code Person} that we are building as empty.
+     */
+    public PersonBuilder withoutTime() {
+        this.time = Optional.empty();
         return this;
     }
 
@@ -148,7 +168,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(id, name, phone, address, tags, remark, meetingLink);
+        return new Person(id, name, phone, address, time, tags, remark, meetingLink);
     }
 
 }

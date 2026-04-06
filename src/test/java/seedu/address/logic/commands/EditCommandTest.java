@@ -11,6 +11,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_TUTOR;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonWithId;
@@ -83,6 +84,44 @@ public class EditCommandTest {
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(personWithMaxId, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_idInAddressBookSetTime_success() {
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTime(VALID_TIME_AMY).build();
+        EditCommand editCommand = new EditCommand(ID_FIRST, descriptor);
+
+        Optional<Person> personToEditFound = model.findPersonById(ID_FIRST);
+        assertTrue(personToEditFound.isPresent());
+        Person personToEdit = personToEditFound.get();
+        Person editedPerson = new PersonBuilder(personToEdit).withTime(VALID_TIME_AMY).build();
+
+        String expectedMessage = String.format(Messages.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_idInAddressBookClearTime_success() {
+        Optional<Person> originalPersonFound = model.findPersonById(ID_FIRST);
+        assertTrue(originalPersonFound.isPresent());
+        Person originalPerson = originalPersonFound.get();
+        Person personWithTime = new PersonBuilder(originalPerson).withTime(VALID_TIME_AMY).build();
+        model.setPerson(originalPerson, personWithTime);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withoutTime().build();
+        EditCommand editCommand = new EditCommand(ID_FIRST, descriptor);
+        Person editedPerson = new PersonBuilder(personWithTime).withoutTime().build();
+
+        String expectedMessage = String.format(Messages.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personWithTime, editedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }

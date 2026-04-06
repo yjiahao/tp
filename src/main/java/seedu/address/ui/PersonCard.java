@@ -22,6 +22,7 @@ public class PersonCard extends UiPart<Region> {
 
     private static final String MESSAGE_MISSING_PHONE_NUMBER = "No phone number provided";
     private static final String MESSAGE_MISSING_ADDRESS = "No address provided";
+    private static final String MESSAGE_MISSING_TIME = "No time provided";
     private static final String MESSAGE_MISSING_REMARK = "No remark provided";
     private static final String MESSAGE_MISSING_MEETING_LINK = "No meeting link provided";
 
@@ -29,6 +30,7 @@ public class PersonCard extends UiPart<Region> {
 
     private static final String PHONE_ICON = "\u260E";
     private static final String ADDRESS_ICON = "\u2302";
+    private static final String TIME_ICON = "\u23F0";
     private static final String REMARK_ICON = "\u270E";
     private static final String MEETING_LINK_ICON = "\u26D3";
     /**
@@ -52,6 +54,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label address;
     @FXML
+    private Label time;
+    @FXML
     private FlowPane tags;
     @FXML
     private Label remark;
@@ -71,6 +75,7 @@ public class PersonCard extends UiPart<Region> {
         renderNameWithId(person, nameWithId);
         renderPhone(person, phone);
         renderAddress(person, address);
+        renderTime(person, time);
         renderTags(person);
         renderRemark(person, remark);
         renderMeetingLink(person, meetingLink);
@@ -137,6 +142,13 @@ public class PersonCard extends UiPart<Region> {
     private void renderMissingAddress(Label addressLabel) {
         addressLabel.setText(ADDRESS_ICON + " " + MESSAGE_MISSING_ADDRESS);
         addCssClass(addressLabel, CSS_CLASS_MISSING_FIELD);
+    }
+
+    private void renderTime(Person person, Label timeLabel) {
+        person.getTime().ifPresentOrElse(timeValue -> timeLabel.setText(TIME_ICON + " " + timeValue), () -> {
+            timeLabel.setText(TIME_ICON + " " + MESSAGE_MISSING_TIME);
+            addCssClass(timeLabel, CSS_CLASS_MISSING_FIELD);
+        });
     }
 
     /**

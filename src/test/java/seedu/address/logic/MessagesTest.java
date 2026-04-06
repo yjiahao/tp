@@ -2,6 +2,7 @@ package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_AMY;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
@@ -44,13 +46,14 @@ public class MessagesTest {
                 .withName("Alice")
                 .withPhone("91234567")
                 .withAddress("123, Jurong West Ave 6")
+                .withTime(VALID_TIME_AMY)
                 .withTags("Student")
                 .build();
 
         String formatted = Messages.format(person);
 
-        assertEquals("Alice; Phone: 91234567; Address: 123, Jurong West Ave 6; Tags: [Student]; Remark: first student; "
-                + "Meeting Link: ", formatted);
+        assertEquals("Alice; Phone: 91234567; Address: 123, Jurong West Ave 6; Time: Monday 18:00;"
+                + " Tags: [Student]; Remark: first student; Meeting Link: ", formatted);
     }
 
     @Test
@@ -60,14 +63,15 @@ public class MessagesTest {
                 new Name("Bob"),
                 Optional.<Phone>empty(),
                 Optional.of(new Address("311, Clementi Ave 2")),
+                Optional.<Time>empty(),
                 new HashSet<Tag>(),
-                Optional.<Remark>of(new Remark("Test remark 1")),
+                Optional.of(new Remark("Test remark 1")),
                 Optional.empty());
 
         String formatted = Messages.format(person);
 
-        assertEquals("Bob; Phone: ; Address: 311, Clementi Ave 2; Tags: ; Remark: Test remark 1; Meeting Link: ",
-                formatted);
+        assertEquals("Bob; Phone: ; Address: 311, Clementi Ave 2; Time: ; Tags: ; Remark: Test remark 1; "
+                + "Meeting Link: ", formatted);
     }
 
     @Test
@@ -75,16 +79,17 @@ public class MessagesTest {
         Person person = new Person(
                 Id.of(1),
                 new Name("Bob"),
-                Optional.<Phone>of(new Phone("91234567")),
+                Optional.of(new Phone("91234567")),
                 Optional.of(new Address("311, Clementi Ave 2")),
+                Optional.<Time>empty(),
                 new HashSet<Tag>(),
-                Optional.<Remark>empty(),
+                Optional.empty(),
                 Optional.empty());
 
         String formatted = Messages.format(person);
 
-        assertEquals("Bob; Phone: 91234567; Address: 311, Clementi Ave 2; Tags: ; Remark: ; Meeting Link: ",
-                formatted);
+        assertEquals("Bob; Phone: 91234567; Address: 311, Clementi Ave 2; Time: ; Tags: ; Remark: ; "
+                + "Meeting Link: ", formatted);
     }
 
     @Test
@@ -94,13 +99,14 @@ public class MessagesTest {
                 new Name("Bob"),
                 Optional.of(new Phone("98765432")),
                 Optional.empty(),
+                Optional.<Time>empty(),
                 new HashSet<Tag>(),
-                Optional.<Remark>empty(),
+                Optional.empty(),
                 Optional.empty());
 
         String formatted = Messages.format(person);
 
-        assertEquals("Bob; Phone: 98765432; Address: ; Tags: ; Remark: ; Meeting Link: ", formatted);
+        assertEquals("Bob; Phone: 98765432; Address: ; Time: ; Tags: ; Remark: ; Meeting Link: ", formatted);
     }
 
 }

@@ -12,6 +12,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_BOB;
 
 import org.junit.jupiter.api.Test;
 
@@ -110,6 +111,10 @@ public class EditPersonDescriptorTest {
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withAddress(VALID_ADDRESS_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
+        // different time -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withTime(VALID_TIME_BOB).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
         // different tags -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withTags(VALID_TAG_PARENT).build();
         assertFalse(DESC_AMY.equals(editedAmy));
@@ -136,10 +141,12 @@ public class EditPersonDescriptorTest {
         String expected = EditPersonDescriptor.class.getCanonicalName() + "{name="
                 + editPersonDescriptor.getName().orElse(null) + ", phone="
                 + editPersonDescriptor.getPhone() + ", address="
-                + editPersonDescriptor.getAddress() + ", tags="
+                + editPersonDescriptor.getAddress() + ", time="
+                + editPersonDescriptor.getTime() + ", tags="
                 + editPersonDescriptor.getTags().orElse(null) + ", tagsToDelete="
                 + editPersonDescriptor.getTagsToDelete().orElse(null) + ", remark="
-                + editPersonDescriptor.getRemark() + "}";
+                + editPersonDescriptor.getRemark() + ", meetingLink="
+                + editPersonDescriptor.getMeetingLink() + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }
 }

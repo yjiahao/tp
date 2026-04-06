@@ -23,6 +23,7 @@ public class Person {
     private final Optional<Address> address;
 
     // Data fields
+    private final Optional<Time> time;
     private final Set<Tag> tags = new HashSet<>();
     private final Optional<Remark> remark;
     private final Optional<MeetingLink> meetingLink;
@@ -35,6 +36,7 @@ public class Person {
         Name name,
         Optional<Phone> phone,
         Optional<Address> address,
+        Optional<Time> time,
         Set<Tag> tags,
         Optional<Remark> remark,
         Optional<MeetingLink> meetingLink
@@ -43,6 +45,7 @@ public class Person {
         this.name = name;
         this.phone = phone;
         this.address = address;
+        this.time = time;
         this.tags.addAll(tags);
         this.remark = remark;
         this.meetingLink = meetingLink;
@@ -62,6 +65,10 @@ public class Person {
 
     public Optional<Address> getAddress() {
         return address;
+    }
+
+    public Optional<Time> getTime() {
+        return time;
     }
 
     /**
@@ -133,6 +140,7 @@ public class Person {
         return name.equals(otherPerson.name)
                 && phone.equals(otherPerson.phone)
                 && address.equals(otherPerson.address)
+                && time.equals(otherPerson.time)
                 && tags.equals(otherPerson.tags)
                 && remark.equals(otherPerson.remark)
                 && meetingLink.equals(otherPerson.meetingLink);
@@ -141,7 +149,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, address, tags, remark, meetingLink);
+        return Objects.hash(name, phone, address, time, tags, remark, meetingLink);
     }
 
     @Override
@@ -151,6 +159,7 @@ public class Person {
                 .add("name", name)
                 .add("phone", phone)
                 .add("address", address)
+                .add("time", time)
                 .add("tags", tags)
                 .add("remark", remark)
                 .add("meetingLink", meetingLink)

@@ -8,6 +8,9 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DELETE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TIME_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TIME_DURATION_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TIME_NO_DAY_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_UNLISTED_TAG_DELETE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_UNLISTED_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.MEETING_LINK_DESC_AMY;
@@ -18,6 +21,9 @@ import static seedu.address.logic.commands.CommandTestUtil.TAG_DELETE_DESC_PAREN
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DELETE_DESC_STUDENT;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_STUDENT;
+import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.TIME_DESC_DURATION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_MEETING_LINK_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
@@ -25,12 +31,15 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PARENT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_STUDENT;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TIME_DURATION_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_DELETE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIME;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIds.ID_FIRST;
@@ -46,6 +55,7 @@ import seedu.address.model.person.Id;
 import seedu.address.model.person.MeetingLink;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
@@ -79,6 +89,9 @@ public class EditCommandParserTest {
     public void parse_invalidValue_failure() {
         assertParseFailure(parser, "1" + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + INVALID_TIME_DESC, Time.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + INVALID_TIME_DURATION_DESC, Time.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1" + INVALID_TIME_NO_DAY_DESC, Time.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_UNLISTED_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS);
         assertParseFailure(parser, "1" + INVALID_MEETING_LINK_DESC, MeetingLink.MESSAGE_CONSTRAINTS);
@@ -105,10 +118,10 @@ public class EditCommandParserTest {
     public void parse_allFieldsSpecified_success() {
         Id targetId = ID_SECOND;
         String userInput = targetId.getValue() + PHONE_DESC_BOB + TAG_DESC_PARENT
-                + ADDRESS_DESC_AMY + NAME_DESC_AMY + TAG_DESC_STUDENT;
+                + ADDRESS_DESC_AMY + TIME_DESC_AMY + NAME_DESC_AMY + TAG_DESC_STUDENT;
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withPhone(VALID_PHONE_BOB).withAddress(VALID_ADDRESS_AMY)
+                .withPhone(VALID_PHONE_BOB).withAddress(VALID_ADDRESS_AMY).withTime(VALID_TIME_AMY)
                 .withTags(VALID_TAG_PARENT, VALID_TAG_STUDENT).build();
         EditCommand expectedCommand = new EditCommand(targetId, descriptor);
 
@@ -142,6 +155,11 @@ public class EditCommandParserTest {
 
         userInput = targetId.getValue() + ADDRESS_DESC_AMY;
         descriptor = new EditPersonDescriptorBuilder().withAddress(VALID_ADDRESS_AMY).build();
+        expectedCommand = new EditCommand(targetId, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        userInput = targetId.getValue() + TIME_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withTime(VALID_TIME_AMY).build();
         expectedCommand = new EditCommand(targetId, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
@@ -308,17 +326,18 @@ public class EditCommandParserTest {
         assertParseFailure(parser, userInput, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
         userInput = targetId.getValue() + PHONE_DESC_AMY + ADDRESS_DESC_AMY
-                + TAG_DESC_STUDENT + PHONE_DESC_AMY + ADDRESS_DESC_AMY + TAG_DESC_STUDENT
-                + PHONE_DESC_BOB + ADDRESS_DESC_BOB + TAG_DESC_PARENT;
+                + TIME_DESC_AMY + TAG_DESC_STUDENT + PHONE_DESC_AMY + ADDRESS_DESC_AMY
+                + TIME_DESC_AMY + TAG_DESC_STUDENT + PHONE_DESC_BOB + ADDRESS_DESC_BOB
+                + TIME_DESC_BOB + TAG_DESC_PARENT;
 
         assertParseFailure(parser, userInput,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_ADDRESS));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_ADDRESS, PREFIX_TIME));
 
         userInput = targetId.getValue() + INVALID_NAME_DESC + INVALID_PHONE_DESC
-                + INVALID_PHONE_DESC + INVALID_NAME_DESC;
+                + INVALID_TIME_DESC + INVALID_PHONE_DESC + INVALID_NAME_DESC + TIME_DESC_AMY;
 
         assertParseFailure(parser, userInput,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_NAME));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_NAME, PREFIX_TIME));
     }
 
     @Test
@@ -327,6 +346,40 @@ public class EditCommandParserTest {
         String userInput = targetId.getValue() + TAG_EMPTY;
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags().build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_clearTime_success() {
+        Id targetId = ID_THIRD;
+        String userInput = targetId.getValue() + " " + PREFIX_TIME;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withoutTime().build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_alternateTimeFormat_success() {
+        Id targetId = ID_SECOND;
+        String userInput = targetId.getValue() + " " + PREFIX_TIME + "monday 1800";
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTime("Monday 18:00").build();
+        EditCommand expectedCommand = new EditCommand(targetId, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_durationTimeFormat_success() {
+        Id targetId = ID_SECOND;
+        String userInput = targetId.getValue() + TIME_DESC_DURATION_BOB;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTime(VALID_TIME_DURATION_BOB).build();
         EditCommand expectedCommand = new EditCommand(targetId, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);

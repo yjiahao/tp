@@ -36,7 +36,13 @@ jobs:
           java-version: '17'
           java-package: jdk+fx
 
+      # JavaFX UI tests start the FX toolkit and need a virtual display on headless Linux runners.
+      - name: Build and check with Gradle (Linux, Xvfb)
+        if: runner.os == 'Linux'
+        run: xvfb-run ./gradlew check coverage
+
       - name: Build and check with Gradle
+        if: runner.os != 'Linux'
         run: ./gradlew check coverage
 
       - name: Upload coverage reports to Codecov
