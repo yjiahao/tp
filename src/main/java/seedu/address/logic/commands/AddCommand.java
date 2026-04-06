@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
@@ -25,6 +26,7 @@ public class AddCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_REMARK + "REMARK] "
+            + "[" + PREFIX_MEETING_LINK + "MEETING_LINK] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example:\n"
             + "\t" + COMMAND_WORD + " "
@@ -32,6 +34,7 @@ public class AddCommand extends Command {
             + PREFIX_PHONE + "98765432 "
             + PREFIX_ADDRESS + "1A Kent Ridge Rd, 119224 "
             + PREFIX_REMARK + "Has dyslexia "
+            + PREFIX_MEETING_LINK + "https://zoom.us/j/123456789 "
             + PREFIX_TAG + "Student\n"
             + "\t" + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe\n";

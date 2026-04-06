@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MEETING_LINK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
@@ -22,6 +23,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Id;
+import seedu.address.model.person.MeetingLink;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -44,6 +46,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_REMARK + "REMARK] "
+            + "[" + PREFIX_MEETING_LINK + "MEETING_LINK] "
             + "[" + PREFIX_TAG + "TAG]... "
             + "[" + PREFIX_TAG_DELETE + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
@@ -103,17 +106,21 @@ public class EditCommand extends Command {
         Id personId = personToEdit.getId();
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Optional<Phone> updatedPhone = editPersonDescriptor.isPhoneChanged()
-            ? editPersonDescriptor.getPhone()
-            : personToEdit.getPhone();
+                ? editPersonDescriptor.getPhone()
+                : personToEdit.getPhone();
         Optional<Address> updatedAddress = editPersonDescriptor.isAddressChanged()
                 ? editPersonDescriptor.getAddress()
                 : personToEdit.getAddress();
         Set<Tag> updatedTags = createUpdatedTags(personToEdit.getTags(), editPersonDescriptor);
         Optional<Remark> updatedRemark = editPersonDescriptor.isRemarkChanged()
-            ? editPersonDescriptor.getRemark()
-            : personToEdit.getRemark();
+                ? editPersonDescriptor.getRemark()
+                : personToEdit.getRemark();
+        Optional<MeetingLink> updatedMeetingLink = editPersonDescriptor.isMeetingLinkChanged()
+                ? editPersonDescriptor.getMeetingLink()
+                : personToEdit.getMeetingLink();
 
-        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTags, updatedRemark);
+        return new Person(personId, updatedName, updatedPhone, updatedAddress, updatedTags, updatedRemark,
+                updatedMeetingLink);
     }
 
     private static Set<Tag> createUpdatedTags(Set<Tag> existingTags, EditPersonDescriptor editPersonDescriptor) {
@@ -189,6 +196,8 @@ public class EditCommand extends Command {
         private Set<Tag> tagsToDelete;
         private Optional<Remark> remark;
         private boolean remarkChanged;
+        private Optional<MeetingLink> meetingLink;
+        private boolean meetingLinkChanged;
 
         /**
          * Creates an empty descriptor with no edited fields.
@@ -200,6 +209,8 @@ public class EditCommand extends Command {
             this.address = Optional.empty();
             this.remarkChanged = false;
             this.remark = Optional.empty();
+            this.meetingLinkChanged = false;
+            this.meetingLink = Optional.empty();
         }
 
         /**
@@ -215,6 +226,7 @@ public class EditCommand extends Command {
             setTags(toCopy.tags);
             setTagsToDelete(toCopy.tagsToDelete);
             setRemark(toCopy.remark, toCopy.remarkChanged);
+            setMeetingLink(toCopy.meetingLink, toCopy.meetingLinkChanged);
         }
 
         /**
@@ -224,7 +236,8 @@ public class EditCommand extends Command {
             return CollectionUtil.isAnyNonNull(name, tags, tagsToDelete)
                     || phoneChanged
                     || addressChanged
-                    || remarkChanged;
+                    || remarkChanged
+                    || meetingLinkChanged;
         }
 
         /**
@@ -388,6 +401,39 @@ public class EditCommand extends Command {
                     .flatMap(remark -> remark);
         }
 
+        /**
+         * Sets the edited meeting link value.
+         * For public use.
+         */
+        public void setMeetingLink(Optional<MeetingLink> meetingLink) {
+            Optional.ofNullable(meetingLink)
+                    .ifPresentOrElse(l -> setMeetingLink(l, true), () -> setMeetingLink(Optional.empty(), false));
+        }
+
+        /**
+         * Sets edited meeting link value and change the edit state.
+         * For private use.
+         */
+        private void setMeetingLink(Optional<MeetingLink> meetingLink, boolean meetingLinkChanged) {
+            requireNonNull(meetingLink);
+            this.meetingLink = meetingLink;
+            this.meetingLinkChanged = meetingLinkChanged;
+        }
+
+        /**
+         * Returns true if meeting link field was edited by the user.
+         */
+        public boolean isMeetingLinkChanged() {
+            return meetingLinkChanged;
+        }
+
+        /**
+         * Returns the edited meeting link if it was provided.
+         */
+        public Optional<MeetingLink> getMeetingLink() {
+            return Optional.ofNullable(meetingLink).flatMap(l -> l);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -408,7 +454,9 @@ public class EditCommand extends Command {
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
                     && Objects.equals(tagsToDelete, otherEditPersonDescriptor.tagsToDelete)
                     && Objects.equals(remark, otherEditPersonDescriptor.remark)
-                    && remarkChanged == otherEditPersonDescriptor.remarkChanged;
+                    && remarkChanged == otherEditPersonDescriptor.remarkChanged
+                    && Objects.equals(meetingLink, otherEditPersonDescriptor.meetingLink)
+                    && meetingLinkChanged == otherEditPersonDescriptor.meetingLinkChanged;
         }
 
         @Override
