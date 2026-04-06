@@ -41,11 +41,12 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_REMARK + "REMARK] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "[" + PREFIX_REMARK + "REMARK]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_TAG + "Student " + PREFIX_REMARK + "needs additional practices\n"
+            + PREFIX_REMARK + "Needs additional practices "
+            + PREFIX_TAG + "Student\n"
             + "To clear all existing tags, use " + COMMAND_WORD + " 1 " + PREFIX_TAG;
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
