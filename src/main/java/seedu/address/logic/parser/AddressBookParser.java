@@ -28,6 +28,7 @@ import seedu.address.model.person.Id;
  * Parses user input.
  */
 public class AddressBookParser {
+    private boolean isAwaitingClearConfirmation;
 
     /**
      * Used for initial separation of command word and args.
@@ -63,40 +64,54 @@ public class AddressBookParser {
         switch (commandWord) {
 
         case AddCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             verifyNoModePrefix(arguments);
             return new AddCommandParser(currentMaxId).parse(arguments);
 
         case EditCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             verifyNoModePrefix(arguments);
             return new EditCommandParser().parse(arguments);
 
         case DeleteCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             verifyNoModePrefix(arguments);
             return new DeleteCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
             verifyNoModePrefix(arguments);
-            return new ClearCommand();
+            if (isAwaitingClearConfirmation) {
+                isAwaitingClearConfirmation = false;
+                return new ClearCommand(true);
+            }
+            isAwaitingClearConfirmation = true;
+            return new ClearCommand(false);
 
         case FindCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             return new FindCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             verifyNoModePrefix(arguments);
             return new ListCommand();
 
         case CopyCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             return new CopyCommandParser().parse(arguments);
 
         case ExitCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             verifyNoModePrefix(arguments);
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:
+            isAwaitingClearConfirmation = false;
             verifyNoModePrefix(arguments);
             return new HelpCommand();
 
         default:
+            isAwaitingClearConfirmation = false;
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
