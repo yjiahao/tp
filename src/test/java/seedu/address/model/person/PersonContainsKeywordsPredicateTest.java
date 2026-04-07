@@ -95,6 +95,10 @@ public class PersonContainsKeywordsPredicateTest {
 
         PersonContainsKeywordsPredicate differentRemarkFlag = remarkPredicate(firstPredicateKeywordList);
         assertFalse(firstPredicate.equals(differentRemarkFlag));
+
+        PersonContainsKeywordsPredicate differentDateTimeFlag = predicateWithDateTimeKeywords(
+                List.of(new TimeSearchKeyword("Friday", "16:00")), MatchMode.OR);
+        assertFalse(firstPredicate.equals(differentDateTimeFlag));
     }
 
     @Test
