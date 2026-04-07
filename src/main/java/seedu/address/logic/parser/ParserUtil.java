@@ -163,12 +163,18 @@ public class ParserUtil {
     public static TimeSearchKeyword parseFindTimeKeyword(String rawTimeKeyword) throws ParseException {
         requireNonNull(rawTimeKeyword);
 
-        String[] dayAndTimeParts = rawTimeKeyword.trim().split("\\s+", 2);
+        String trimmedTimeKeyword = rawTimeKeyword.trim();
+        String canonicalWholeTime = getCanonicalFindTime(trimmedTimeKeyword);
+        if (canonicalWholeTime != null) {
+            return new TimeSearchKeyword("", canonicalWholeTime);
+        }
+
+        String[] dayAndTimeParts = trimmedTimeKeyword.split("\\s+", 2);
 
         if (dayAndTimeParts.length == 1) {
             String token = dayAndTimeParts[0];
 
-            String canonicalTime = Time.getCanonicalLegacyTime(token);
+            String canonicalTime = getCanonicalFindTime(token);
             if (canonicalTime != null) {
                 return new TimeSearchKeyword("", canonicalTime);
             }
@@ -182,7 +188,7 @@ public class ParserUtil {
         }
 
         String canonicalDay = Time.getCanonicalDayQuery(dayAndTimeParts[0]);
-        String canonicalTime = Time.getCanonicalLegacyTime(dayAndTimeParts[1]);
+        String canonicalTime = getCanonicalFindTime(dayAndTimeParts[1]);
         // find d/1300 Wed will be rejected
         if (canonicalDay == null || canonicalTime == null) {
             throw new ParseException(Time.MESSAGE_CONSTRAINTS);
@@ -196,6 +202,26 @@ public class ParserUtil {
         Time parsedTime = new Time(candidateTime);
         String[] canonicalDayAndTime = parsedTime.value.split("\\s+", 2);
         return new TimeSearchKeyword(canonicalDayAndTime[0], canonicalDayAndTime[1]);
+    }
+
+    private static String getCanonicalFindTime(String rawTimeKeyword) {
+        String canonicalTime = Time.getCanonicalLegacyTime(rawTimeKeyword);
+        if (canonicalTime != null) {
+            return canonicalTime;
+        }
+
+        String[] timeParts = rawTimeKeyword.trim().split("\\s*-\\s*", 2);
+        if (timeParts.length != 2) {
+            return null;
+        }
+
+        String canonicalStartTime = Time.getCanonicalLegacyTime(timeParts[0]);
+        String canonicalEndTime = Time.getCanonicalLegacyTime(timeParts[1]);
+        if (canonicalStartTime == null || canonicalEndTime == null) {
+            return null;
+        }
+
+        return canonicalStartTime + " - " + canonicalEndTime;
     }
 
     /**

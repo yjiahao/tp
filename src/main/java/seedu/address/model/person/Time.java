@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Represents a Person's scheduled day and time in the address book.
@@ -231,6 +230,24 @@ public class Time {
      */
     public String getDisplayValue() {
         return value;
+    }
+
+    /**
+     * Returns the weekday portion of this time value.
+     */
+    public String getDayPart() {
+        String[] dayAndTimeParts = value.split("\\s+", 2);
+        assert dayAndTimeParts.length == 2 : "Time value should contain both day and time: " + value;
+        return dayAndTimeParts[0];
+    }
+
+    /**
+     * Returns the time portion of this time value.
+     */
+    public String getTimePart() {
+        String[] dayAndTimeParts = value.split("\\s+", 2);
+        assert dayAndTimeParts.length == 2 : "Time value should contain both day and time: " + value;
+        return dayAndTimeParts[1];
     }
 
     /**
