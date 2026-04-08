@@ -217,7 +217,7 @@ Step 5. The user then decides to execute the command `list`. Commands that do no
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear` twice. The first `clear` shows a warning and does not modify the address book. The second consecutive `clear` clears the address book and calls `Model#commitAddressBook()`. If any other command is entered in between (including an invalid command), the confirmation resets. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
 
@@ -593,6 +593,21 @@ testers are expected to do more *exploratory* testing.
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
+
+### Clearing all contacts
+
+1. Clearing contacts using the two-step confirmation flow
+
+   1. Prerequisites: Multiple contacts exist in the address book.
+
+   1. Test case: `clear`<br>
+      Expected: No contacts are deleted. A warning message is shown asking the user to type `clear` again to confirm.
+
+   1. Test case: `clear` then `clear`<br>
+      Expected: All contacts are deleted and the UI is refreshed to show an empty list.
+
+   1. Test case: `clear` then any other command (including an invalid command) then `clear`<br>
+      Expected: The second `clear` shows the warning again (the confirmation is reset).
 
 ### Finding contacts
 

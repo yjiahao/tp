@@ -32,7 +32,7 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 
    * `del 3`: Delete the contact with an `ID` of 3.
 
-   * `clear`: Delete all contacts.
+   * `clear` (run twice): Delete all contacts.
 
    * `exit`: Exit the app.
 
@@ -235,9 +235,17 @@ Examples:
 
 ### Clearing all entries: `clear`
 
-Clear all entries from the address book, whilst displaying all the contacts that have been removed.
+Clear all entries from the address book (with a two-step confirmation), whilst displaying all the contacts that have been removed.
 
 Format: `clear`
+
+* The first `clear` shows a warning and does not delete anything.
+* The second consecutive `clear` deletes all contacts.
+* If any other command is entered in between (including an invalid command), the confirmation resets.
+
+Examples:
+* `clear` then `clear` clears the address book.
+* `clear` then `list` then `clear` will show the warning again (the confirmation is reset).
 
 ### Exiting the program: `exit`
 
@@ -283,7 +291,7 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [r/REMARK] [l/MEETING_LINK] [t/TAG]…​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/22224444 a/123, Clementi Rd, 1234665 r/new student l/https://zoom.us/j/123456789 t/Parent t/Tutor`
-**Clear** | `clear`
+**Clear** | `clear` (run twice)
 **Delete** | `del ID`<br> e.g., `del 3`
 **Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [d/DAY_TIME] [r/REMARK] [l/MEETING_LINK] [t/TAG]…​ [tdel/TAG]…​`<br> e.g., `edit 2 d/Monday 18:00 l/https://zoom.us/j/123456789 t/Parent tdel/Tutor`
 **Find** | `find [n/NAME]... [a/ADDRESS]... [p/PHONE]... [t/TAG]... [r/REMARK]...`<br> e.g., `find n/James t/Student`
