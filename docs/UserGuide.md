@@ -95,14 +95,15 @@ Examples:
 * `add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01 r/new student`
 * `add n/John Doe a/John street, block 123, #01-01 t/Parent t/Tutor`
 * `add n/Jane Doe p/98765432 l/https://zoom.us/j/123456789`
-* `add n/Jane Doe p/98765432`
-* `add n/Jane Doe p/`
-* `add n/Jane Doe a/`
-* `add n/Jane Doe l/`
 
 The first example gives the following expected output:
 
   ![result for 'add n/John Doe t/Student p/98765432 a/John street, block 123, #01-01 r/new student'](images/AddCommandResult.png)
+
+Adding optional prefix without input will be equivalent to adding just the name.
+ie. the following will behave the same way
+* `add n/Jane Doe p/98765432`
+* `add n/Jane Doe p/`
 
 ### Listing all persons: `list`
 
@@ -281,7 +282,7 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [r/REMARK] [l/MEETING_LINK] [t/TAG]…​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/22224444 a/123, Clementi Rd, 1234665 r/new student l/https://zoom.us/j/123456789 t/Parent t/Tutor`, `add n/James Ho l/https://zoom.us/j/123456789`
+**Add** | `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [r/REMARK] [l/MEETING_LINK] [t/TAG]…​` <br> e.g., `add n/James Ho`, `add n/James Ho p/`, `add n/James Ho p/89761234 a/123, Clementi Rd, 1234665 r/new student l/https://zoom.us/j/123456789 t/Parent t/Tutor`, `add n/James Ho l/https://zoom.us/j/123456789`
 **Clear** | `clear`
 **Delete** | `del ID [ID]…​`<br> e.g., `del 3`, `del 1 3 5`
 **Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [d/DAY_TIME] [r/REMARK] [l/MEETING_LINK] [t/TAG]…​ [tdel/TAG]…​`<br> e.g., `edit 2 d/Monday 18:00 l/https://zoom.us/j/123456789 t/Parent tdel/Tutor`
