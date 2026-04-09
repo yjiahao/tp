@@ -376,6 +376,15 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_idNotInAddressBookNoFieldSpecified_failure() {
+        Id notInAddressBookId = Id.fromCurrentMaxId(model.findMaxId());
+        EditCommand editCommand = new EditCommand(notInAddressBookId, new EditPersonDescriptor());
+
+        assertCommandFailure(editCommand, model,
+                String.format(Messages.MESSAGE_INVALID_PERSON_ID, notInAddressBookId.getValue()));
+    }
+
+    @Test
     public void execute_idInFilteredList_success() {
         showPersonWithId(model, ID_FIRST);
 

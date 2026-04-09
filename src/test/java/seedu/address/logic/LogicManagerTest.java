@@ -87,6 +87,13 @@ public class LogicManagerTest {
     }
 
     @Test
+    public void execute_editWithoutEditsAndInvalidId_throwsCommandException() {
+        String editCommand = "edit 9";
+        assertCommandException(editCommand,
+                String.format(Messages.MESSAGE_INVALID_PERSON_ID, 9));
+    }
+
+    @Test
     public void execute_validCommand_success() throws Exception {
         String listCommand = ListCommand.COMMAND_WORD;
         assertCommandSuccess(listCommand,

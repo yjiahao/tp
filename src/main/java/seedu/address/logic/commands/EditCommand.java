@@ -82,13 +82,13 @@ public class EditCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (!editPersonDescriptor.isAnyFieldEdited()) {
-            throw new CommandException(Messages.MESSAGE_NOT_EDITED);
-        }
-
         Person personToEdit = model.findPersonById(id)
                 .orElseThrow(() -> new CommandException(String.format(Messages.MESSAGE_INVALID_PERSON_ID,
                         id.getValue())));
+
+        if (!editPersonDescriptor.isAnyFieldEdited()) {
+            throw new CommandException(Messages.MESSAGE_NOT_EDITED);
+        }
 
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
