@@ -111,6 +111,13 @@ Format: `list`
 
 * The number of people currently in the contact list will also be shown.
 
+Examples:
+* `list`
+
+The example gives the following expected output:
+
+![result for 'list'](images/ListCommandResult.png)
+
 ### Editing a person: `edit`
 
 💡 Edit an existing person in the address book.
