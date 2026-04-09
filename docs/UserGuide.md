@@ -199,11 +199,43 @@ Examples (Find people whose):
 * `find d/1200 d/thu`: Weekly timeslot is `12:00` (or within a stored time range that includes `12:00`) or is on Thursday.
 * `find d/tue 1500-1600`: Weekly timeslot is on Tuesday and is exactly `15:00 - 16:00` (or a stored single time within that range).
 
+The first example gives the following expected output:
+
+![result for 'find n/alex a/119224'](images/FindCommandResult1.png)
+
+The second example gives the following expected output:
+
+![result for 'find m/and t/student n/clement'](images/FindCommandResult2.png)
+
+The third example gives the following expected output:
+
+![result for 'find d/1200 d/thu'](images/FindCommandResult3.png)
+
+The fourth example gives the following expected output:
+
+![result for 'find d/tue 1500-1600'](images/FindCommandResult4.png)
+
 Expected behavior:
 * `find p/ben` will not return an error, but will return no results (since phone numbers contain digits only).
 * `find p/9` will not match contacts with no phone field (missing phone never matches `p/`).
 * `find d/1500-1600` will not match a person whose time is `14:00 - 17:00` (range queries require an exact stored range match).
 * `find t/best friend` will not return an error, but will return no results (as this is not a valid tag).
+
+The first expected behavior example gives the following expected output:
+
+![result for 'find p/ben'](images/FindCommandExpected1.png)
+
+The second expected behavior example gives the following expected output:
+
+![result for 'find p/9'](images/FindCommandExpected2.png)
+
+The third expected behavior example gives the following expected output:
+
+![result for 'find d/1500-1600'](images/FindCommandExpected3.png)
+
+The fourth expected behavior example gives the following expected output:
+
+![result for 'find t/best friend'](images/FindCommandExpected4.png)
 
 ### Deleting a person: `del`
 
