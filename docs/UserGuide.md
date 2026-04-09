@@ -147,19 +147,7 @@ Examples:
 
 The first example gives the following expected output:
 
-![result for 'edit 1 p/91234567'](images/EditCommandResult1.png)
-
-The second example gives the following expected output:
-
-![result for 'edit 1 d/Monday 18:00'](images/EditCommandResult2.png)
-
-The third example gives the following expected output:
-
-![result for 'edit 1 d/Wednesday 1800 - 1930 l/https://zoom.us/j/123456789 t/Tutor tdel/Student'](images/EditCommandResult3.png)
-
-The fourth example gives the following expected output:
-
-![result for 'edit 2 t/'](images/EditCommandResult4.png)
+![result for 'edit 1 p/91234567'](images/EditCommandResult.png)
 
 Expected behavior:
 * The `edit` command succeeds even if the provided values are identical to the existing ones (i.e., no changes are made).
@@ -194,48 +182,20 @@ Weekly timeslot rules (`d/`):
 * Flexible formats (e.g., `DD:HH–DDHH` or similar variations) are allowed.
 
 Examples (Find people whose):
-* `find n/alex a/119224`: Name contains `alex` OR address contains `119224`.
+* `find n/alex a/geylang`: Name contains `alex` OR address contains `geylang`.
 * `find m/and t/student n/clement`: Tagged `Student` AND name contains `clement`.
 * `find d/1200 d/thu`: Weekly timeslot is `12:00` (or within a stored time range that includes `12:00`) or is on Thursday.
 * `find d/tue 1500-1600`: Weekly timeslot is on Tuesday and is exactly `15:00 - 16:00` (or a stored single time within that range).
 
 The first example gives the following expected output:
 
-![result for 'find n/alex a/119224'](images/FindCommandResult1.png)
-
-The second example gives the following expected output:
-
-![result for 'find m/and t/student n/clement'](images/FindCommandResult2.png)
-
-The third example gives the following expected output:
-
-![result for 'find d/1200 d/thu'](images/FindCommandResult3.png)
-
-The fourth example gives the following expected output:
-
-![result for 'find d/tue 1500-1600'](images/FindCommandResult4.png)
+![result for 'find n/alex a/geylang'](images/FindCommandResult.png)
 
 Expected behavior:
 * `find p/ben` will not return an error, but will return no results (since phone numbers contain digits only).
 * `find p/9` will not match contacts with no phone field (missing phone never matches `p/`).
 * `find d/1500-1600` will not match a person whose time is `14:00 - 17:00` (range queries require an exact stored range match).
 * `find t/best friend` will not return an error, but will return no results (as this is not a valid tag).
-
-The first expected behavior example gives the following expected output:
-
-![result for 'find p/ben'](images/FindCommandExpected1.png)
-
-The second expected behavior example gives the following expected output:
-
-![result for 'find p/9'](images/FindCommandExpected2.png)
-
-The third expected behavior example gives the following expected output:
-
-![result for 'find d/1500-1600'](images/FindCommandExpected3.png)
-
-The fourth expected behavior example gives the following expected output:
-
-![result for 'find t/best friend'](images/FindCommandExpected4.png)
 
 ### Deleting a person: `del`
 
@@ -257,23 +217,7 @@ Examples:
 
 The first example gives the following expected output:
 
-![result for 'del 2'](images/DeleteCommandResult1.png)
-
-The second example gives the following expected output:
-
-![result for 'del 1 3 5'](images/DeleteCommandResult2.png)
-
-The third example gives the following expected output:
-
-![result for 'find n/Betsy'](images/DeleteCommandResult3.png)
-
-Then, running `del 1` gives the following expected output:
-
-![result for 'del 1'](images/DeleteCommandResult4.png)
-
-The fourth example gives the following expected output:
-
-![result for 'del 1 99'](images/DeleteCommandResult5.png)
+![result for 'del 2'](images/DeleteCommandResult.png)
 
 ### Copying a person information: `copy`
 
@@ -286,7 +230,7 @@ Format: `copy ID FIELD`
 * Possible fields include `n/` for name, `p/` for phone number, `a/` for address, and `l/` for meeting link.
 * Copy is not supported for the weekly timeslot, tags, or remark fields. The `d/`, `t/`, `tdel/`, and `r/`
   fields are invalid for this command.
-* If the person's field is empty, then nothing will be copied to the clipboard.
+* If the person's field is empty, the command fails with an error message (nothing is copied to the clipboard).
 
 Examples:
 * `copy 6 n/`: Copy the name of the person with `ID` 6 to the clipboard.
@@ -294,6 +238,10 @@ Examples:
 * `copy 9 a/`: Copy the address of the person with `ID` 9 to the clipboard.
 * `copy 1 l/`: Copy the meeting link of the person with `ID` 1 to the clipboard.
 * `copy 1 p/`: Fail if `ID` 1 is not found or the phone number field of the person with `ID` 1 is empty.
+
+The fourth example gives the following expected output:
+
+![result for 'copy 1 l/'](images/CopyCommandResult.png)
 
 ### Clearing all entries: `clear`
 
@@ -310,6 +258,10 @@ Format: `clear`
 Examples:
 * `clear` then `clear` clears the address book.
 * `clear` then `list` then `clear` will show the warning again (the confirmation is reset).
+
+The first `clear` gives the following expected output:
+
+![result for 'clear'](images/ClearCommandResult1.png)
 
 ### Exiting the program: `exit`
 
