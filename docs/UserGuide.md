@@ -255,6 +255,26 @@ Examples:
 * `find n/Betsy` followed by `del 1`: Delete the person with `ID` 1 from the address book. Note that it does not delete the first person in the results of the `find` command.
 * `del 1 99`: Fail if either `ID` 1 or `ID` 99 is not found — neither contact will be deleted.
 
+The first example gives the following expected output:
+
+![result for 'del 2'](images/DeleteCommandResult1.png)
+
+The second example gives the following expected output:
+
+![result for 'del 1 3 5'](images/DeleteCommandResult2.png)
+
+The third example gives the following expected output:
+
+![result for 'find n/Betsy'](images/DeleteCommandResult3.png)
+
+Then, running `del 1` gives the following expected output:
+
+![result for 'del 1'](images/DeleteCommandResult4.png)
+
+The fourth example gives the following expected output:
+
+![result for 'del 1 99'](images/DeleteCommandResult5.png)
+
 ### Copying a person information: `copy`
 
 💡 Copy a specified field of a person from the address book to the user clipboard.
