@@ -63,17 +63,17 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 
 ### Viewing help: `help`
 
-Show a message explaining how to access the help page.
-
+💡 Show a message explaining how to access the help page.
 ![help message](images/helpMessage.png)
 
+<div class="alert alert-light" role="alert">
 Format: `help`
-
+</div>
 
 ### Adding a person: `add`
-
-Add a person to the address book.
-
+<div class="alert alert-light" role="alert">
+💡 Add a person to the address book.
+</div>
 Format: `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [r/REMARK] [d/WEEKLY_TIMESLOT] [l/MEETING_LINK] [t/TAG]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -123,14 +123,11 @@ Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [d/WEEKLY_TIMESLOT] [r/REMARK] [
 Examples:
 * `edit 1 p/91234567`: Set the phone number of contact 1.
 * `edit 1 d/Monday 18:00`: Set the weekly timeslot of contact 1.
-* `edit 1 d/`: Clear the weekly timeslot of contact 1.
-* `edit 1 t/Parent t/Tutor`: Add `Parent` and `Tutor` tags to contact 1.
-* `edit 1 tdel/Student`: Remove the `Student` tag from contact 1.
-* `edit 2 t/`: Clear all tags of contact 2.
 * `edit 1 d/Wednesday 1800 - 1930 l/https://zoom.us/j/123456789 t/Tutor tdel/Student`: Set weekly timeslot + meeting link, add `Tutor` tag, and remove `Student` tag.
+* `edit 2 t/`: Clear all tags of contact 2.
 
 Expected behavior:
-* When using edit, if the input matches the existing values (e.g., same name or same tag), it still shows a success message even though nothing has changed.
+* The `edit` command succeeds even if the provided values are identical to the existing ones (i.e., no changes are made).
 
 ### Locating persons: `find`
 
@@ -163,7 +160,6 @@ Examples (Find people whose):
 * `find n/alex a/119224`: Name contains `alex` OR address contains `119224`.
 * `find m/and t/student n/clement`: Tagged `Student` AND name contains `clement`.
 * `find p/9`: Phone contains `9` (contacts without phone are excluded).
-* `find d/tue`: Weekly timeslot is on Tuesday.
 * `find d/1200 d/thu`: Weekly timeslot is `12:00` (or within a stored time range that includes `12:00`) or is on Thursday.
 * `find d/tue 1500-1600`: Weekly timeslot is on Tuesday and is exactly `15:00 - 16:00` (or a stored single time within that range).
 
@@ -347,7 +343,7 @@ Action | Format, Examples
 **Clear** | `clear` (run twice)
 **Delete** | `del ID [ID]…​`<br> e.g., `del 3`, `del 1 3 5`
 **Edit** | `edit ID [n/NAME] [p/PHONE_NUMBER] [a/ADDRESS] [d/WEEKLY_TIMESLOT] [r/REMARK] [l/MEETING_LINK] [t/TAG]…​ [tdel/TAG]…​`<br> e.g., `edit 2 d/Monday 18:00 l/https://zoom.us/j/123456789 t/Parent tdel/Tutor`
-**Find** | `find [m/MODE] [n/NAME]… [a/ADDRESS]… [p/PHONE]… [t/TAG]… [r/REMARK]… [d/WEEKLY_TIMESLOT]…`<br> e.g., `find n/James t/Student`, `find d/tue d/1200`
+**Find** | `find [m/MODE] [n/NAME]… [a/ADDRESS]… [p/PHONE]… [t/TAG]… [r/REMARK]… [d/WEEKLY_TIMESLOT]…`<br> e.g., `find m/and n/James t/Student d/tue`
 **List** | `list`
 **Copy** | `copy ID FIELD`<br> e.g., `copy 1 l/`
 **Exit** | `exit`
