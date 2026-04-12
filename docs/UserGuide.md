@@ -4,7 +4,6 @@ title: User Guide
 ---
 
 EduConnect is a **desktop application that enables private tutors to manage their work contacts, optimized for use via a Command Line Interface (CLI)** while still having the benefits of a Graphical User Interface (GUI). If you can type fast, EduConnect can get your contact management tasks done faster than traditional GUI apps.
-</p>
 
 * Table of Contents
 {:toc}
@@ -383,7 +382,7 @@ These rules apply across multiple commands in EduConnect:
   * Names that contain special characters like / may need to be stored in an alternative format (e.g., A/P can be written as AP or Anak Perempuan).
 
 * `p/PHONE_NUMBER`:
-  * Must contain digits only.
+  * Must contain digits only. It cannot contain spaces, or any special characters.
   * Must start with `6`, `8`, or `9`.
   * Must be exactly 8 digits long.
   * Must not have any country code (e.g. `+65`). Assume that all numbers are Singapore numbers.
