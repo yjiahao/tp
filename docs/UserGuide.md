@@ -72,7 +72,7 @@ EduConnect is a **desktop application that enables private tutors to manage thei
 💡 Opens the help window and shows how to access the full guide.
 
 <div class="alert alert-light" role="alert">
-Format: `help`
+Format: help
 </div>
 
 ![help message](images/helpMessage.png)
@@ -82,7 +82,7 @@ Format: `help`
 💡 Add a person to the address book.
 
 <div class="alert alert-light" role="alert">
-Format: `add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [r/REMARK] [d/WEEKLY_TIMESLOT] [l/MEETING_LINK] [t/TAG]…​`
+Format: add n/NAME [p/PHONE_NUMBER] [a/ADDRESS] [r/REMARK] [d/WEEKLY_TIMESLOT] [l/MEETING_LINK] [t/TAG]…​
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -106,7 +106,7 @@ The first example gives the following expected output:
 💡 Shows all contacts currently stored in the address book.
 
 <div class="alert alert-light" role="alert">
-Format: `list`
+Format: list
 </div>
 
 * The number of people currently in the contact list will also be shown.
@@ -123,7 +123,7 @@ The example gives the following expected output:
 💡 Edit an existing person in the address book.
 
 <div class="alert alert-light" role="alert">
-Format: `edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [d/WEEKLY_TIMESLOT] [r/REMARK] [l/MEETING_LINK] [t/TAG]… [tdel/TAG]…​`
+Format: edit ID [n/NAME] [p/PHONE] [a/ADDRESS] [d/WEEKLY_TIMESLOT] [r/REMARK] [l/MEETING_LINK] [t/TAG]… [tdel/TAG]…​
 </div>
 
 * `ID` specifies the person to be edited.
@@ -157,7 +157,7 @@ Expected behavior:
 💡 Find persons whose specified fields match the given keywords.
 
 <div class="alert alert-light" role="alert">
-Format: `find [m/MODE] [n/NAME]… [a/ADDRESS]… [p/PHONE]… [t/TAG]… [r/REMARK]… [d/WEEKLY_TIMESLOT]…`
+Format: find [m/MODE] [n/NAME]… [a/ADDRESS]… [p/PHONE]… [t/TAG]… [r/REMARK]… [d/WEEKLY_TIMESLOT]…
 </div>
 
 * At least one prefixed keyword must be provided; unprefixed keywords are not allowed (e.g. `find Alex` is invalid).
@@ -203,7 +203,7 @@ Expected behavior:
 💡 Delete one or more specified persons from the address book.
 
 <div class="alert alert-light" role="alert">
-Format: `del ID [ID]…​`
+Format: del ID [ID]…​
 </div>
 
 * Deletes the persons with the specified `ID`s.
@@ -225,7 +225,7 @@ The first example gives the following expected output:
 💡 Copy a specified field of a person from the address book to the user clipboard.
 
 <div class="alert alert-light" role="alert">
-Format: `copy ID FIELD`
+Format: copy ID FIELD
 </div>
 
 * Possible fields include `n/` for name, `p/` for phone number, `a/` for address, and `l/` for meeting link.
@@ -249,7 +249,7 @@ The fourth example gives the following expected output:
 💡 Clear all entries from the address book with a two-step confirmation
 
 <div class="alert alert-light" role="alert">
-Format: `clear`
+Format: clear
 </div>
 
 * The first `clear` shows a warning and does not delete anything.
@@ -269,7 +269,7 @@ The first `clear` gives the following expected output:
 💡 Exit the program.
 
 <div class="alert alert-light" role="alert">
-Format: `exit`
+Format: exit
 </div>
 ### <span style="color:#d9730d;">Saving the data</span>
 
