@@ -313,8 +313,8 @@ Below is an example of how a valid JSON data file should look like.
     "name" : "Charlotte Oliveiro",
     "phone" : "93210283",
     "address" : "Blk 11 Ang Mo Kio Street 74, #11-04",
-    "time" : "",
-    "tags" : [ "Tutor" ],
+    "time" : "Sunday 12:00 - 13:30",
+    "tags" : [ "Tutor", "Parent" ],
     "remark" : "",
     "meetingLink" : ""
   } ]
