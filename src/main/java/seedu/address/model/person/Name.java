@@ -13,8 +13,8 @@ public class Name {
             "Names should not be blank, and should only contain alphabets, \"-\", \",\", \".\", \"'\", and \" \".";
 
     /*
-     * The first character of the name must be alphabetical,
-     * otherwise " " (a blank string) becomes a valid input.
+     * Requires the name to start with an alphabetic character.
+     * This rejects blank inputs and names that begin with whitespace or punctuation.
      */
     public static final String VALIDATION_REGEX = "[A-Za-z][A-Za-z ,.'\\-]*";
 

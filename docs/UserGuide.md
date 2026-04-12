@@ -303,13 +303,17 @@ These rules apply across multiple commands in EduConnect:
 * Leading and trailing spaces around prefixed values are ignored.<br>
   e.g. `add n/   Alex` is interpreted as `add n/Alex`.
 
-* `ID` must be a positive integer 1, 2, 3, …​. Leading zeroes are accepted and ignored.<br>
-  e.g. `edit 001 n/Ali` is interpreted as `edit 1 n/Ali`.
+* Leading zeroes are accepted and ignored.
+  e.g., `edit 001 n/Ali` is interpreted as `edit 1 n/Ali`.
 
-* `ID` is unique and generally not reused, except in one scenario (see below). 
-  In most cases, deleting a contact does not free its `ID`.  
-  e.g., if the current `ID` is 10 and you delete contact 9, the next added contact will have `ID` 11.  
-  Exception: If the latest contact (e.g., `ID` 10) is deleted, the next added contact will reuse `ID` 10.
+* `ID` format and behavior
+  * `ID` is automatically assigned by the system.
+  * `ID` is unique among all contacts currently in the contact list.
+  * The `ID` assigned to a new contact is **1 greater than the current maximum ID** in the contact list.
+  * If the contact with the highest `ID` is deleted, that `ID` may be reused by the next added contact.
+      * e.g., if the current highest `ID` is `10` and contact `9` is deleted, the next added contact will have `ID` `11`.
+      * e.g., if contact `10` is deleted, the next added contact will reuse `ID` `10`.
+  * `ID` must be a positive integer (`1`, `2`, `3`, …).
 
 * Empty values:
   * For `add`, providing an optional prefix with no value creates the contact with that field missing.<br>
@@ -331,8 +335,10 @@ These rules apply across multiple commands in EduConnect:
 
 * `n/NAME`:
   * Must not be blank.
+  * Must start with an alphabetic character.
   * Must contain only alphabets, `-`, `,`, `.`, `'` and spaces.
-  * Names that contain special characters like / may need to be stored in an alternative format (e.g., A/P can be written as AP or Anak Perempuan, S/O can be written as son of ).
+  * Names that contain special characters like `/` may need to be stored in an alternative format
+    (e.g. `A/P` can be written as `AP` or `Anak Perempuan`, `S/O` can be written as `son of`).
 
 * `p/PHONE_NUMBER`:
   * Must contain digits only.
