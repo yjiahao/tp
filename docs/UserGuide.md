@@ -414,7 +414,7 @@ These rules apply across multiple commands in EduConnect:
   * Only printable ASCII characters are allowed (i.e. no emojis).
 
 * `l/MEETING_LINK`:
-  * If provided, it must be a valid URL starting with `http://` or `https://` (no spaces).
+  * If provided, it must be a string starting with `http://` or `https://` (no spaces).
 
 ### <span style="color:#d9730d;">Special case: Non-English characters in input</span>
 * Non-English (Unicode) characters are supported only in `a/ADDRESS`. Other fields restrict input due to validation rules.
