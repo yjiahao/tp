@@ -325,7 +325,8 @@ Below is an example of how a valid JSON data file should look like.
 **Notes**
 
 - The JSON file must contain a top-level `persons` key, whose value is an array of person objects.
-- Each person object must include the following keys: `id`, `name`, `phone`, `address`, `time`, `tags`, `remark`, and `meetingLink`.
+- Each person object must include the following keys: `id`, `name`, `phone`, `address`, `time`, `remark`, and `meetingLink`, otherwise the file is considered corrupted.
+  - It is possible for the person object to be missing the `tags` key. The application will treat it as the person has no tags (similar to if the value for `tags` is an empty array).
 - `id` and `name` are mandatory and cannot be left empty.
 - For `phone`, `address`, `time`, `remark`, and `meetingLink`, an empty string (`""`) indicates that the field is not set for that person and will be treated as empty once parsed.
 - For `tags`, an empty array (`[]`) indicates that no tags have been assigned to that person.
